@@ -2,75 +2,67 @@
 "  add something to show the marks
 "  read this: http://robots.thoughtbot.com/faster-grepping-in-vim
 "  figure out how to exclude files from auto complete
-"  add indent guide plugin
-"
 "  Figure out system clipboard thing
-"
 
 set nocompatible " call  Use VIM, not VI
 filetype off
-
-let mapleader = ","
-
 execute pathogen#infect()
 execute pathogen#helptags()
 
-"================================================================
-" Vundle setup
-" bootstrap vundle here, then use bundles at bottom to add new stuff
-"==============================================================
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-Plugin 'gmarik/Vundle.vim' " let Vundle manage Vundle, required
-call vundle#end()       
-
-"==========================
-" reload vimrc
-"==========================
-map <Leader>r :so $MYVIMRC <cr>
 
 
-"==========================
-"Ctrl-P
-"==========================
-set runtimepath^=~/.vim/bundle/ctrlp.vim
-let g:ctrlp_map='<Leader>t'
-let g:ctrlp_cmd = 'CtrlP'
 
-" Leader-b opens up CtrlP for buffers
-nmap <silent> <Leader>b :CtrlPBuffer<CR>
-let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
-  \ 'file': '\v\.(exe|so|dll|log|sql)$'
-  \ }
-
-"==========================
-" split navigation
-" p>         " disable looking stuff up
-" :help splits
-"==========================
-nnoremap <C-J> <C-W>j
-nnoremap <C-K> <C-W>k
-nnoremap <C-L> <C-W>l
-nnoremap <C-H> <C-W>h
+"===============================================================
 "
-" Use ctrl-[hjkl] to select the active split!
-" nmap <silent> <c-k> :wincmd k<CR>                                                                                                                       
-" nmap <silent> <c-j> :wincmd j<CR>                                                                                                                       
-" nmap <silent> <c-h> :wincmd h<CR>                                                                                                                       
-" nmap <silent> <c-l> :wincmd l<CR>
+" Vim Configuration changes
+"
+"===============================================================
 
-map <up> <C-w><up>
-map <down> <C-w><down>
-map <left> <C-w><left>
-map <right> <C-w><right>
+" ignore case when searching
+set ignorecase 
 
+" case sensitive only when capital letter in expression
+set smartcase 
+
+" show matches as they are found
+set incsearch 
+
+set hlsearch
+" Use Silver Searcher instead of grep
+set grepprg=ag
+" Fuzzy finder: ignore stuff that can't be opened, and generated files
+let g:fuzzy_ignore = "*.png;*.PNG;*.JPG;*.jpg;*.GIF;*.gif;vendor/**;coverage/**;tmp/**;rdoc/**"
+
+
+" Toggle search highlighting
+nnoremap <Leader>h :noh <CR>
+
+" show matching brace when they are typed or under cursor
+set showmatch 
+
+" length of time for 'showmatch'
+set matchtime=30 
+
+set scrolloff=8
+set sidescrolloff=15
+set sidescroll=1
+
+" Use _ as a word-separator
+set iskeyword-=_,#
+
+map ss :sp <CR>
+map vv :vsp <CR>
 set splitbelow
 set splitright
 
-"--------------------
-"Editing 
-"--------------------
+" (Hopefully) removes the delay when hitting esc in insert mode
+set noesckeys
+set ttimeout
+set ttimeoutlen=1
+
+" Don't wait so long for the next keypress (particularly in ambigious Leader
+set timeoutlen=500
+
 set autoindent
 set smartindent
 set autoread
@@ -78,7 +70,8 @@ set smarttab
 set expandtab
 set tabstop=2
 set shiftwidth=2
-set backspace=indent,eol,start  "Allow backspace in insert mode
+ "Allow backspace in insert mode
+set backspace=indent,eol,start 
 set nowrap
 set linebreak
 
@@ -86,22 +79,16 @@ filetype plugin on
 filetype indent on
 
 
-"--------------------
-" fix old ruby hash
-"--------------------
-map <Leader>f :%s/:\([^ ]*\)\(\s*\)=>/\1:/g <cr>
+" Don't need to go nuts with the undo level, 150 should be fine
+set history=500 
 
-"--------------------
-" History
-"--------------------
-set history=500    " Don't need to go nuts with the undo level, 150 should be fine
-set undolevels=150 " Save text state between reloads (e.g. if you use :e!)
-set undoreload=200 " Undo levels between sessions!
+" Save text state between reloads (e.g. if you use :e!)
+set undolevels=150
+
+" Undo levels between sessions!
+set undoreload=200 
 set undodir=$HOME/.vim/undo
 
-"--------------------
-" Interface
-"--------------------
 syntax enable
 set mouse=nicr " enables mouse scrolling
 set mouse=a
@@ -124,36 +111,135 @@ endif
 
 set guifont=Source\ Code\ Pro:h16
 
-" --- Turn off swap files
+" Turn off swap files
 set noswapfile
 set nobackup
 set nowb
 
-command! Q q " Bind :Q to :q
-command! W w " Bind :W to :w
-command! Qall qall 
-set shiftround " When at 3 spaces and I hit >>, go to 4, not 5.
 
-map Q :q <CR>
-map W :w <CR>
-map K <Nop>         " disable looking stuff up
-set title           " set the title to the file name and modification status
-set showcmd         " show the command being typed
-set showmode        " show current mode (insert, visual, etc.)
-set gcr=a:blinkon0  "Disable cursor blink
-set laststatus=2    " always show status line 
-" set colorcolumn=80 " Highlight column 80 so I know when to wrap
-" Change the 80th char column to be grey instead of red
-" autmcmd ColorScheme * highlight ColorColumn guibg=Gray20
+
+"===============================================================
+"
+" Basic Vim Command re mappings 
+"
+"===============================================================
+
+"--------------------
+"     leader key
+"--------------------
+let mapleader = ","
+
+"--------------------
+"     reload vimrc
+"--------------------
+map <Leader>r :so $MYVIMRC <cr>
+
+"debug
+map <Leader>d <cr>byebug<esc>:w<cr>
+
+" system clipboard paste
+map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>
+
+"saving
+map <C-w> <esc>:w<CR>
+" and in insert mode
+imap <C-w> <esc>:w<CR>
+
+"ZZ to save and quit
+
+
+" tabs
+map <C-t> <esc>:tabnew<CR>
+nnoremap th  :tabfirst <CR>
+nnoremap tj  :tabnext <CR>
+nnoremap tk  :tabprev <CR>
+nnoremap tl  :tablast <CR>
+nnoremap tt  :tabedit <Space>
+nnoremap tn  :tabnext <CR>
+nnoremap tm  :tabm <Space>
+nnoremap td  :tabclose <CR>
+
+"--------------------
+" fix old ruby hash
+"--------------------
+map <Leader>f :%s/:\([^ ]*\)\(\s*\)=>/\1:/g <cr>
+
+"--------------------
+" split navigation
+" :help splits
+"--------------------
+nnoremap <C-J> <C-W>j
+nnoremap <C-K> <C-W>k
+nnoremap <C-L> <C-W>l
+nnoremap <C-H> <C-W>h
+
+" Disable EX mode
+map Q <Nop>
+
+" When at 3 spaces and I hit >>, go to 4, not 5.
+set shiftround 
+
+" disable looking stuff up
+map K <Nop>         
+
+" set the title to the file name and modification status
+set title           
+
+" show the command being typed
+set showcmd         
+
+" show current mode (insert, visual, etc.)
+set showmode        
+
+"Disable cursor blink
+set gcr=a:blinkon0  
+
+" always show status line 
+set laststatus=2    
+
+
+
+
+
+
+
+"===============================================================
+"
+" Vundle settup, and package specific settings
+"
+"===============================================================
+
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+Plugin 'gmarik/Vundle.vim' " let Vundle manage Vundle, required
+call vundle#end()       
+
+"==========================
+"        Ctrl-P
+"==========================
+Bundle 'kien/ctrlp.vim' 
+set runtimepath^=~/.vim/bundle/ctrlp.vim
+let g:ctrlp_map='<Leader>t'
+let g:ctrlp_cmd = 'CtrlP'
+
+" Leader-b opens up CtrlP for buffers
+nmap <silent> <Leader>b :CtrlPBuffer<CR>
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+  \ 'file': '\v\.(exe|so|dll|log|sql)$'
+  \ }
 
 "--------------------
 " Nerd Tree
 "--------------------
+Bundle 'scrooloose/nerdtree.git'
 map <c-\> :NERDTreeFind<CR>
 
 "--------------------
 " Tabular
+" vertical alignment helper
 "--------------------
+Bundle 'godlygeek/tabular'      
 map <c-A> :Tabularize /
 
 "--------------------
@@ -167,67 +253,10 @@ au FileType css setl ofu=csscomplete#CompleteCSS
 " default color is crazy
 highlight Pmenu ctermbg=238 gui=bold       
 
-"--------------------
-" Searching
-"--------------------
-set ignorecase " ignore case when searching
-set smartcase " case sensitive only when capital letter in expression
-set incsearch " show matches as they are found
-set hlsearch
-" Use Silver Searcher instead of grep
-set grepprg=ag
-" Fuzzy finder: ignore stuff that can't be opened, and generated files
-let g:fuzzy_ignore = "*.png;*.PNG;*.JPG;*.jpg;*.GIF;*.gif;vendor/**;coverage/**;tmp/**;rdoc/**"
-
-
-" Toggle search highlighting
-nnoremap <Leader>h :noh <CR>
-
-"--------------------
-"  Feedback
-"--------------------
- set showmatch " show matching brace when they are typed or under cursor
- set matchtime=30 " length of time for 'showmatch'
-
-" set this to a function
-":so $MYVIMRC
- 
-
-"--------------------
-" Naigation
-"--------------------
-set scrolloff=8
-set sidescrolloff=15
-set sidescroll=1
-
-
-" Use _ as a word-separator
-set iskeyword-=_,#
-
-map ss :sp <CR>
-map vv :vsp <CR>
-
-"------------------------------------------------------------------------------
-" RENAME CURRENT FILE (thanks Gary Bernhardt)
-"------------------------------------------------------------------------------
-function! RenameFile()
-    let old_name = expand('%')
-    let new_name = input('New file name: ', expand('%'), 'file')
-    if new_name != '' && new_name != old_name
-        exec ':saveas ' . new_name
-        exec ':silent !rm ' . old_name
-        redraw!
-    endif
-endfunction
-map <C-n> :call RenameFile()<cr>
-
-
-
-" add bundles here
+" faster file searching
 Bundle 'rking/ag.vim'
 
 " In the quickfix window, you can use:
-
 "     e    to open file and close the quickfix window
 "     o    to open (same as enter)
 "     go   to preview file (open but maintain focus on ag.vim results)
@@ -239,7 +268,6 @@ Bundle 'rking/ag.vim'
 "     gv   to open in vertical split silently
 "     q    to close the quickfix window
 
-Bundle 'scrooloose/nerdtree.git'
 Bundle 'gmarik/vundle'
 Bundle 'vim-ruby/vim-ruby'
 Bundle 'tpope/vim-repeat.git'
@@ -252,38 +280,27 @@ Bundle 'tpope/vim-bundler'
 Bundle 'tpope/vim-fugitive'
 " Provides Rspec runners
 Bundle 'thoughtbot/vim-rspec'  
-" Fuzzy file filder
-Bundle 'kien/ctrlp.vim' 
- " Provides syntax highlighting for rspec
+
+" Provides syntax highlighting for rspec
 Bundle 'Keithbsmiley/rspec.vim'
-
-
-" vertical alignment helper
-Bundle 'godlygeek/tabular'      
-
-
-" TODO reorganize things down here:
-"----------
-" Language
-"-----------
+map <Leader>as :call RunCurrentSpecFile()<CR>
+map <Leader>s :call RunNearestSpec()<CR>
+map <Leader>l :call RunLastSpec()<CR>
+map <Leader>a :call RunAllSpecs()<CR>
 
 " Haml
 Bundle 'tpope/vim-haml'
-
 "Sass
 Bundle 'cakebaker/scss-syntax.vim'
 
-
-"----------------------------
-" Completion
-"-----------------------------
-
+"coffee script
+Bundle 'kchmck/vim-coffee-script'
 "autocomplete helper
 Bundle 'ervandew/supertab'
+"html autocomplete engine
+"<c-y>, to fire
+Bundle 'mattn/emmet-vim'
 
-"----------------------------------------
-" Code display
-"----------------------------------------
 "  This is cool, but it slows down rendering significantly 
 Bundle 'kien/rainbow_parentheses.vim'
 let g:rbpt_colorpairs = [
@@ -311,15 +328,6 @@ let g:rbpt_loadcmd_toggle = 0
 " set the syntax highlighters on at launch
 au VimEnter * RainbowParenthesesToggle
 
-
-"----------------------------------------
-" Integrations
-"----------------------------------------
-
-"----------------------------------------
-" Interface
-"----------------------------------------
-"
 " This is a lightweight vim status bar
 Bundle 'bling/vim-airline'      
 let g:airline_detect_whitespace=0 
@@ -342,50 +350,29 @@ nnoremap <F4> :NumbersOnOff<CR>
 " Matching  % in many more scenarios
 Bundle 'edsono/vim-matchit'
 
-" Ruby matchit
-" Non bundle
-" this matches do/end in ruby, but it isn't in bundle controll: ruby-matchit.vim
+" indent guide, useful for white space delimited languages
+Bundle 'nathanaelkane/vim-indent-guides'
+let g:indent_guides_auto_colors = 0
+hi IndentGuidesOdd  ctermbg=17
+hi IndentGuidesEven ctermbg=239
+
+"=================================================================================
 "
+" Functions
+" 
+"=================================================================================
 
-" tabs
-" :tabnew
-nnoremap th  :tabfirst <CR>
-nnoremap tj  :tabnext <CR>
-nnoremap tk  :tabprev <CR>
-nnoremap tl  :tablast <CR>
-nnoremap tt  :tabedit <Space>
-nnoremap tn  :tabnext <CR>
-nnoremap tm  :tabm <Space>
-nnoremap td  :tabclose <CR>
+"------------------------------------------------------------------------------
+" RENAME CURRENT FILE (thanks Gary Bernhardt)
+"------------------------------------------------------------------------------
+function! RenameFile()
+    let old_name = expand('%')
+    let new_name = input('New file name: ', expand('%'), 'file')
+    if new_name != '' && new_name != old_name
+        exec ':saveas ' . new_name
+        exec ':silent !rm ' . old_name
+        redraw!
+    endif
+endfunction
+map <C-n> :call RenameFile()<cr>
 
-
-
-"----------
-" Commands
-"-----------
-
-"==========================
-" RSpec.vim mappings
-"==========================
-map <Leader>as :call RunCurrentSpecFile()<CR>
-map <Leader>s :call RunNearestSpec()<CR>
-map <Leader>l :call RunLastSpec()<CR>
-map <Leader>a :call RunAllSpecs()<CR>
-
-"--------------------
-" Performance 
-"--------------------
-
-" (Hopefully) removes the delay when hitting esc in insert mode
-set noesckeys
-set ttimeout
-set ttimeoutlen=1
-
-" Don't wait so long for the next keypress (particularly in ambigious Leader
-" situations.
-set timeoutlen=500
-
-
-"----------
-" Other
-"-----------
