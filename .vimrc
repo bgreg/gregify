@@ -1,22 +1,23 @@
 " TODO: 
 "  add something to show the marks
-"  read this: http://robots.thoughtbot.com/faster-grepping-in-vim
 "  figure out how to exclude files from auto complete
-"  Figure out system clipboard thing
+"  add shortcuts for better ctrlp jumps
+"  reorganize this,  the approach of putting bundles next to their configs 
+"    isn't working out as well as it sounded. 
+"  Change save shortcut to <ctrl>+s
 
 set nocompatible " call  Use VIM, not VI
 filetype off
 execute pathogen#infect()
 execute pathogen#helptags()
 
-
-
-
 "===============================================================
 "
 " Vim Configuration changes
 "
 "===============================================================
+" spell checker
+set spell spelllang=en_us
 
 " ignore case when searching
 set ignorecase 
@@ -26,16 +27,15 @@ set smartcase
 
 " show matches as they are found
 set incsearch 
-
 set hlsearch
+
 " Use Silver Searcher instead of grep
 set grepprg=ag
 " Fuzzy finder: ignore stuff that can't be opened, and generated files
 let g:fuzzy_ignore = "*.png;*.PNG;*.JPG;*.jpg;*.GIF;*.gif;vendor/**;coverage/**;tmp/**;rdoc/**"
 
-
 " Toggle search highlighting
-nnoremap <Leader>h :noh <CR>
+map <space> :noh<CR>
 
 " show matching brace when they are typed or under cursor
 set showmatch 
@@ -48,7 +48,7 @@ set sidescrolloff=15
 set sidescroll=1
 
 " Use _ as a word-separator
-set iskeyword-=_,#
+" set iskeyword-=_,#
 
 map ss :sp <CR>
 map vv :vsp <CR>
@@ -129,13 +129,13 @@ set nowb
 "--------------------
 let mapleader = ","
 
-"--------------------
-"     reload vimrc
-"--------------------
-map <Leader>r :so $MYVIMRC <cr>
+cnoremap %% <C-R>=expand('%:h').'/'<cr>
+map <leader>e :edit %%
 
-"debug
-map <Leader>d <cr>byebug<esc>:w<cr>
+"debug, doesn't work yet
+nmap <silent> <leader>b byebug<Esc>
+
+set autowrite " Automatically save the file when I look away
 
 " system clipboard paste
 map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>
@@ -143,10 +143,21 @@ map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>
 "saving
 map <C-w> <esc>:w<CR>
 " and in insert mode
-imap <C-w> <esc>:w<CR>
+map <Esc><Esc> :w<CR>
 
-"ZZ to save and quit
 
+command! Q q " Bind :Q to :q
+command! Qall qall 
+
+" Disable Ex mode
+map Q <Nop>
+
+" quit with shift q in visual mode or command mode
+map Q :q<CR>
+vmap Q :q<CR>
+
+" switch between the last two files
+nnoremap <leader><leader> :w<CR><c-^>
 
 " tabs
 map <C-t> <esc>:tabnew<CR>
@@ -173,9 +184,6 @@ nnoremap <C-K> <C-W>k
 nnoremap <C-L> <C-W>l
 nnoremap <C-H> <C-W>h
 
-" Disable EX mode
-map Q <Nop>
-
 " When at 3 spaces and I hit >>, go to 4, not 5.
 set shiftround 
 
@@ -197,6 +205,8 @@ set gcr=a:blinkon0
 " always show status line 
 set laststatus=2    
 
+" yank line to system clipboard
+map <Leader>y "+yy 
 
 
 
@@ -298,6 +308,7 @@ Bundle 'kchmck/vim-coffee-script'
 "autocomplete helper
 Bundle 'ervandew/supertab'
 "html autocomplete engine
+"
 "<c-y>, to fire
 Bundle 'mattn/emmet-vim'
 
@@ -347,7 +358,7 @@ noremap <Leader>n :NumbersToggle<cr> " Toggle between relative numbers and absol
 nnoremap <F3> :NumbersToggle<CR>
 nnoremap <F4> :NumbersOnOff<CR>
 
-" Matching  % in many more scenarios
+" Matching % in many more scenarios
 Bundle 'edsono/vim-matchit'
 
 " indent guide, useful for white space delimited languages
