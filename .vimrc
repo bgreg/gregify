@@ -8,6 +8,10 @@
 
 set nocompatible " call  Use VIM, not VI
 filetype off
+filetype plugin on
+filetype indent on
+syntax enable
+
 execute pathogen#infect()
 execute pathogen#helptags()
 
@@ -16,6 +20,10 @@ execute pathogen#helptags()
 " Vim Configuration changes
 "
 "===============================================================
+
+" Automatically save the file when I look away
+set autowrite 
+
 " spell checker
 set spell spelllang=en_us
 
@@ -31,6 +39,7 @@ set hlsearch
 
 " Use Silver Searcher instead of grep
 set grepprg=ag
+
 " Fuzzy finder: ignore stuff that can't be opened, and generated files
 let g:fuzzy_ignore = "*.png;*.PNG;*.JPG;*.jpg;*.GIF;*.gif;vendor/**;coverage/**;tmp/**;rdoc/**"
 
@@ -48,8 +57,9 @@ set sidescrolloff=15
 set sidescroll=1
 
 " Use _ as a word-separator
-" set iskeyword-=_,#
+set iskeyword-=_,#
 
+"Split opening 
 map ss :sp <CR>
 map vv :vsp <CR>
 set splitbelow
@@ -60,7 +70,7 @@ set noesckeys
 set ttimeout
 set ttimeoutlen=1
 
-" Don't wait so long for the next keypress (particularly in ambigious Leader
+" Don't wait so long for the next key press (particularly in ambigious Leader
 set timeoutlen=500
 
 set autoindent
@@ -70,14 +80,11 @@ set smarttab
 set expandtab
 set tabstop=2
 set shiftwidth=2
+
  "Allow backspace in insert mode
 set backspace=indent,eol,start 
 set nowrap
 set linebreak
-
-filetype plugin on
-filetype indent on
-
 
 " Don't need to go nuts with the undo level, 150 should be fine
 set history=500 
@@ -89,24 +96,25 @@ set undolevels=150
 set undoreload=200 
 set undodir=$HOME/.vim/undo
 
-syntax enable
 set mouse=nicr " enables mouse scrolling
 set mouse=a
 set t_Co=256
-let g:solarized_termcolors=256
+
+"--------------------
+" autocomplete
+"--------------------
+au FileType ruby,eruby setl ofu=rubycomplete#Complete
+au FileType html,xhtml setl ofu=htmlcomplete#CompleteTags
+au FileType css setl ofu=csscomplete#CompleteCSS
 
 if &term=~"xterm"
-   set background=dark
-   colorscheme gotham
+   colorscheme gotham256
 
    " Custom color changes to the gotham theme
    highlight LineNr ctermfg=DarkGrey ctermbg=black
    highlight Comment ctermfg=232
    highlight Search cterm=NONE ctermfg=black ctermbg=DarkGrey
    highlight VertSplit ctermfg=black ctermbg=DarkGrey
-else
-  set background=dark
-  colorscheme solarized
 endif
 
 set guifont=Source\ Code\ Pro:h16
@@ -116,7 +124,20 @@ set noswapfile
 set nobackup
 set nowb
 
+" set the title to the file name and modification status
+set title           
 
+" show the command being typed
+set showcmd         
+
+" show current mode (insert, visual, etc.)
+set showmode        
+
+"Disable cursor blink
+set gcr=a:blinkon0  
+
+" always show status line 
+set laststatus=2    
 
 "===============================================================
 "
@@ -129,22 +150,20 @@ set nowb
 "--------------------
 let mapleader = ","
 
+" print in the current path on the command line. 
+" This is useful for file switching to a named path 
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
 map <leader>e :edit %%
 
-"debug, doesn't work yet
+"debug, doesn't work yet. I want to insert byebug when I hit ,b
 nmap <silent> <leader>b byebug<Esc>
 
-set autowrite " Automatically save the file when I look away
 
 " system clipboard paste
 map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>
 
-"saving
-map <C-w> <esc>:w<CR>
-" and in insert mode
+" double tap escape to save
 map <Esc><Esc> :w<CR>
-
 
 command! Q q " Bind :Q to :q
 command! Qall qall 
@@ -190,28 +209,8 @@ set shiftround
 " disable looking stuff up
 map K <Nop>         
 
-" set the title to the file name and modification status
-set title           
-
-" show the command being typed
-set showcmd         
-
-" show current mode (insert, visual, etc.)
-set showmode        
-
-"Disable cursor blink
-set gcr=a:blinkon0  
-
-" always show status line 
-set laststatus=2    
-
 " yank line to system clipboard
 map <Leader>y "+yy 
-
-
-
-
-
 
 "===============================================================
 "
@@ -223,6 +222,12 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 Plugin 'gmarik/Vundle.vim' " let Vundle manage Vundle, required
 call vundle#end()       
+
+" The best color scheme ever created
+Bundle 'whatyouhide/vim-gotham'
+
+" default color is crazy
+highlight Pmenu ctermbg=238 gui=bold       
 
 "==========================
 "        Ctrl-P
@@ -252,32 +257,8 @@ map <c-\> :NERDTreeFind<CR>
 Bundle 'godlygeek/tabular'      
 map <c-A> :Tabularize /
 
-"--------------------
-" autocomplete
-"--------------------
-filetype plugin on
-au FileType ruby,eruby setl ofu=rubycomplete#Complete
-au FileType html,xhtml setl ofu=htmlcomplete#CompleteTags
-au FileType css setl ofu=csscomplete#CompleteCSS
-
-" default color is crazy
-highlight Pmenu ctermbg=238 gui=bold       
-
 " faster file searching
 Bundle 'rking/ag.vim'
-
-" In the quickfix window, you can use:
-"     e    to open file and close the quickfix window
-"     o    to open (same as enter)
-"     go   to preview file (open but maintain focus on ag.vim results)
-"     t    to open in new tab
-"     T    to open in new tab silently
-"     h    to open in horizontal split
-"     H    to open in horizontal split silently
-"     v    to open in vertical split
-"     gv   to open in vertical split silently
-"     q    to close the quickfix window
-
 Bundle 'gmarik/vundle'
 Bundle 'vim-ruby/vim-ruby'
 Bundle 'tpope/vim-repeat.git'
@@ -288,6 +269,7 @@ Bundle 'tpope/vim-unimpaired'
 Bundle 'tpope/vim-commentary'
 Bundle 'tpope/vim-bundler' 
 Bundle 'tpope/vim-fugitive'
+
 " Provides Rspec runners
 Bundle 'thoughtbot/vim-rspec'  
 
@@ -300,15 +282,17 @@ map <Leader>a :call RunAllSpecs()<CR>
 
 " Haml
 Bundle 'tpope/vim-haml'
+
 "Sass
 Bundle 'cakebaker/scss-syntax.vim'
 
 "coffee script
 Bundle 'kchmck/vim-coffee-script'
+
 "autocomplete helper
 Bundle 'ervandew/supertab'
+
 "html autocomplete engine
-"
 "<c-y>, to fire
 Bundle 'mattn/emmet-vim'
 
@@ -341,8 +325,7 @@ au VimEnter * RainbowParenthesesToggle
 
 " This is a lightweight vim status bar
 Bundle 'bling/vim-airline'      
-let g:airline_detect_whitespace=0 
-
+" let g:airline_detect_whitespace=0 
 
 " Tag bar
 Bundle  'majutsushi/tagbar'
@@ -367,6 +350,17 @@ let g:indent_guides_auto_colors = 0
 hi IndentGuidesOdd  ctermbg=17
 hi IndentGuidesEven ctermbg=239
 
+Bundle 'ecomba/vim-ruby-refactoring'
+" :nnoremap <leader>rap  :RAddParameter<cr>
+" :nnoremap <leader>rcpc :RConvertPostConditional<cr>
+" :nnoremap <leader>rel  :RExtractLet<cr>
+" :vnoremap <leader>rec  :RExtractConstant<cr>
+" :vnoremap <leader>relv :RExtractLocalVariable<cr>
+" :nnoremap <leader>rit  :RInlineTemp<cr>
+" :vnoremap <leader>rrlv :RRenameLocalVariable<cr>
+" :vnoremap <leader>rriv :RRenameInstanceVariable<cr>
+" :vnoremap <leader>rem  :RExtractMethod<cr>
+
 "=================================================================================
 "
 " Functions
@@ -386,4 +380,3 @@ function! RenameFile()
     endif
 endfunction
 map <C-n> :call RenameFile()<cr>
-
