@@ -163,27 +163,6 @@ gjc () {
     g commit --amend
 }
 
-get_backup () {
-  CURRENT_DIR=$(pwd)
-  cd ~/projects/s3
-  rm *.tar *sql*
-  ruby get_bu.rb ruby get_bu.rb --download "./" --passphrase '' --dbs 'paynearme'
-  cd ~/projects/topo
-  rake make_safe:delete_callbacks_and_sftp_settings
-  bundle exec rails runner "eval( File.read '/Users/gregmcguirk/projects/accounting/force_user_creation.rb')"
-  cd $CURRENT_DIR
-}
-
 st () {
   echo -ne "\e]1;$1\a"
 }
-
-
-# TODO
-# write get_backup function
-# that calls ~/s3/get_backup
-# and runs rake make safe 
-# 
-# remove old backups in the get_backup script
-# copy your modified robby russle theme into a new file with a new name
-#        
