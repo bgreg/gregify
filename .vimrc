@@ -153,7 +153,7 @@ map <Leader>l :call RunLastSpec()<CR>
 map <Leader>a :call RunAllSpecs()<CR>
 map <Leader>n :NumbersToggle<cr> " Toggle between relative numbers and absolute numbers
 map <leader>e :edit %%
-map <Leader>f :%s/:\([^ ]*\)\(\s*\)=>/\1:/g <cr>
+map <Leader>f :s/:\([^ ]*\)\(\s*\)=>/\1:/g <cr>
 map <Leader>y "+yy " yank line to system clipboard
 map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr> " system clipboard paste
 nnoremap <leader>rap  :RAddParameter<cr>
