@@ -1,7 +1,6 @@
 " TODO: 
 "  *) add something to show the marks
 "  *) figure out how to exclude files from auto complete
-"  *) add shortcuts for better ctrlp jumps
 "  *) Change save shortcut to <ctrl>+s
 
 set nocompatible
@@ -129,7 +128,6 @@ let g:ctrlp_custom_ignore = {
   \ 'dir':  '\v[\/]\.(git|hg|svn)$',
   \ 'file': '\v\.(exe|so|dll|log|sql)$'
   \ }
-let g:ctrlp_max_files = 0
 let g:indent_guides_auto_colors = 0
 let g:numbers_exclude = ['tagbar', 'gundo', 'minibufexpl', 'nerdtree']
 
@@ -157,6 +155,10 @@ map <leader>e :edit %%
 map <Leader>f :s/:\([^ ]*\)\(\s*\)=>/\1:/g <cr>
 map <Leader>y "+yy " yank line to system clipboard
 map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr> " system clipboard paste
+map <Leader>tm :CtrlP app/models/<cr>
+map <Leader>ta :CtrlP app/assets/<cr>
+map <Leader>tc :CtrlP app/controllers/<cr>
+map <Leader>tl :CtrlP app/controllers/<cr>
 nnoremap <leader>rap  :RAddParameter<cr>
 nnoremap <leader>rcpc :RConvertPostConditional<cr>
 nnoremap <leader>rel  :RExtractLet<cr>
