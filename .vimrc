@@ -1,14 +1,16 @@
 " TODO: 
 "  *) add something to show the marks
 "  *) figure out how to exclude files from auto complete
+"  *) add shortcuts for better ctrlp jumps
 "  *) Change save shortcut to <ctrl>+s
+"  *) install tailminusf to tail log files in vim 
+"  *) exuburant c-tags for vim ? 
 
 set nocompatible
 filetype off
-
-let mapleader = ","
-
 set rtp+=~/.vim/bundle/Vundle.vim
+
+" :help vundle
 call vundle#begin()
   Plugin 'gmarik/Vundle.vim' 
   Plugin 'whatyouhide/vim-gotham'
@@ -40,6 +42,8 @@ call vundle#begin()
   Plugin 'edsono/vim-matchit'
   Plugin 'nathanaelkane/vim-indent-guides'
   Plugin 'ecomba/vim-ruby-refactoring'
+  Plugin 'xolox/vim-easytags'
+  Plugin 'xolox/vim-misc'
   Plugin 'scrooloose/syntastic'
 call vundle#end()       
 
@@ -48,12 +52,13 @@ au FileType ruby,eruby setl ofu=rubycomplete#Complete
 au FileType html,xhtml setl ofu=htmlcomplete#CompleteTags
 au FileType css setl ofu=csscomplete#CompleteCSS
 
+
 set shiftround 
 set autowrite 
 set number          
 set relativenumber  
 set ruler           
-set spell spelllang=en_us
+" set spell spelllang=en_us
 set ignorecase 
 set smartcase 
 set incsearch 
@@ -99,6 +104,7 @@ set gcr=a:blinkon0
 set laststatus=2    
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 
+let mapleader = ","
 let g:fuzzy_ignore = "*.png;*.PNG;*.JPG;*.jpg;*.GIF;*.gif;vendor/**;coverage/**;tmp/**;rdoc/**"
 let g:rbpt_colorpairs = [
     \ ['brown',       'RoyalBlue3'],
@@ -130,15 +136,15 @@ let g:indent_guides_auto_colors = 0
 let g:numbers_exclude = ['tagbar', 'gundo', 'minibufexpl', 'nerdtree']
 
 if &term=~"xterm"
-   " colorscheme gotham256
+   colorscheme gotham256
    " These changes only apply to the gotham theme
-   " highlight LineNr ctermfg=DarkGrey ctermbg=black
-   " highlight Comment ctermfg=232
-   " highlight Search cterm=NONE ctermfg=black ctermbg=DarkGrey
-   " highlight VertSplit ctermfg=black ctermbg=DarkGrey
-   " highlight Pmenu ctermbg=238 gui=bold       
-   " highlight IndentGuidesOdd  ctermbg=17
-   " highlight IndentGuidesEven ctermbg=239
+   highlight LineNr ctermfg=DarkGrey ctermbg=black
+   highlight Comment ctermfg=232
+   highlight Search cterm=NONE ctermfg=black ctermbg=DarkGrey
+   highlight VertSplit ctermfg=black ctermbg=DarkGrey
+   highlight Pmenu ctermbg=238 gui=bold       
+   highlight IndentGuidesOdd  ctermbg=17
+   highlight IndentGuidesEven ctermbg=239
 endif
 
 "+=================+
@@ -148,11 +154,13 @@ map <Leader>as :call RunCurrentSpecFile()<CR>
 map <Leader>s :call RunNearestSpec()<CR>
 map <Leader>l :call RunLastSpec()<CR>
 map <Leader>a :call RunAllSpecs()<CR>
-map <Leader>n :NumbersToggle<cr> " Toggle between relative numbers and absolute numbers
+map <Leader>n :NumbersToggle<cr> 
 map <leader>e :edit %%
+map <leader>w :%s/\s\+$//g
 map <Leader>f :s/:\([^ ]*\)\(\s*\)=>/\1:/g <cr>
-map <Leader>y "+yy " yank line to system clipboard
-map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr> " system clipboard paste
+map <Leader>y "+yy    
+map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr> 
+map <Leader>tab :Tabularize /
 map <Leader>tm :CtrlP app/models/<cr>
 map <Leader>ta :CtrlP app/assets/<cr>
 map <Leader>tc :CtrlP app/controllers/<cr>
@@ -166,19 +174,19 @@ nnoremap <leader>rit  :RInlineTemp<cr>
 vnoremap <leader>rrlv :RRenameLocalVariable<cr>
 vnoremap <leader>rriv :RRenameInstanceVariable<cr>
 vnoremap <leader>rem  :RExtractMethod<cr>
+map <leader>- <esc>:vert res 160<cr>
+map <leader>= <esc>:vert res 35<cr>
 
 "
 "     Control Mappings   
 map <c-n> :call RenameFile()<cr>
-map <c-A> :Tabularize /
-map <c-\> :NERDTreeFind<CR>
-map <c-t> <esc>:tabnew<CR>
-"
-"     splits 
+map <c-\> :NERDTreeFind<cr>
+map <c-t> <esc>:tabnew <cr>
 nnoremap <C-J> <C-W>j
 nnoremap <C-K> <C-W>k
 nnoremap <C-L> <C-W>l
 nnoremap <C-H> <C-W>h
+
 "    
 "     command mode 
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
@@ -227,3 +235,4 @@ filetype on
 filetype plugin on
 filetype indent on
 syntax enable
+
