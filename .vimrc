@@ -5,9 +5,6 @@
 
 set nocompatible
 filetype off
-filetype plugin on
-filetype indent on
-syntax enable
 
 let mapleader = ","
 
@@ -43,6 +40,7 @@ call vundle#begin()
   Plugin 'edsono/vim-matchit'
   Plugin 'nathanaelkane/vim-indent-guides'
   Plugin 'ecomba/vim-ruby-refactoring'
+  Plugin 'scrooloose/syntastic'
 call vundle#end()       
 
 au VimEnter * RainbowParenthesesToggle
@@ -132,15 +130,15 @@ let g:indent_guides_auto_colors = 0
 let g:numbers_exclude = ['tagbar', 'gundo', 'minibufexpl', 'nerdtree']
 
 if &term=~"xterm"
-   colorscheme gotham256
+   " colorscheme gotham256
    " These changes only apply to the gotham theme
-   highlight LineNr ctermfg=DarkGrey ctermbg=black
-   highlight Comment ctermfg=232
-   highlight Search cterm=NONE ctermfg=black ctermbg=DarkGrey
-   highlight VertSplit ctermfg=black ctermbg=DarkGrey
-   highlight Pmenu ctermbg=238 gui=bold       
-   highlight IndentGuidesOdd  ctermbg=17
-   highlight IndentGuidesEven ctermbg=239
+   " highlight LineNr ctermfg=DarkGrey ctermbg=black
+   " highlight Comment ctermfg=232
+   " highlight Search cterm=NONE ctermfg=black ctermbg=DarkGrey
+   " highlight VertSplit ctermfg=black ctermbg=DarkGrey
+   " highlight Pmenu ctermbg=238 gui=bold       
+   " highlight IndentGuidesOdd  ctermbg=17
+   " highlight IndentGuidesEven ctermbg=239
 endif
 
 "+=================+
@@ -158,7 +156,7 @@ map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr> " system clipboard paste
 map <Leader>tm :CtrlP app/models/<cr>
 map <Leader>ta :CtrlP app/assets/<cr>
 map <Leader>tc :CtrlP app/controllers/<cr>
-map <Leader>tl :CtrlP app/controllers/<cr>
+map <Leader>tl :CtrlP app/lib/<cr>
 nnoremap <leader>rap  :RAddParameter<cr>
 nnoremap <leader>rcpc :RConvertPostConditional<cr>
 nnoremap <leader>rel  :RExtractLet<cr>
@@ -224,3 +222,8 @@ let old_name = expand('%')
         redraw!
     endif
 endfunction
+
+filetype on
+filetype plugin on
+filetype indent on
+syntax enable
