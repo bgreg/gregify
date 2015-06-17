@@ -139,7 +139,6 @@ alias gl="git log"
 alias rspec='nocorrect rspec'
 alias gs='gst'
 alias gbr='git for-each-ref --sort=-committerdate refs/heads/ | head' 
-alias bastion='ssh gmcguirk@bastion.paynearme.com'
 alias agr='ag --ruby'
 
 # functions
