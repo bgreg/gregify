@@ -1,10 +1,7 @@
 " TODO: 
 "  *) add something to show the marks
 "  *) figure out how to exclude files from auto complete
-"  *) add shortcuts for better ctrlp jumps
 "  *) Change save shortcut to <ctrl>+s
-"  *) install tailminusf to tail log files in vim 
-"  *) exuburant c-tags for vim ? 
 
 set nocompatible
 filetype off
@@ -42,16 +39,16 @@ call vundle#begin()
   Plugin 'edsono/vim-matchit'
   Plugin 'nathanaelkane/vim-indent-guides'
   Plugin 'ecomba/vim-ruby-refactoring'
-  Plugin 'xolox/vim-easytags'
   Plugin 'xolox/vim-misc'
   Plugin 'scrooloose/syntastic'
+  Plugin 'roman/golden-ratio'
+  Plugin 'tpope/vim-vividchalk'
 call vundle#end()       
 
 au VimEnter * RainbowParenthesesToggle
 au FileType ruby,eruby setl ofu=rubycomplete#Complete
 au FileType html,xhtml setl ofu=htmlcomplete#CompleteTags
 au FileType css setl ofu=csscomplete#CompleteCSS
-
 
 set shiftround 
 set autowrite 
@@ -136,15 +133,16 @@ let g:indent_guides_auto_colors = 0
 let g:numbers_exclude = ['tagbar', 'gundo', 'minibufexpl', 'nerdtree']
 
 if &term=~"xterm"
-   colorscheme gotham256
+   colorscheme Tomorrow-Night-Eighties
+   " colorscheme gotham256
    " These changes only apply to the gotham theme
-   highlight LineNr ctermfg=DarkGrey ctermbg=black
-   highlight Comment ctermfg=232
-   highlight Search cterm=NONE ctermfg=black ctermbg=DarkGrey
-   highlight VertSplit ctermfg=black ctermbg=DarkGrey
-   highlight Pmenu ctermbg=238 gui=bold       
-   highlight IndentGuidesOdd  ctermbg=17
-   highlight IndentGuidesEven ctermbg=239
+   " highlight LineNr ctermfg=DarkGrey ctermbg=black
+   " highlight Comment ctermfg=232
+   " highlight Search cterm=NONE ctermfg=black ctermbg=DarkGrey
+   " highlight VertSplit ctermfg=black ctermbg=DarkGrey
+   " highlight Pmenu ctermbg=238 gui=bold       
+   " highlight IndentGuidesOdd  ctermbg=17
+   " highlight IndentGuidesEven ctermbg=239
 endif
 
 "+=================+
@@ -156,11 +154,11 @@ map <Leader>l :call RunLastSpec()<CR>
 map <Leader>a :call RunAllSpecs()<CR>
 map <Leader>n :NumbersToggle<cr> 
 map <leader>e :edit %%
-map <leader>w :%s/\s\+$//g
+map <leader>w :%s/\s\+$//g <cr>
 map <Leader>f :s/:\([^ ]*\)\(\s*\)=>/\1:/g <cr>
 map <Leader>y "+yy    
 map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr> 
-map <Leader>tab :Tabularize /
+map <Leader>c :Tabularize /
 map <Leader>tm :CtrlP app/models/<cr>
 map <Leader>ta :CtrlP app/assets/<cr>
 map <Leader>tc :CtrlP app/controllers/<cr>
@@ -174,9 +172,6 @@ nnoremap <leader>rit  :RInlineTemp<cr>
 vnoremap <leader>rrlv :RRenameLocalVariable<cr>
 vnoremap <leader>rriv :RRenameInstanceVariable<cr>
 vnoremap <leader>rem  :RExtractMethod<cr>
-map <leader>- <esc>:vert res 160<cr>
-map <leader>= <esc>:vert res 35<cr>
-
 "
 "     Control Mappings   
 map <c-n> :call RenameFile()<cr>
@@ -186,22 +181,22 @@ nnoremap <C-J> <C-W>j
 nnoremap <C-K> <C-W>k
 nnoremap <C-L> <C-W>l
 nnoremap <C-H> <C-W>h
-
 "    
 "     command mode 
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
 command! Q q 
 command! Qall qall 
-
 "
 "     function keys
 nmap <F8> :TagbarToggle<CR>
-
+map <F8>   :call SwitchColor(1)<CR>
+imap <F8>  <Esc>:call SwitchColor(1)<CR>
+map <S-F8> :call SwitchColor(-1)<CR>
 "
 "     other
-map <space> :noh<CR>" Toggle search highlighting
-map ss :sp <CR>     " Horizontal Split 
-map vv :vsp <CR>    " vertical split
+map <space> :noh<CR>
+map ss :sp <CR>     
+map vv :vsp <CR>   
 map Q <Nop>         " Disable Ex mode
 map Q :q<CR>        
 vmap Q :q<CR>       " Visual mapping
@@ -210,7 +205,7 @@ nnoremap th  :tabfirst <CR>
 nnoremap tj  :tabnext <CR>
 nnoremap tk  :tabprev <CR>
 nnoremap tl  :tablast <CR>
-nnoremap tt  :tabedit <Space>
+nnoremap te  :tabedit <Space>
 nnoremap tn  :tabnext <CR>
 nnoremap tm  :tabm <Space>
 nnoremap td  :tabclose <CR>
@@ -229,6 +224,72 @@ let old_name = expand('%')
         exec ':silent !rm ' . old_name
         redraw!
     endif
+endfunction
+
+
+"+================+
+"|  Autocommands  |
+"+================+
+
+" This autocommand jumps to the last known position in a file
+" just after opening it, if the '" mark is set: >
+autocmd! BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+
+"+===========================+
+"| Arrow keys are the devil  |
+"+===========================+
+map <Left> :echo "no!" <cr>
+map <Right> :echo "no!"<cr>
+map <Up> :echo "no!"<cr>
+map <Down> :echo "no!"<cr>
+
+"+===========================+
+" Custom color switcher      |
+"+===========================+
+
+if v:version < 700 || exists('loaded_switchcolor') || &cp
+  finish
+endif
+
+let loaded_switchcolor = 1
+
+let paths = split(globpath(&runtimepath, 'colors/*.vim'), "\n")
+let s:swcolors = map(paths, 'fnamemodify(v:val, ":t:r")')
+let s:swskip = [ '256-jungle', '3dglasses', 'calmar256-light', 'coots-beauty-256', 'grb256' ]
+let s:swback = 0    " background variants light/dark was not yet switched
+let s:swindex = 0
+
+function! SwitchColor(swinc)
+  " if have switched background: dark/light
+  if (s:swback == 1)
+    let s:swback = 0
+    let s:swindex += a:swinc
+    let i = s:swindex % len(s:swcolors)
+
+    " in skip list
+    if (index(s:swskip, s:swcolors[i]) == -1)
+      execute "colorscheme " . s:swcolors[i]
+    else
+      return SwitchColor(a:swinc)
+    endif
+
+  else
+    let s:swback = 1
+    if (&background == "light")
+      execute "set background=dark"
+    else
+      execute "set background=light"
+    endif
+
+    " roll back if background is not supported
+    if (!exists('g:colors_name'))
+      return SwitchColor(a:swinc)
+    endif
+  endif
+
+  " show current name on screen. :h :echo-redraw
+  redraw
+  execute "colorscheme"
 endfunction
 
 filetype on

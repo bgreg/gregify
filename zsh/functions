@@ -1,0 +1,44 @@
+function git_branch_name {
+  val=`git branch 2>/dev/null | grep '^*' | colrm 1 2`
+  echo "$val"
+}
+
+function g {
+  if [[ $# > 0 ]]; then
+    git $@
+  else
+    git status
+  fi
+}
+compdef g=git
+
+function rrg {
+  rake routes | grep $1
+}
+
+function take {
+  mkdir $1
+  cd $1
+}
+
+# Allows commit message without typing quotes (can't have quotes in the commit msg though).
+function gc {
+  git commit -m "$*"
+}
+
+alias agr='ag --ruby'
+
+# functions
+function gjc {
+    echo
+    echo "==============================================================================="
+    echo "Your Commit Message: $(g rev-parse --abbrev-ref HEAD) - $1"
+    echo "==============================================================================="
+    echo
+    g commit -m "$(g rev-parse --abbrev-ref HEAD) - $1"
+    g commit --amend
+}
+
+st {
+  echo -ne "\e]1;$1\a"
+}

@@ -1,0 +1,80 @@
+[user]
+    name = Greg McGuirk 
+    email = bert.mcguirk@gmail.com 
+
+[color]
+    ui = auto
+
+[alias]
+    stat = status
+    st = status --short
+    remove = rm
+    ci = commit
+    cia = commit -a
+    ciaa = commit -a --amend
+    cip = !git add -p && git ci
+    cipa = !git add -p && git ci --amend
+    br = branch
+    co = checkout
+    df = diff
+    lg = log -p
+    loll = log --graph --decorate --pretty=oneline --abbrev-commit
+    lol = !git --no-pager loll
+    lolal = log --graph --decorate --pretty=oneline --abbrev-commit --all
+    lola = !git --no-pager lolal
+    ls = ls-files
+    unstash = stash pop
+    log-merge = !git log $(git merge-base --octopus $(git log -1 --merges --pretty=format:%P $1))..$1 --graph --pretty=oneline --abbrev-commit --boundary
+    log-all = !git log --graph --decorate --pretty=oneline --abbrev-commit --all $(git fsck --no-reflogs | grep commit | cut -d\\  -f3)
+    git = !git
+    x = !gitx
+    man = help
+    pop = stash pop
+    cp = cherry-pick
+
+[branch]
+    autosetuprebase = always
+
+[mergetool]
+    keepBackup = true
+    prompt = false
+
+[core]
+    excludesfile = ~/.gitignore
+    editor = vim -v
+
+    # Treat spaces before tabs and all kinds of trailing whitespace as an error
+    # [default] trailing-space: looks for spaces at the end of a line
+    # [default] space-before-tab: looks for spaces before tabs at the beginning of a line
+    whitespace = space-before-tab,-indent-with-non-tab,trailing-space
+
+    # Make `git rebase` safer on OS X
+    # More info: <http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/>
+    trustctime = false
+
+[color]
+    diff = auto
+    status = auto
+    branch = auto
+
+[color "diff"]
+    meta = yellow 
+
+[apply]
+    whitespace = nowarn
+
+[github]
+    user = bgreg
+
+# Setup Kaleidoscope as my default diffing tool (because its awesome)
+[difftool "Kaleidoscope"]
+   cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
+[mergetool "Kaleidoscope"]
+   cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
+   trustExitCode = true
+[diff]
+   tool = Kaleidoscope
+[difftool]
+   prompt = false
+[merge]
+   tool = Kaleidoscope
