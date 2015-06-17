@@ -5,7 +5,7 @@ export ZSH=$HOME/.oh-my-zsh
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="gregyrussell"
+ZSH_THEME="robbyrussell"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -47,13 +47,9 @@ COMPLETION_WAITING_DOTS="true"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git brew bundler gem rails rake rvm)
 
-
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
-
-export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:~/projects/topo/commands:/usr/X11/bin:/usr/local:/usr/local/mysql-5.1.73-osx10.6-x86_64/bin"
-# export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
@@ -81,18 +77,12 @@ export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:~/projects/topo/comman
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
 
-
 #     My stuff # 
 
 #vim mode
 bindkey -v
 export KEYTIMEOUT=1
 bindkey '^R' history-incremental-search-backward # Don't loose reverse search in vim mode
-
-
-
-# # Path
-# export PATH=:$HOME/.rvm/bin:~:/usr/local/git/bin::/usr/local/mysql/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:$HOME/.bin:$HOME/.rvm/bin:/opt/local/bin:/opt/local/sbin:$PATH
 
 # Ruby releated
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" 
