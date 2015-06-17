@@ -36,8 +36,8 @@ export PATH=:$HOME/.rvm/bin:~:/usr/local/git/bin:/usr/bin:/bin:/usr/sbin:/sbin:/
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" 
 
 # Source my custom files after oh-my-zsh so I can override things.
-source $HOME/.dotfiles/zsh/aliases
-source $HOME/.dotfiles/zsh/functions
+source $HOME/dotfiles/zsh/aliases
+source $HOME/dotfiles/zsh/functions
 
 # Fix up the Ruby GC to make it faster
 export RUBY_GC_HEAP_INIT_SLOTS=1250000

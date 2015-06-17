@@ -73,21 +73,10 @@ alias dotf="~/.dotfiles"
 alias mysql="$(brew --prefix mysql)/bin/mysql"
 
 
-
-
-
-
-
-
-
-
-
-liases
-alias ze='vim ~/.zshrc'
-alias zr='source ~/.zshrc'
-alias ve='vim ~/.vimrc'
-alias vi='vim'
-
+# alias ze='vim ~/.zshrc'
+# alias zr='source ~/.zshrc'
+# alias ve='vim ~/.vimrc'
+# alias vi='vim'
 
 # Setup the Gemset aliases
 # alias rvmu='rvm use'
@@ -127,9 +116,5 @@ alias vi='vim'
 # alias gs='gst'
 # alias gbr='git for-each-ref --sort=-committerdate refs/heads/ | head' 
 # alias agr='ag --ruby'
-
-
-
-
 
 

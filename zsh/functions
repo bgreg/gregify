@@ -10,7 +10,7 @@ function g {
     git status
   fi
 }
-compdef g=git
+#compdef g=git
 
 function rrg {
   rake routes | grep $1
@@ -21,24 +21,20 @@ function take {
   cd $1
 }
 
-# Allows commit message without typing quotes (can't have quotes in the commit msg though).
 function gc {
   git commit -m "$*"
 }
 
-alias agr='ag --ruby'
-
-# functions
-function gjc {
-    echo
-    echo "==============================================================================="
-    echo "Your Commit Message: $(g rev-parse --abbrev-ref HEAD) - $1"
-    echo "==============================================================================="
-    echo
-    g commit -m "$(g rev-parse --abbrev-ref HEAD) - $1"
-    g commit --amend
-}
-
-st {
-  echo -ne "\e]1;$1\a"
-}
+#function gjc {
+#    echo
+#    echo "==============================================================================="
+#    echo "Your Commit Message: $(g rev-parse --abbrev-ref HEAD) - $1"
+#    echo "==============================================================================="
+#    echo
+#    g commit -m "$(g rev-parse --abbrev-ref HEAD) - $1"
+#    g commit --amend
+#}
+#
+#function st {
+#  echo -ne "\e]1;$1\a"
+#}
