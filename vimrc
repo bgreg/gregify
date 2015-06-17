@@ -43,6 +43,7 @@ call vundle#begin()
   Plugin 'scrooloose/syntastic'
   Plugin 'roman/golden-ratio'
   Plugin 'tpope/vim-vividchalk'
+  Plugin 'chriskempson/vim-tomorrow-theme' 
 call vundle#end()       
 
 au VimEnter * RainbowParenthesesToggle
