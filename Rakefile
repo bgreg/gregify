@@ -2,6 +2,11 @@ require 'rake'
 
 desc "install the dot files into user's home directory"
 task :install do
+  puts "Your shell is set to: #{ENV['SHELL']}"
+  unless ENV['SHELL'] =~ /zsh/
+    system('chsh -s /usr/local/bin/zsh')
+  end
+
   replace_all = false
   Dir['*'].each do |file|
     next if %w[Rakefile README LICENSE id_dsa.pub].include?(file)
