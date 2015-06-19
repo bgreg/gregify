@@ -6,7 +6,7 @@ ZSH_CUSTOM=~/.zsh/themes
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-ZSH_THEME="sean"
+ZSH_THEME="robbyrussell"
 
 # ZSH related options
 # For more interesting options, use man zshoptions
@@ -26,7 +26,7 @@ export GIT_PAGER='less -FRX'
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git brew bundler gem rails rake rvm)
+plugins=(git brew bundler gem rails rake rvm osx)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -45,3 +45,8 @@ export RUBY_HEAP_SLOTS_INCREMENT=100000
 export RUBY_HEAP_SLOTS_GROWTH_FACTOR=1
 export RUBY_GC_MALLOC_LIMIT=30000000
 export RUBY_HEAP_FREE_MIN=12500
+
+# this helps with source highlighting with less
+LESSPIPE=`which src-hilite-lesspipe.sh`
+export LESSOPEN="| ${LESSPIPE} %s"
+export LESS='-R'

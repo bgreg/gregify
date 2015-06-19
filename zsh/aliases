@@ -1,20 +1,9 @@
-# Setup the Gemset aliases
 alias rvmu='rvm use'
-# Useful for watching logs
 alias tf='tail -f'
 alias tfd='tf log/development.log'
 alias tft='tf log/test.log'
 
-# MacVim has a horrible bug where it breaks when I switch from
-# external monitor to no monitor.  The fix is to delete its
-# preference files.  This happens just about every damn day so
-# here is a goddamn alias for it
-alias fuck_mvim='rm ~/Library/Preferences/org.vim.*'
-
 # Override system vi/vim, the override option in brew isn't working
-alias vi='mvim -v'
-alias vim='vi'
-
 # Brew doesn't properly override ctags
 alias ctags="`brew --prefix`/bin/ctags"
 
@@ -28,7 +17,7 @@ alias la="ls -la"
 alias lah="ls -lah"
 
 # A script to recursively find and replace through folders using Perl
-alias rr="~/.scripts/recursive_replace.sh"
+# alias rr="~/.scripts/recursive_replace.sh"
 
 # make an alias to ack since I live in Ruby-land
 alias ark="ag --ruby"
@@ -52,11 +41,7 @@ alias d="git diff"
 alias a="git add"
 alias dca="d --cached"
 alias pp="git stash && git pull && git pop"
-alias po="git co db/schema.rb && noskip_common && git stash && git pull && git pop && skip_common"
-alias noskip_common="noskip Gemfile* && noskip config/database.yml && noskip config/environments/development.rb"
-alias skip_common="skip Gemfile* && skip config/database.yml && skip config/environments/development.rb && skip db/schema.rb"
-alias skip="git update-index --assume-unchanged"
-alias noskip="git update-index --no-assume-unchanged"
+alias po="git co db/schema.rb && git stash && git pull && git pop"
 alias myco="git log --author=me"
 alias co="git checkout"
 alias clean="git clean -fxd"
@@ -73,48 +58,25 @@ alias dotf="~/.dotfiles"
 alias mysql="$(brew --prefix mysql)/bin/mysql"
 
 
-# alias ze='vim ~/.zshrc'
-# alias zr='source ~/.zshrc'
-# alias ve='vim ~/.vimrc'
-# alias vi='vim'
+alias ze='vim ~/.dotfiles/zshrc'
+alias zr='source ~/.dotfiles/zshrc'
+alias ve='vim ~/.dotfiles/.vimrc'
+alias vi='vim'
 
-# Setup the Gemset aliases
-# alias rvmu='rvm use'
-# # Useful for watching logs
-# alias tf='tail -f'
-# alias tfd='tf log/development.log'
-# alias tft='tf log/test.log'
-#
-# # Brew doesn't properly override ctags
-# alias ctags="`brew --prefix`/bin/ctags"
-#
-# # Navigating
-# alias l="ls"
-# alias la="ls -la"
-# alias lah="ls -lah"
-#
-# # A script to recursively find and replace through folders using Perl
-# alias rr="~/.scripts/recursive_replace.sh"
-#
-#
-# # DB aliases
-# alias m="mysql -u root"
-# alias initdb="rake db:init_dev_db && user"
-# alias ddb="rake db:init_dev_db db:test:clone"
-# alias mysql_restart="sudo /Library/StartupItems/MySQLCOM/MySQLCOM restart"
-#
-#
-# # rails
-# # Rails/Ruby related aliases
-# alias user="rake db:create_user[\"greg\",\"greg@paynearme.com\"]"
-# alias rdm="rake db:migrate && rake db:test:clone"
-# alias t="cd ~/projects/topo"
-# alias rc="zeus console"
 #
 # alias gl="git log"
 # alias rspec='nocorrect rspec'
 # alias gs='gst'
-# alias gbr='git for-each-ref --sort=-committerdate refs/heads/ | head' 
+alias gbr='git for-each-ref --sort=-committerdate refs/heads/ | head' 
 # alias agr='ag --ruby'
 
+
+alias mavenlink='cd ~/workspace/mavenlink'
+
+alias mavenlink="cd ~/workspace/mavenlink"
+alias mavenlink2="cd ~/workspace/mavenlink2"
+alias mobile="cd ~/workspace/mobile"
+alias marketing="cd ~/workspace/marketing"
+alias migrate="rake db:migrate db:test:prepare"
+alias fixtures='rspec spec/controllers/create_js_dom_fixtures_spec.rb'
 
