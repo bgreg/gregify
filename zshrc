@@ -32,6 +32,8 @@ source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
 export PATH=:$HOME/.rvm/bin:~:/usr/local/git/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:$HOME/.bin:$HOME/.rvm/bin:/opt/local/bin:/opt/local/sbin:$PATH
+export PATH="$PATH:~/workspace/blackbox/bin"
+export PATH="$PATH:/usr/local/opt/mysql55/bin"
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" 
 
@@ -50,3 +52,4 @@ export RUBY_HEAP_FREE_MIN=12500
 LESSPIPE=`which src-hilite-lesspipe.sh`
 export LESSOPEN="| ${LESSPIPE} %s"
 export LESS='-R'
+export PATH="/usr/local/bin:$PATH"

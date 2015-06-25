@@ -55,7 +55,7 @@ alias dotv="vim ~/.dotfiles"
 alias dotf="~/.dotfiles"
 
 #MySQL Aliases
-alias mysql="$(brew --prefix mysql)/bin/mysql"
+#alias mysql="$(brew --prefix mysql)/bin/mysql"
 
 
 alias ze='vim ~/.dotfiles/zshrc'

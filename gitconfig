@@ -7,8 +7,7 @@
 
 [alias]
     stat = status
-    st = status --short
-    remove = rm
+    st = status
     ci = commit
     cia = commit -a
     ciaa = commit -a --amend
