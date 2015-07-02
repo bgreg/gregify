@@ -1,3 +1,60 @@
+class Pryrc 
+  attr_reader :theme, :verbose
+
+  def initialize(theme, verbose = false)
+    @verbose = true 
+    @theme = theme
+  end
+
+  def prompt_theme
+    case theme
+    when 'dark' 
+      prompt(:purple, :yellow, :purple, :purple)
+    when 'light'
+      prompt(:blue, :red, :blue, :blue)
+    else
+      if verbose
+        puts "A PRY_THEME has not been set in your shell. \n"\
+             "You can choose between dark or light themes like this: \n"\
+             "export PRY_THEME=light, or export PRY_THEME=dark"
+      end
+      prompt(:purple, :yellow, :purple, :purple)
+    end
+  end
+
+  private
+
+  # wrap ANSI codes so Readline knows where the prompt ends
+  def custom_color(name, text)
+    if Pry.color
+      "\001#{Pry::Helpers::Text.send name, '{text}'}\002".sub '{text}', "\002#{text}\001"
+    else
+      text
+    end
+  end
+
+  #  Available colors
+  #  ---------------
+  # :black, :red, :green, :yellow, :blue, :purple, :magenta, :cyan, :white
+  #
+  def prompt(version_color, object_color, terminator_color, line_continuation_color)
+    [
+      lambda do |object, nest_level, pry|
+        prompt = ""
+        prompt += "Ruby:(#{ custom_color(version_color, "#{ RUBY_VERSION.to_s }") }) "
+        prompt += "object:("
+        prompt += custom_color(object_color, Pry.view_clip(object))
+        if nest_level > 0
+          prompt += ":#{nest_level}"
+        end
+        prompt += ")"
+        "#{ prompt } #{ custom_color(terminator_color, '>> ') }"
+      end, 
+      lambda { |object, nest_level, pry| custom_color(line_continuation_color , '>>') }
+    ]
+  end
+end
+
 %w[rubygems awesome_print rexml/document].each do |gem|
   begin
     require gem
@@ -13,31 +70,10 @@ AwesomePrint.pry!
 Pry.config.color = true
 Pry.config.pager = true
 Pry.config.auto_indent = true
-
-# wrap ANSI codes so Readline knows where the prompt ends
-def custom_color(name, text)
-  if Pry.color
-    "\001#{Pry::Helpers::Text.send name, '{text}'}\002".sub '{text}', "\002#{text}\001"
-  else
-    text
-  end
-end
-
-Pry.config.prompt = [
-  proc do |object, nest_level, pry|
-    prompt = ""
-    prompt += "Ruby:(#{custom_color(:purple, "#{RUBY_VERSION.to_s}")}) "
-    prompt += "object:("
-    prompt += custom_color(:yellow, Pry.view_clip(object))
-    prompt += ":#{nest_level}" if nest_level > 0
-    prompt += ")"
-    "#{prompt} #{custom_color(:purple, '>> ')}"
-  end, 
-  proc { |object, nest_level, pry| custom_color( :cyan, '>>' ) }
-]
-
+Pry.config.prompt = Pryrc.new(ENV['PRY_THEME']).prompt_theme
 Pry.config.commands.import(
   Pry::CommandSet.new do
+
     command "copy", "Copies any supplied string to the system clip board"  do |string|
       IO.popen('pbcopy', 'w') { |f| f << string.to_s }
     end
@@ -90,5 +126,5 @@ Pry.config.commands.import(
   end
 )
 
-puts "Mavenlink toolbox loaded. Type 'help' to see the available pry commands."
+puts "\nMavenlink toolbox loaded. Type 'help' to see the available pry commands.\n\n" 
 
