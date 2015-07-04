@@ -1,14 +1,14 @@
-class Pryrc 
+class Pryrc
   attr_reader :theme, :verbose
 
   def initialize(theme, verbose = false)
-    @verbose = true 
+    @verbose = true
     @theme = theme
   end
 
   def prompt_theme
     case theme
-    when 'dark' 
+    when 'dark'
       prompt(:purple, :yellow, :purple, :purple)
     when 'light'
       prompt(:blue, :red, :blue, :blue)
@@ -24,9 +24,9 @@ class Pryrc
 
   private
 
-  # wrap ANSI codes so Readline knows where the prompt ends
   def custom_color(name, text)
     if Pry.color
+      # wrap ANSI codes so Readline knows where the prompt ends
       "\001#{Pry::Helpers::Text.send name, '{text}'}\002".sub '{text}', "\002#{text}\001"
     else
       text
@@ -49,21 +49,24 @@ class Pryrc
         end
         prompt += ")"
         "#{ prompt } #{ custom_color(terminator_color, '>> ') }"
-      end, 
+      end,
       lambda { |object, nest_level, pry| custom_color(line_continuation_color , '>>') }
     ]
   end
 end
 
-%w[rubygems awesome_print rexml/document].each do |gem|
+%w[rubygems awesome_print].each do |gem|
   begin
     require gem
   rescue LoadError
     puts "You are missing a cool gem: #{gem}"
-    exit 
+    exit
   end
 end
 
+# sets Awesome Print as the default printer for pry,
+# remove to roll back to standard pry output
+#
 AwesomePrint.pry!
 
 # Pry.editor = 'vim'
@@ -78,8 +81,8 @@ Pry.config.commands.import(
       IO.popen('pbcopy', 'w') { |f| f << string.to_s }
     end
 
-    command "sql", 
-            "Send any supplied SQL statement to the currently connected ActiveRecord database.", 
+    command "sql",
+            "Send any supplied SQL statement to the currently connected ActiveRecord database.",
             requires_gem: ['activerecord'] do |query|
       ActiveRecord::Base.connection.select_all(query)
     end
@@ -95,20 +98,22 @@ Pry.config.commands.import(
     end
 
     command "printx", "Pretty print any given XML string." do |xml_string|
-      doc = REXML::Document.new(xml_string) 
+      require 'rexml/document'
+
+      doc = REXML::Document.new(xml_string)
       output_string = ""
       doc.write(output_string, 1)
       output.puts(output_string)
     end
 
     command "array_toy",
-            "Returns an Array object keyed from 1 to 10. This is helpful for experimenting with the Array library.", 
+            "Returns an Array object keyed from 1 to 10. This is helpful for experimenting with the Array library.",
             keep_retval: true do
       Array.new(10) { |i| i+1 }
     end
 
-    command "hash_toy", 
-            "Returns a hash object keyed from 'a' to 'j'. This is helpful for experimenting with the hash library.", 
+    command "hash_toy",
+            "Returns a hash object keyed from 'a' to 'j'. This is helpful for experimenting with the hash library.",
             keep_retval: true do
       Hash[("a".."j").to_a.zip((1..10).to_a)]
     end
@@ -126,5 +131,5 @@ Pry.config.commands.import(
   end
 )
 
-puts "\nMavenlink toolbox loaded. Type 'help' to see the available pry commands.\n\n" 
+puts "\n Toolbox loaded from ~/.pryrc. Type 'help' to see the available pry commands.\n\n"
 
