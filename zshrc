@@ -53,3 +53,5 @@ LESSPIPE=`which src-hilite-lesspipe.sh`
 export LESSOPEN="| ${LESSPIPE} %s"
 export LESS='-R'
 export PATH="/usr/local/bin:$PATH"
+
+export PRY_THEME=dark
