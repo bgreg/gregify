@@ -11,3 +11,8 @@
 
   install the vim plugins: 
   `vim +PluginInstall +qall`
+
+TODO: 
+
+-[ ] make a switch for checking ruby version managers
+-[ ] edit path, it has some older stuff
