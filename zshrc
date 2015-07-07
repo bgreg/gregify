@@ -31,12 +31,20 @@ plugins=(git brew bundler gem rails rake rvm osx)
 source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
-export PATH=:$HOME/.rvm/bin:~:/usr/local/git/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:$HOME/.bin:$HOME/.rvm/bin:/opt/local/bin:/opt/local/sbin:$PATH
+
+if [[ -n $(rvm -v) ]]; then
+  export PATH=:$HOME/.rvm/bin:~:/usr/local/git/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:$HOME/.bin:$HOME/.rvm/bin:/opt/local/bin:/opt/local/sbin:$PATH
+  [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
+elif [[ -n $(rbenv -v) ]]; then
+  export PATH="$HOME/.rbenv/bin:$PATH"
+  eval "$(rbenv init -)"
+else
+  echo "no ruby manager installed"
+fi
+
+
 export PATH="$PATH:~/workspace/blackbox/bin"
 export PATH="$PATH:/usr/local/opt/mysql55/bin"
-
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" 
-
 # Source my custom files after oh-my-zsh so I can override things.
 source $HOME/.dotfiles/zsh/aliases
 source $HOME/.dotfiles/zsh/functions
@@ -50,6 +58,11 @@ export RUBY_HEAP_FREE_MIN=12500
 
 # this helps with source highlighting with less
 LESSPIPE=`which src-hilite-lesspipe.sh`
-export LESSOPEN="| ${LESSPIPE} %s"
-export LESS='-R'
-export PATH="/usr/local/bin:$PATH"
+if [[ -n LESSPIPE ]]; then
+  export LESSOPEN="| ${LESSPIPE} %s"
+  export LESS='-R'
+  export PATH="/usr/local/bin:$PATH"
+fi
+
+export PRY_THEME=dark
+
