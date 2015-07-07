@@ -32,10 +32,12 @@ source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
 
-if [[ -n $(rvm -v) ]]; then
+if type rvm  >& /dev/null
+then
   export PATH=:$HOME/.rvm/bin:~:/usr/local/git/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:$HOME/.bin:$HOME/.rvm/bin:/opt/local/bin:/opt/local/sbin:$PATH
   [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
-elif [[ -n $(rbenv -v) ]]; then
+elif type rbenv >& /dev/null
+then
   export PATH="$HOME/.rbenv/bin:$PATH"
   eval "$(rbenv init -)"
 else
