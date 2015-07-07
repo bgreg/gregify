@@ -1,8 +1,7 @@
 class Pryrc
   attr_reader :theme, :verbose
 
-  def initialize(theme, verbose = false)
-    @verbose = true
+  def initialize(theme)
     @theme = theme
   end
 
@@ -13,12 +12,9 @@ class Pryrc
     when 'light'
       prompt(:blue, :red, :blue, :blue)
     else
-      if verbose
-        puts "A PRY_THEME has not been set in your shell. \n"\
-             "You can choose between dark or light themes like this: \n"\
-             "export PRY_THEME=light, or export PRY_THEME=dark"
-      end
-      exit
+      abort("A PRY_THEME has not been set in your shell. \n"\
+            "You can choose between dark or light themes like this: \n"\
+            "export PRY_THEME=light, or export PRY_THEME=dark")
     end
   end
 
