@@ -18,7 +18,7 @@ class Pryrc
              "You can choose between dark or light themes like this: \n"\
              "export PRY_THEME=light, or export PRY_THEME=dark"
       end
-      prompt(:purple, :yellow, :purple, :purple)
+      exit
     end
   end
 
@@ -69,7 +69,7 @@ end
 #
 AwesomePrint.pry!
 
-# Pry.editor = 'vim'
+Pry.editor = 'vim'
 Pry.config.color = true
 Pry.config.pager = true
 Pry.config.auto_indent = true
