@@ -1,4 +1,4 @@
-== Installation
+###Installation
 
   `brew install ruby-build rbenv postgres vim tree zsh `
 
@@ -12,7 +12,8 @@
   install the vim plugins: 
   `vim +PluginInstall +qall`
 
-TODO: 
+####TODO: 
 
--[ ] make a switch for checking ruby version managers
--[ ] edit path, it has some older stuff
+- [ ] make a switch for checking ruby version managers
+- [ ] edit path, it has some older stuff
+- [ ] look at using command key more in vimrc ( <D - ... > ) 
