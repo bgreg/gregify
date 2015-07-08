@@ -1,6 +1,6 @@
 [user]
-    name = Greg McGuirk
-    email = bert.mcguirk@gmail.com 
+  name = Greg McGuirk
+	email = bert.mcguirk@gmail.com
 
 [color]
     ui = auto
@@ -65,15 +65,5 @@
 [github]
     user = bgreg
 
-# Setup Kaleidoscope as my default diffing tool (because its awesome)
-[difftool "Kaleidoscope"]
-   cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
-[mergetool "Kaleidoscope"]
-   cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
-   trustExitCode = true
-[diff]
-   tool = Kaleidoscope
-[difftool]
-   prompt = false
 [merge]
-   tool = Kaleidoscope
+	tool = opendiff
