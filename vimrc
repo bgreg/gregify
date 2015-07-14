@@ -194,6 +194,11 @@ map <F8>   :call SwitchColor(1)<CR>
 imap <F8>  <Esc>:call SwitchColor(1)<CR>
 map <S-F8> :call SwitchColor(-1)<CR>
 "
+"     Saving 
+map <Esc><Esc> :w<CR>
+" map <c-s> :echo "saved!"<cr>
+" map <c-S> :wq <cr>
+"
 "     other
 map <space> :noh<CR>
 map ss :sp <CR>     
@@ -210,8 +215,9 @@ nnoremap te  :tabedit <Space>
 nnoremap tn  :tabnext <CR>
 nnoremap tm  :tabm <Space>
 nnoremap td  :tabclose <CR>
-map <Esc><Esc> :w<CR>
 map K <Nop>         
+
+
 
 "+=============+
 "|  Functions  |
@@ -226,7 +232,6 @@ let old_name = expand('%')
         redraw!
     endif
 endfunction
-
 
 "+================+
 "|  Autocommands  |
