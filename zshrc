@@ -86,4 +86,5 @@ fi
 # of the tty command.
 GPG_TTY=`tty`
 export GPG_TTY
+export EDITOR=/usr/local/bin/vim
 

@@ -162,6 +162,8 @@ map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>
 map <Leader>c :Tabularize /
 map <Leader>tm :CtrlP app/models/<cr>
 map <Leader>ta :CtrlP app/assets/<cr>
+map <Leader>ts :CtrlP spec/<cr>
+map <Leader>tf :CtrlP spec/fixtures/<cr>
 map <Leader>tc :CtrlP app/controllers/<cr>
 map <Leader>tl :CtrlP app/lib/<cr>
 nnoremap <leader>rap  :RAddParameter<cr>
@@ -173,6 +175,7 @@ nnoremap <leader>rit  :RInlineTemp<cr>
 vnoremap <leader>rrlv :RRenameLocalVariable<cr>
 vnoremap <leader>rriv :RRenameInstanceVariable<cr>
 vnoremap <leader>rem  :RExtractMethod<cr>
+
 "
 "     Control Mappings   
 map <c-n> :call RenameFile()<cr>
@@ -182,22 +185,26 @@ nnoremap <C-J> <C-W>j
 nnoremap <C-K> <C-W>k
 nnoremap <C-L> <C-W>l
 nnoremap <C-H> <C-W>h
+
 "    
 "     command mode 
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
 command! Q q 
 command! Qall qall 
+
 "
 "     function keys
-nmap <F8> :TagbarToggle<CR>
+nmap <F8>  :TagbarToggle<CR>
 map <F8>   :call SwitchColor(1)<CR>
 imap <F8>  <Esc>:call SwitchColor(1)<CR>
 map <S-F8> :call SwitchColor(-1)<CR>
+
 "
 "     Saving 
 map <Esc><Esc> :w<CR>
 " map <c-s> :echo "saved!"<cr>
 " map <c-S> :wq <cr>
+
 "
 "     other
 map <space> :noh<CR>
@@ -240,14 +247,6 @@ endfunction
 " This autocommand jumps to the last known position in a file
 " just after opening it, if the '" mark is set: >
 autocmd! BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
-
-"+===========================+
-"| Arrow keys are the devil  |
-"+===========================+
-map <Left> :echo "no!" <cr>
-map <Right> :echo "no!"<cr>
-map <Up> :echo "no!"<cr>
-map <Down> :echo "no!"<cr>
 
 "+===========================+
 " Custom color switcher      |

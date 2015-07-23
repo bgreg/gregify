@@ -60,7 +60,7 @@ alias dotf="~/.dotfiles"
 
 alias ze='vim ~/.dotfiles/zshrc'
 alias zr='source ~/.dotfiles/zshrc'
-alias ve='vim ~/.dotfiles/.vimrc'
+alias ve='vim ~/.dotfiles/vimrc'
 alias vi='vim'
 
 #
