@@ -150,22 +150,23 @@ endif
 "|  Mappings       |
 "+=================+
 map <Leader>as :call RunCurrentSpecFile()<CR>
-map <Leader>s :call RunNearestSpec()<CR>
-map <Leader>l :call RunLastSpec()<CR>
-map <Leader>a :call RunAllSpecs()<CR>
-map <Leader>n :NumbersToggle<cr> 
+map <leader>s :call RunNearestSpec()<CR>
+map <leader>l :call RunLastSpec()<CR>
+map <leader>a :call RunAllSpecs()<CR>
+map <leader>n :NumbersToggle<cr> 
 map <leader>e :edit %%
 map <leader>w :%s/\s\+$//g <cr>
-map <Leader>f :s/:\([^ ]*\)\(\s*\)=>/\1:/g <cr>
-map <Leader>y "+yy    
-map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr> 
-map <Leader>c :Tabularize /
-map <Leader>tm :CtrlP app/models/<cr>
-map <Leader>ta :CtrlP app/assets/<cr>
-map <Leader>ts :CtrlP spec/<cr>
-map <Leader>tf :CtrlP spec/fixtures/<cr>
-map <Leader>tc :CtrlP app/controllers/<cr>
-map <Leader>tl :CtrlP app/lib/<cr>
+map <leader>f :s/:\([^ ]*\)\(\s*\)=>/\1:/g <cr>
+map <leader>y "+yy    
+map <leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr> 
+map <leader>c :Tabularize /
+map <leader>tm :CtrlP app/models/<cr>
+map <leader>ta :CtrlP app/assets/<cr>
+map <leader>ts :CtrlP spec/<cr>
+map <leader>tf :CtrlP spec/fixtures/<cr>
+map <leader>tc :CtrlP app/controllers/<cr>
+map <leader>tl :CtrlP app/lib/<cr>
+map <leader> obinding.pry<ESC>
 nnoremap <leader>rap  :RAddParameter<cr>
 nnoremap <leader>rcpc :RConvertPostConditional<cr>
 nnoremap <leader>rel  :RExtractLet<cr>
