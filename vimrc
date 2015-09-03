@@ -102,6 +102,8 @@ set showmode
 set gcr=a:blinkon0
 set laststatus=2
 set runtimepath^=~/.vim/bundle/ctrlp.vim
+set nocompatible
+
 
 let mapleader = ","
 let g:fuzzy_ignore = "*.png;*.PNG;*.JPG;*.jpg;*.GIF;*.gif;vendor/**;coverage/**;tmp/**;rdoc/**"
