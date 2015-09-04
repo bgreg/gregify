@@ -10,6 +10,7 @@ set rtp+=~/.vim/bundle/Vundle.vim
 
 " :help vundle
 call vundle#begin()
+  Plugin 'sunaku/vim-ruby-minitest'
   Plugin 'gmarik/Vundle.vim'
   Plugin 'whatyouhide/vim-gotham'
   Plugin 'kien/ctrlp.vim'
