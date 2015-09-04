@@ -32,9 +32,10 @@ source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
 
+export PATH=$HOME/.rvm/bin:~:/usr/local/git/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:$HOME/.bin:$HOME/.rvm/bin:/opt/local/bin:/opt/local/sbin:$PATH
+
 if type rvm  >& /dev/null
 then
-  export PATH=:$HOME/.rvm/bin:~:/usr/local/git/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:$HOME/.bin:$HOME/.rvm/bin:/opt/local/bin:/opt/local/sbin:$PATH
   [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
 elif type rbenv >& /dev/null
 then
