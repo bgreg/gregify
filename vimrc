@@ -46,6 +46,7 @@ call vundle#begin()
   Plugin 'roman/golden-ratio'
   Plugin 'tpope/vim-vividchalk'
   Plugin 'chriskempson/vim-tomorrow-theme'
+  Plugin 'guns/xterm-color-table.vim'
 call vundle#end()
 
 au VimEnter * RainbowParenthesesToggle
