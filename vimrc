@@ -12,7 +12,7 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
   Plugin 'sunaku/vim-ruby-minitest'
   Plugin 'gmarik/Vundle.vim'
-  Plugin 'whatyouhide/vim-gotham'
+  Plugin 'bgreg/vim-darknight'
   Plugin 'kien/ctrlp.vim'
   Plugin 'scrooloose/nerdtree.git'
   Plugin 'godlygeek/tabular'
@@ -138,16 +138,16 @@ let g:indent_guides_auto_colors = 0
 let g:numbers_exclude = ['tagbar', 'gundo', 'minibufexpl', 'nerdtree']
 
 if &term=~"xterm"
-   colorscheme Tomorrow-Night-Eighties
-   " colorscheme gotham256
+   " colorscheme Tomorrow-Night-Eighties
+   colorscheme gotham256
    " These changes only apply to the gotham theme
-   " highlight LineNr ctermfg=DarkGrey ctermbg=black
-   " highlight Comment ctermfg=232
-   " highlight Search cterm=NONE ctermfg=black ctermbg=DarkGrey
-   " highlight VertSplit ctermfg=black ctermbg=DarkGrey
-   " highlight Pmenu ctermbg=238 gui=bold
-   " highlight IndentGuidesOdd  ctermbg=17
-   " highlight IndentGuidesEven ctermbg=239
+   highlight LineNr ctermfg=DarkGrey ctermbg=black
+   highlight Comment ctermfg=232
+   highlight Search cterm=NONE ctermfg=black ctermbg=DarkGrey
+   highlight VertSplit ctermfg=black ctermbg=DarkGrey
+   highlight Pmenu ctermbg=238 gui=bold
+   highlight IndentGuidesOdd  ctermbg=17
+   highlight IndentGuidesEven ctermbg=239
 endif
 
 "+=================+
