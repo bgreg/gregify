@@ -3,6 +3,8 @@
 "  *) figure out how to exclude files from auto complete
 "  *) Change save shortcut to <ctrl>+s
 "  *) learn to use g; more
+"  *) if it is before 12 am, use morning color scheme
+
 
 set nocompatible
 filetype off
@@ -171,7 +173,10 @@ map <leader>ts :CtrlP spec/<cr>
 map <leader>tf :CtrlP spec/fixtures/<cr>
 map <leader>tc :CtrlP app/controllers/<cr>
 map <leader>tl :CtrlP app/lib/<cr>
-map <leader> obyebug<ESC>
+map <leader>ig :IndentGuidesToggle<cr>
+
+" 
+" refactoring bindings
 nnoremap <leader>rap  :RAddParameter<cr>
 nnoremap <leader>rcpc :RConvertPostConditional<cr>
 nnoremap <leader>rel  :RExtractLet<cr>
@@ -193,13 +198,13 @@ nnoremap <C-L> <C-W>l
 nnoremap <C-H> <C-W>h
 
 "
-"     command mode
+"     Command mode
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
 command! Q q
 command! Qall qall
 
 "
-"     function keys
+"     Function keys
 nmap <F8>  :TagbarToggle<CR>
 map <F8>   :call SwitchColor(1)<CR>
 imap <F8>  <Esc>:call SwitchColor(1)<CR>
@@ -208,18 +213,22 @@ map <S-F8> :call SwitchColor(-1)<CR>
 "
 "     Saving
 map <Esc><Esc> :w<CR>
-" map <c-s> :echo "saved!"<cr>
+map <c-s> :echo "saved!"<cr>
 " map <c-S> :wq <cr>
 
 "
-"     other
+"     Other
 map <space> :noh<CR>
 map ss :sp <CR>
 map vv :vsp <CR>
+map K <Nop>
 map Q <Nop>         " Disable Ex mode
-map Q :q<CR>
-vmap Q :q<CR>       " Visual mapping
+map Q :q<CR>        " quit in normal mode
+vmap Q :q<CR>       " quit in visual mapping
 nnoremap <leader><leader> :w<CR><c-^>  " Switch between the last two files
+
+"
+"    Tab navigation
 nnoremap th  :tabfirst <CR>
 nnoremap tj  :tabnext <CR>
 nnoremap tk  :tabprev <CR>
@@ -228,9 +237,6 @@ nnoremap te  :tabedit <Space>
 nnoremap tn  :tabnext <CR>
 nnoremap tm  :tabm <Space>
 nnoremap td  :tabclose <CR>
-map K <Nop>
-
-
 
 "+=============+
 "|  Functions  |

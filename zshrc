@@ -106,3 +106,23 @@ function clear_desktop() {
     echo "Desktop files were moved to: $NEW_PATH"
   fi
 }
+
+# A command to launch a new, anonymous Chrome session for testing.
+function chrome() {
+  mkdir -p /tmp/chrome$1
+  ~/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --user-data-dir=/tmp/chrome$1
+}
+
+function parse_git_branch {
+  git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
+}
+
+function gbin {
+  echo branch \($1\) has these commits and \($(parse_git_branch)\) does not
+  git log ..$1 --no-merges --format='%h | Author:%an | Date:%ad | %s' --date=local
+}
+
+function gbout {
+  echo branch \($(parse_git_branch)\) has these commits and \($1\) does not
+  git log $1.. --no-merges --format='%h | Author:%an | Date:%ad | %s' --date=local
+}
