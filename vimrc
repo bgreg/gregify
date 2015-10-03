@@ -1,14 +1,13 @@
 " TODO:
 "  *) add something to show the marks
 "  *) figure out how to exclude files from auto complete
-"  *) Change save shortcut to <ctrl>+s
 "  *) learn to use g; more
 "  *) if it is before 12 am, use morning color scheme
-
 
 set nocompatible
 filetype off
 set rtp+=~/.vim/bundle/Vundle.vim
+set encoding=utf-8
 
 " :help vundle
 call vundle#begin()
@@ -49,6 +48,7 @@ call vundle#begin()
   Plugin 'tpope/vim-vividchalk'
   Plugin 'chriskempson/vim-tomorrow-theme'
   Plugin 'guns/xterm-color-table.vim'
+  Plugin '907th/vim-auto-save'
 call vundle#end()
 
 au VimEnter * RainbowParenthesesToggle
@@ -61,7 +61,7 @@ set autowrite
 set number
 set relativenumber
 set ruler
-" set spell spelllang=en_us
+set spell spelllang=en_us
 set ignorecase
 set smartcase
 set incsearch
@@ -78,7 +78,7 @@ set splitright
 set noesckeys
 set ttimeout
 set ttimeoutlen=1
-set timeoutlen=500 " Don't wait so long for the next key press (particularly in ambigious Leader
+set timeoutlen=500 " Don't wait so long for the next key press
 set autoindent
 set smartindent
 set autoread
@@ -108,8 +108,7 @@ set laststatus=2
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 set nocompatible
 
-
-let mapleader = ","
+let mapleader = "\<Space>"
 let g:fuzzy_ignore = "*.png;*.PNG;*.JPG;*.jpg;*.GIF;*.gif;vendor/**;coverage/**;tmp/**;rdoc/**"
 let g:rbpt_colorpairs = [
     \ ['brown',       'RoyalBlue3'],
@@ -139,6 +138,8 @@ let g:ctrlp_custom_ignore = {
   \ }
 let g:indent_guides_auto_colors = 0
 let g:numbers_exclude = ['tagbar', 'gundo', 'minibufexpl', 'nerdtree']
+let g:auto_save = 1  " enable AutoSave on Vim startup
+let g:auto_save_in_insert_mode = 0  " do not save while in insert mode
 
 if &term=~"xterm"
    " colorscheme Tomorrow-Night-Eighties
@@ -156,6 +157,7 @@ endif
 "+=================+
 "|  Mappings       |
 "+=================+
+
 map <Leader>as :call RunCurrentSpecFile()<CR>
 map <leader>s :call RunNearestSpec()<CR>
 map <leader>l :call RunLastSpec()<CR>
@@ -175,7 +177,6 @@ map <leader>tc :CtrlP app/controllers/<cr>
 map <leader>tl :CtrlP app/lib/<cr>
 map <leader>ig :IndentGuidesToggle<cr>
 
-" 
 " refactoring bindings
 nnoremap <leader>rap  :RAddParameter<cr>
 nnoremap <leader>rcpc :RConvertPostConditional<cr>
@@ -187,7 +188,6 @@ vnoremap <leader>rrlv :RRenameLocalVariable<cr>
 vnoremap <leader>rriv :RRenameInstanceVariable<cr>
 vnoremap <leader>rem  :RExtractMethod<cr>
 
-"
 "     Control Mappings
 map <c-n> :call RenameFile()<cr>
 map <c-\> :NERDTreeFind<cr>
@@ -197,26 +197,17 @@ nnoremap <C-K> <C-W>k
 nnoremap <C-L> <C-W>l
 nnoremap <C-H> <C-W>h
 
-"
 "     Command mode
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
 command! Q q
 command! Qall qall
 
-"
 "     Function keys
-nmap <F8>  :TagbarToggle<CR>
-map <F8>   :call SwitchColor(1)<CR>
-imap <F8>  <Esc>:call SwitchColor(1)<CR>
-map <S-F8> :call SwitchColor(-1)<CR>
+nmap <F8> :TagbarToggle<CR>
+map  <F8> :call SwitchColor(1)<CR>
+imap <F8> <Esc>:call SwitchColor(1)<CR>
+map  <S-F8> :call SwitchColor(-1)<CR>
 
-"
-"     Saving
-map <Esc><Esc> :w<CR>
-map <c-s> :echo "saved!"<cr>
-" map <c-S> :wq <cr>
-
-"
 "     Other
 map <space> :noh<CR>
 map ss :sp <CR>
@@ -227,7 +218,10 @@ map Q :q<CR>        " quit in normal mode
 vmap Q :q<CR>       " quit in visual mapping
 nnoremap <leader><leader> :w<CR><c-^>  " Switch between the last two files
 
-"
+" saving
+nmap <leader>s :w<CR>
+vmap <leader>s <Esc><leader>s gv
+
 "    Tab navigation
 nnoremap th  :tabfirst <CR>
 nnoremap tj  :tabnext <CR>
@@ -241,7 +235,6 @@ nnoremap td  :tabclose <CR>
 "+=============+
 "|  Functions  |
 "+=============+
-
 function! RenameFile()
 let old_name = expand('%')
     let new_name = input('New file name: ', expand('%'), 'file')
@@ -263,7 +256,6 @@ autocmd! BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "nor
 "+===========================+
 " Custom color switcher      |
 "+===========================+
-
 if v:version < 700 || exists('loaded_switchcolor') || &cp
   finish
 endif
@@ -313,4 +305,3 @@ filetype on
 filetype plugin on
 filetype indent on
 syntax enable
-
