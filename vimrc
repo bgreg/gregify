@@ -216,7 +216,7 @@ map K <Nop>
 map Q <Nop>         " Disable Ex mode
 map Q :q<CR>        " quit in normal mode
 vmap Q :q<CR>       " quit in visual mapping
-nnoremap <leader><leader> :w<CR><c-^>  " Switch between the last two files
+nnoremap , :w<CR><c-^>  " Switch between the last two files
 
 " saving
 nmap <leader>s :w<CR>
