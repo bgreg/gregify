@@ -218,10 +218,6 @@ map Q :q<CR>        " quit in normal mode
 vmap Q :q<CR>       " quit in visual mapping
 nnoremap , :w<CR><c-^>  " Switch between the last two files
 
-" saving
-nmap <leader>s :w<CR>
-vmap <leader>s <Esc><leader>s gv
-
 "    Tab navigation
 nnoremap th  :tabfirst <CR>
 nnoremap tj  :tabnext <CR>
