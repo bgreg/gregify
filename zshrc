@@ -126,3 +126,7 @@ function gbout {
   echo branch \($(parse_git_branch)\) has these commits and \($1\) does not
   git log $1.. --no-merges --format='%h | Author:%an | Date:%ad | %s' --date=local
 }
+
+alias poundit="rake db:drop db:create db:migrate && rake db:seed"
+
+eval $(thefuck --alias)

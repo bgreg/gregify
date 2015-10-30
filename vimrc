@@ -14,6 +14,7 @@ call vundle#begin()
   Plugin 'sunaku/vim-ruby-minitest'
   Plugin 'gmarik/Vundle.vim'
   Plugin 'bgreg/vim-darknight'
+  Plugin 'whatyouhide/vim-gotham'
   Plugin 'kien/ctrlp.vim'
   Plugin 'scrooloose/nerdtree.git'
   Plugin 'godlygeek/tabular'
@@ -141,9 +142,10 @@ let g:numbers_exclude = ['tagbar', 'gundo', 'minibufexpl', 'nerdtree']
 let g:auto_save = 1  " enable AutoSave on Vim startup
 let g:auto_save_in_insert_mode = 0  " do not save while in insert mode
 
+colorscheme gotham256
+
 if &term=~"xterm"
    " colorscheme Tomorrow-Night-Eighties
-   colorscheme gotham256
    " These changes only apply to the gotham theme
    highlight LineNr ctermfg=DarkGrey ctermbg=black
    highlight Comment ctermfg=232
@@ -248,6 +250,10 @@ endfunction
 " This autocommand jumps to the last known position in a file
 " just after opening it, if the '" mark is set: >
 autocmd! BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
+
+" Remove white space on save
+autocmd BufWritePre * :%s/\s\+$//e
+
 
 "+===========================+
 " Custom color switcher      |
