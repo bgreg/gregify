@@ -7,10 +7,6 @@ alias tft='tf log/test.log'
 # Brew doesn't properly override ctags
 alias ctags="`brew --prefix`/bin/ctags"
 
-# Folder shortcuts
-alias topo='~/projects/topo/'
-alias tbranch='~/projects/topo_branch/'
-
 # ls shortcuts - because two characters suck when one will do
 alias l="ls"
 alias la="ls -la"
@@ -47,7 +43,6 @@ alias co="git checkout"
 alias clean="git clean -fxd"
 
 # Rails/Ruby related aliases
-alias user="rake db:create_user[\"Sean\",\"sean@paynearme.com\"]"
 alias rdm="rake db:migrate && rake db:test:clone"
 
 # Dotfiles folder aliases
@@ -67,7 +62,7 @@ alias vi='vim'
 # alias gl="git log"
 # alias rspec='nocorrect rspec'
 # alias gs='gst'
-alias gbr='git for-each-ref --sort=-committerdate refs/heads/ | head' 
+alias gbr='git for-each-ref --sort=-committerdate refs/heads/ | head'
 # alias agr='ag --ruby'
 
 
@@ -79,4 +74,4 @@ alias mobile="cd ~/workspace/mobile"
 alias marketing="cd ~/workspace/marketing"
 alias migrate="rake db:migrate db:test:prepare"
 alias fixtures='rspec spec/controllers/create_js_dom_fixtures_spec.rb'
-
+alias poundit="rake db:drop db:create db:migrate && rake db:seed"

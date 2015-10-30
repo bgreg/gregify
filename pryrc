@@ -65,12 +65,19 @@ end
 #
 AwesomePrint.pry!
 
+# == Pry-Nav - Using pry as a debugger ==
+Pry.commands.alias_command 'c', 'continue' rescue nil
+Pry.commands.alias_command 's', 'step' rescue nil
+Pry.commands.alias_command 'n', 'next' rescue nil
+Pry.commands.alias_command 'r!', 'reload!' rescue nil
+
 Pry.editor = 'vim'
 Pry.config.color = true
 Pry.config.pager = true
 Pry.config.auto_indent = true
 Pry.config.prompt = Pryrc.new(ENV['PRY_THEME']).prompt_theme
 Pry.config.commands.import(
+
   Pry::CommandSet.new do
 
     command "copy", "Copies any supplied string to the system clip board"  do |string|

@@ -7,14 +7,14 @@
 
 [alias]
     stat = status
-	st = status
-	ci = commit
+    st = status
+    ci = commit
     cia = commit -a
     ciaa = commit -a --amend
     cip = !git add -p && git ci
     cipa = !git add -p && git ci --amend
-	br = branch
-	co = checkout
+    br = branch
+    co = checkout
     df = diff
     lg = log -p
     loll = log --graph --decorate --pretty=oneline --abbrev-commit
@@ -57,7 +57,7 @@
     branch = auto
 
 [color "diff"]
-    meta = yellow 
+    meta = yellow
 
 [apply]
     whitespace = nowarn

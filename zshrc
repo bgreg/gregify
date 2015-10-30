@@ -26,7 +26,7 @@ export GIT_PAGER='less -FRX'
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git brew bundler gem rails rake rvm osx)
+plugins=(git brew bundler gem rails rake rvm osx vi-mode)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -88,45 +88,4 @@ fi
 GPG_TTY=`tty`
 export GPG_TTY
 export EDITOR=/usr/local/bin/vim
-
-function clear_desktop() {
-  if find "$HOME/Desktop" -maxdepth 1 -type f | grep -v '/\.' &>/dev/null
-  then
-    DATE=$(date | tr " " "_")
-    FILENAME="desktop_backup_$DATE"
-    TMP="$HOME/Desktop/tmp_$DATE"
-    NEW_PATH="$HOME/Documents/$FILENAME"
-
-    # Move desktop files that are not hidden into a tmp folder
-    mkdir $TMP
-    find "$HOME/Desktop" -not -path "$HOME/Desktop/.*" -maxdepth 1 -type f -exec mv {} $TMP \;
-
-    # move tmp folder to documents and rename it
-    mv $TMP $NEW_PATH
-    echo "Desktop files were moved to: $NEW_PATH"
-  fi
-}
-
-# A command to launch a new, anonymous Chrome session for testing.
-function chrome() {
-  mkdir -p /tmp/chrome$1
-  ~/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --user-data-dir=/tmp/chrome$1
-}
-
-function parse_git_branch {
-  git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'
-}
-
-function gbin {
-  echo branch \($1\) has these commits and \($(parse_git_branch)\) does not
-  git log ..$1 --no-merges --format='%h | Author:%an | Date:%ad | %s' --date=local
-}
-
-function gbout {
-  echo branch \($(parse_git_branch)\) has these commits and \($1\) does not
-  git log $1.. --no-merges --format='%h | Author:%an | Date:%ad | %s' --date=local
-}
-
-alias poundit="rake db:drop db:create db:migrate && rake db:seed"
-
 eval $(thefuck --alias)
