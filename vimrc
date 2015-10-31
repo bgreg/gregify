@@ -1,7 +1,6 @@
 " TODO:
 "  *) add something to show the marks
 "  *) figure out how to exclude files from auto complete
-"  *) learn to use g; more
 "  *) if it is before 12 am, use morning color scheme
 
 set nocompatible
@@ -13,7 +12,6 @@ set encoding=utf-8
 call vundle#begin()
   Plugin 'sunaku/vim-ruby-minitest'
   Plugin 'gmarik/Vundle.vim'
-  Plugin 'bgreg/vim-darknight'
   Plugin 'whatyouhide/vim-gotham'
   Plugin 'kien/ctrlp.vim'
   Plugin 'scrooloose/nerdtree.git'
@@ -36,7 +34,6 @@ call vundle#begin()
   Plugin 'kchmck/vim-coffee-script'
   Plugin 'ervandew/supertab'
   Plugin 'mattn/emmet-vim' "<c-y>, to fire
-  Plugin 'kien/rainbow_parentheses.vim'
   Plugin 'bling/vim-airline'
   Plugin 'majutsushi/tagbar'
   Plugin 'myusuf3/numbers.vim'
@@ -52,7 +49,6 @@ call vundle#begin()
   Plugin '907th/vim-auto-save'
 call vundle#end()
 
-au VimEnter * RainbowParenthesesToggle
 au FileType ruby,eruby setl ofu=rubycomplete#Complete
 au FileType html,xhtml setl ofu=htmlcomplete#CompleteTags
 au FileType css setl ofu=csscomplete#CompleteCSS
@@ -108,29 +104,8 @@ set gcr=a:blinkon0
 set laststatus=2
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 set nocompatible
-
 let mapleader = "\<Space>"
 let g:fuzzy_ignore = "*.png;*.PNG;*.JPG;*.jpg;*.GIF;*.gif;vendor/**;coverage/**;tmp/**;rdoc/**"
-let g:rbpt_colorpairs = [
-    \ ['brown',       'RoyalBlue3'],
-    \ ['Darkblue',    'SeaGreen3'],
-    \ ['darkgray',    'DarkOrchid3'],
-    \ ['darkgreen',   'firebrick3'],
-    \ ['darkcyan',    'RoyalBlue3'],
-    \ ['darkred',     'SeaGreen3'],
-    \ ['darkmagenta', 'DarkOrchid3'],
-    \ ['brown',       'firebrick3'],
-    \ ['gray',        'RoyalBlue3'],
-    \ ['black',       'SeaGreen3'],
-    \ ['darkmagenta', 'DarkOrchid3'],
-    \ ['Darkblue',    'firebrick3'],
-    \ ['darkgreen',   'RoyalBlue3'],
-    \ ['darkcyan',    'SeaGreen3'],
-    \ ['darkred',     'DarkOrchid3'],
-    \ ['red',         'firebrick3'],
-    \ ]
-let g:rbpt_max = 16
-let g:rbpt_loadcmd_toggle = 0
 let g:ctrlp_map='<Leader>t'
 let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_custom_ignore = {
@@ -143,17 +118,23 @@ let g:auto_save = 1  " enable AutoSave on Vim startup
 let g:auto_save_in_insert_mode = 0  " do not save while in insert mode
 
 colorscheme gotham256
-
 if &term=~"xterm"
-   " colorscheme Tomorrow-Night-Eighties
    " These changes only apply to the gotham theme
    highlight LineNr ctermfg=DarkGrey ctermbg=black
-   highlight Comment ctermfg=232
+   highlight Comment ctermfg=Magenta
    highlight Search cterm=NONE ctermfg=black ctermbg=DarkGrey
    highlight VertSplit ctermfg=black ctermbg=DarkGrey
    highlight Pmenu ctermbg=238 gui=bold
-   highlight IndentGuidesOdd  ctermbg=17
-   highlight IndentGuidesEven ctermbg=239
+   highlight IndentGuidesOdd  ctermbg=5
+   highlight IndentGuidesEven ctermbg=13
+
+
+   " highlight Comment ctermbg=DarkGray
+   " highlight Constant ctermbg=Blue
+   " highlight Normal ctermbg=Black
+   " highlight NonText ctermbg=Black
+   " highlight Special ctermbg=DarkMagenta
+   " highlight Cursor ctermbg=Green
 endif
 
 "+=================+
@@ -205,7 +186,7 @@ command! Q q
 command! Qall qall
 
 "     Function keys
-nmap <F8> :TagbarToggle<CR>
+nmap <F7> :TagbarToggle<CR>
 map  <F8> :call SwitchColor(1)<CR>
 imap <F8> <Esc>:call SwitchColor(1)<CR>
 map  <S-F8> :call SwitchColor(-1)<CR>
