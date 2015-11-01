@@ -29,7 +29,7 @@ alias pdb="udb && adb && rake dev:update_dataset && user"
 alias mysql_restart="sudo /Library/StartupItems/MySQLCOM/MySQLCOM restart"
 
 # Git related aliases
-alias gpush='git push origin HEAD'
+alias gpsh='git push origin HEAD'
 alias ci="git ci"
 alias ca="git cia"
 alias s="git st"
