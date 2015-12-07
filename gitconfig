@@ -30,6 +30,7 @@
     man = help
     pop = stash pop
     cp = cherry-pick
+	cw = whatchanged
 
 [branch]
     autosetuprebase = always

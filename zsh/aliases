@@ -62,7 +62,7 @@ alias vi='vim'
 # alias gl="git log"
 # alias rspec='nocorrect rspec'
 # alias gs='gst'
-alias gbr='git for-each-ref --sort=-committerdate refs/heads/ | head'
+alias gbr='git for-each-ref --sort=-committerdate refs/heads/ | head | cut -d"/" -f3'
 # alias agr='ag --ruby'
 
 
