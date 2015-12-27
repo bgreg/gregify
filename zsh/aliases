@@ -15,18 +15,8 @@ alias lah="ls -lah"
 # A script to recursively find and replace through folders using Perl
 # alias rr="~/.scripts/recursive_replace.sh"
 
-# make an alias to ack since I live in Ruby-land
-alias ark="ag --ruby"
-
 # DB aliases
 alias m="mysql -u root"
-alias initdb="rake db:init_dev_db && user"
-alias ddb="sdb;rake db:create && rake db:init_dev_db && user && rake db:test:clone"
-alias tdb="sdb;rake db:create && rake db:redo_schema && rake db:test:clone"
-# A script to see how many migrations need to be run
-alias mc="~/.scripts/migration_count.rb"
-alias pdb="udb && adb && rake dev:update_dataset && user"
-alias mysql_restart="sudo /Library/StartupItems/MySQLCOM/MySQLCOM restart"
 
 # Git related aliases
 alias gpsh='git push origin HEAD'
@@ -41,6 +31,10 @@ alias po="git co db/schema.rb && git stash && git pull && git pop"
 alias myco="git log --author=me"
 alias co="git checkout"
 alias clean="git clean -fxd"
+alias grf='git diff-tree --no-commit-id --name-only -r $(git rev-list --no-merges -n 1 HEAD)'
+# alias gs='gst'
+alias gbr='git for-each-ref --sort=-committerdate refs/heads/ | head | cut -d"/" -f3'
+alias gl="git log"
 
 # Rails/Ruby related aliases
 alias rdm="rake db:migrate && rake db:test:clone"
@@ -58,17 +52,11 @@ alias zr='source ~/.dotfiles/zshrc'
 alias ve='vim ~/.dotfiles/vimrc'
 alias vi='vim'
 
-#
-# alias gl="git log"
 # alias rspec='nocorrect rspec'
-# alias gs='gst'
-alias gbr='git for-each-ref --sort=-committerdate refs/heads/ | head | cut -d"/" -f3'
-# alias agr='ag --ruby'
+alias agr='ag --ruby'
 
 
 alias mavenlink='cd ~/workspace/mavenlink'
-
-alias mavenlink="cd ~/workspace/mavenlink"
 alias mavenlink2="cd ~/workspace/mavenlink2"
 alias mobile="cd ~/workspace/mobile"
 alias marketing="cd ~/workspace/marketing"
