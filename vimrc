@@ -2,6 +2,7 @@
 "  *) add something to show the marks
 "  *) figure out how to exclude files from auto complete
 "  *) if it is before 12 am, use morning color scheme
+"  *)  https://github.com/mhinz/vim-grepper
 
 set nocompatible
 filetype off
@@ -42,7 +43,6 @@ call vundle#begin()
   Plugin 'ecomba/vim-ruby-refactoring'
   Plugin 'xolox/vim-misc'
   Plugin 'scrooloose/syntastic'
-  Plugin 'roman/golden-ratio'
   Plugin 'tpope/vim-vividchalk'
   Plugin 'chriskempson/vim-tomorrow-theme'
   Plugin 'guns/xterm-color-table.vim'
@@ -86,8 +86,8 @@ set shiftwidth=2
 set backspace=indent,eol,start "Allow backspace in insert mode
 set nowrap
 set linebreak
-set history=500
-set undolevels=150 " Save text state between reloads (e.g. if you use :e!)
+set history=1000
+set undolevels=500 " Save text state between reloads (e.g. if you use :e!)
 set undoreload=200
 set undodir=$HOME/.vim/undo
 set mouse=nicr "enables mouse scrolling
@@ -284,7 +284,5 @@ function! SwitchColor(swinc)
   execute "colorscheme"
 endfunction
 
-filetype on
-filetype plugin on
-filetype indent on
+filetype plugin indent on
 syntax enable

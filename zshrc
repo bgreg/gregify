@@ -30,24 +30,10 @@ plugins=(git brew bundler gem rails rake rvm osx vi-mode)
 
 source $ZSH/oh-my-zsh.sh
 
-# Customize to your needs...
+export PATH="/usr/local/bin:$PATH"
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
 
-export PATH=$HOME/.rvm/bin:~:/usr/local/git/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:$HOME/.bin:$HOME/.rvm/bin:/opt/local/bin:/opt/local/sbin:$PATH
-
-if type rvm >& /dev/null
-then
-  [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"
-elif type rbenv >& /dev/null
-then
-  export PATH="$HOME/.rbenv/bin:$PATH"
-  eval "$(rbenv init -)"
-else
-  echo "no ruby manager installed"
-fi
-
-
-export PATH="$PATH:~/workspace/blackbox/bin"
-export PATH="$PATH:/usr/local/opt/mysql55/bin"
 # Source my custom files after oh-my-zsh so I can override things.
 source $HOME/.dotfiles/zsh/aliases
 source $HOME/.dotfiles/zsh/functions
@@ -76,16 +62,19 @@ export COLLATION=utf8_general_ci
 # from https://blog.kumina.nl/2009/11/gpg-agent-on-macosx/
 # Script for ensuring only one instance of gpg-agent is running
 # and if there is not one, start an instance of gpg-agent.
-if test -f $HOME/.gpg-agent-info && kill -0 `cut -d: -f 2 $HOME/.gpg-agent-info` 2>/dev/null; then
-  GPG_AGENT_INFO=`cat $HOME/.gpg-agent-info`
-  export GPG_AGENT_INFO
-else
-  eval `gpg-agent --daemon`
-  echo $GPG_AGENT_INFO >$HOME/.gpg-agent-info
-fi
+#if test -f $HOME/.gpg-agent-info && kill -0 `cut -d: -f 2 $HOME/.gpg-agent-info` 2>/dev/null; then
+#  GPG_AGENT_INFO=`cat $HOME/.gpg-agent-info`
+#  export GPG_AGENT_INFO
+#else
+#  eval `gpg-agent --daemon`
+#  echo $GPG_AGENT_INFO >$HOME/.gpg-agent-info
+#fi
 # Imperative that this environment variable always reflects the output
 # of the tty command.
 GPG_TTY=`tty`
 export GPG_TTY
 export EDITOR=/usr/local/bin/vim
 eval $(thefuck --alias)
+export RBENV_VERSION=2.3.0
+
+bindkey "^R" history-incremental-search-backward

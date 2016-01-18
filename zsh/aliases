@@ -20,8 +20,9 @@ alias m="mysql -u root"
 
 # Git related aliases
 alias gpsh='git push origin HEAD'
-alias ci="git ci"
+alias ci="git ci -v"
 alias ca="git cia"
+alias cim="git ci -m"
 alias s="git st"
 alias d="git diff"
 alias a="git add"
@@ -32,7 +33,6 @@ alias myco="git log --author=me"
 alias co="git checkout"
 alias clean="git clean -fxd"
 alias grf='git diff-tree --no-commit-id --name-only -r $(git rev-list --no-merges -n 1 HEAD)'
-# alias gs='gst'
 alias gbr='git for-each-ref --sort=-committerdate refs/heads/ | head | cut -d"/" -f3'
 alias gl="git log"
 
