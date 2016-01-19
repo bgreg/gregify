@@ -56,10 +56,6 @@ alias vi='vim'
 alias agr='ag --ruby'
 
 
-alias mavenlink='cd ~/workspace/mavenlink'
-alias mavenlink2="cd ~/workspace/mavenlink2"
 alias mobile="cd ~/workspace/mobile"
 alias marketing="cd ~/workspace/marketing"
-alias migrate="rake db:migrate db:test:prepare"
-alias fixtures='rspec spec/controllers/create_js_dom_fixtures_spec.rb'
-alias poundit="rake db:drop db:create db:migrate && rake db:seed"
+alias rebuild="rake db:drop db:create db:migrate && rake db:seed"
