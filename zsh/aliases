@@ -1,4 +1,3 @@
-alias rvmu='rvm use'
 alias tf='tail -f'
 alias tfd='tf log/development.log'
 alias tft='tf log/test.log'
@@ -15,9 +14,6 @@ alias lah="ls -lah"
 # A script to recursively find and replace through folders using Perl
 # alias rr="~/.scripts/recursive_replace.sh"
 
-# DB aliases
-alias m="mysql -u root"
-
 # Git related aliases
 alias gpsh='git push origin HEAD'
 alias ci="git ci -v"
@@ -33,18 +29,17 @@ alias myco="git log --author=me"
 alias co="git checkout"
 alias clean="git clean -fxd"
 alias grf='git diff-tree --no-commit-id --name-only -r $(git rev-list --no-merges -n 1 HEAD)'
+alias erf='vim $(git diff --name-only)'
 alias gbr='git for-each-ref --sort=-committerdate refs/heads/ | head | cut -d"/" -f3'
 alias gl="git log"
 
 # Rails/Ruby related aliases
 alias rdm="rake db:migrate && rake db:test:clone"
+alias r="rake"
 
 # Dotfiles folder aliases
 alias dotv="vim ~/.dotfiles"
 alias dotf="~/.dotfiles"
-
-#MySQL Aliases
-#alias mysql="$(brew --prefix mysql)/bin/mysql"
 
 
 alias ze='vim ~/.dotfiles/zshrc'
@@ -52,10 +47,8 @@ alias zr='source ~/.dotfiles/zshrc'
 alias ve='vim ~/.dotfiles/vimrc'
 alias vi='vim'
 
-# alias rspec='nocorrect rspec'
 alias agr='ag --ruby'
 
-
-alias mobile="cd ~/workspace/mobile"
-alias marketing="cd ~/workspace/marketing"
 alias rebuild="rake db:drop db:create db:migrate && rake db:seed"
+alias fixaudio="sudo killall coreaudiod"
+alias production_deploy="cap production deploy && cap production unicorn:restart"

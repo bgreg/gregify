@@ -47,6 +47,7 @@ call vundle#begin()
   Plugin 'chriskempson/vim-tomorrow-theme'
   Plugin 'guns/xterm-color-table.vim'
   Plugin '907th/vim-auto-save'
+  Plugin 'roman/golden-ratio'
 call vundle#end()
 
 au FileType ruby,eruby setl ofu=rubycomplete#Complete
@@ -104,6 +105,7 @@ set gcr=a:blinkon0
 set laststatus=2
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 set nocompatible
+" set hidden " navigate away from a buffer without saving
 let mapleader = "\<Space>"
 let g:fuzzy_ignore = "*.png;*.PNG;*.JPG;*.jpg;*.GIF;*.gif;vendor/**;coverage/**;tmp/**;rdoc/**"
 let g:ctrlp_map='<Leader>t'
@@ -117,7 +119,14 @@ let g:numbers_exclude = ['tagbar', 'gundo', 'minibufexpl', 'nerdtree']
 let g:auto_save = 1  " enable AutoSave on Vim startup
 let g:auto_save_in_insert_mode = 0  " do not save while in insert mode
 
+" let g:user_emmet_leader_key='<C-j>'  this didn't work because I hit that to
+" move windows
+
 colorscheme gotham256
+
+" let g:alduin_Shout_Windhelm = 1
+" colorscheme alduin
+
 if &term=~"xterm"
    " These changes only apply to the gotham theme
    highlight LineNr ctermfg=DarkGrey ctermbg=black
@@ -157,6 +166,7 @@ map <leader>ta :CtrlP app/assets/<cr>
 map <leader>ts :CtrlP spec/<cr>
 map <leader>tf :CtrlP spec/fixtures/<cr>
 map <leader>tc :CtrlP app/controllers/<cr>
+map <leader>tv :CtrlP app/views/<cr>
 map <leader>tl :CtrlP app/lib/<cr>
 map <leader>ig :IndentGuidesToggle<cr>
 
@@ -175,6 +185,7 @@ vnoremap <leader>rem  :RExtractMethod<cr>
 map <c-n> :call RenameFile()<cr>
 map <c-\> :NERDTreeFind<cr>
 map <c-t> <esc>:tabnew <cr>
+map <c-c> <esc>:!ctags -R .<cr>
 nnoremap <C-J> <C-W>j
 nnoremap <C-K> <C-W>k
 nnoremap <C-L> <C-W>l

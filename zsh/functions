@@ -63,6 +63,13 @@ function gbout {
   git log $1.. --no-merges --format='%h | Author:%an | Date:%ad | %s' --date=local
 }
 
+function box(){
+  t="$1xxxx";c=${2:-=};
+  echo ${t//?/$c};
+  echo "$c $1 $c";
+  echo ${t//?/$c};
+}
+
 #function gjc {
 #    echo
 #    echo "==============================================================================="
@@ -73,6 +80,28 @@ function gbout {
 #    g commit --amend
 #}
 #
-#function st {
-#  echo -ne "\e]1;$1\a"
-#}
+
+function st {
+  echo -ne "\e]1;$1\a"
+}
+
+function paver {
+  while true
+  do
+    for i in 02E{{9..5},{6..8}}
+    do
+      printf "\u${i}O=o>"
+      sleep 0.09
+      printf "\b\b\b\b\b"
+    done
+    printf "_"
+  done
+}
+
+function french {
+  t=$(($(tput cols)/3))
+  for FR in $(seq $(tput lines))
+  do
+    printf "\e[44m%${t}s\e[47m%${t}s\e[41m%${t}s\e[0m\n"
+  done
+}
