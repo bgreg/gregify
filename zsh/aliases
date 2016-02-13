@@ -34,8 +34,10 @@ alias gbr='git for-each-ref --sort=-committerdate refs/heads/ | head | cut -d"/"
 alias gl="git log"
 
 # Rails/Ruby related aliases
-alias rdm="rake db:migrate && rake db:test:clone"
 alias r="rake"
+alias migraete="RAILS_ENV=development rake db:migrate"
+alias production_deploy="cap production deploy && cap production unicorn:restart"
+alias rebuild="rake db:drop db:create db:migrate && rake db:seed"
 
 # Dotfiles folder aliases
 alias dotv="vim ~/.dotfiles"
@@ -49,6 +51,4 @@ alias vi='vim'
 
 alias agr='ag --ruby'
 
-alias rebuild="rake db:drop db:create db:migrate && rake db:seed"
 alias fixaudio="sudo killall coreaudiod"
-alias production_deploy="cap production deploy && cap production unicorn:restart"
