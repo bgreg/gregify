@@ -48,6 +48,7 @@ call vundle#begin()
   Plugin 'guns/xterm-color-table.vim'
   Plugin '907th/vim-auto-save'
   Plugin 'roman/golden-ratio'
+  Plugin 'ngmy/vim-rubocop'
 call vundle#end()
 
 au FileType ruby,eruby setl ofu=rubycomplete#Complete
@@ -127,24 +128,24 @@ colorscheme gotham256
 " let g:alduin_Shout_Windhelm = 1
 " colorscheme alduin
 
-if &term=~"xterm"
-   " These changes only apply to the gotham theme
-   highlight LineNr ctermfg=DarkGrey ctermbg=black
-   highlight Comment ctermfg=Magenta
-   highlight Search cterm=NONE ctermfg=black ctermbg=DarkGrey
-   highlight VertSplit ctermfg=black ctermbg=DarkGrey
-   highlight Pmenu ctermbg=238 gui=bold
-   highlight IndentGuidesOdd  ctermbg=5
-   highlight IndentGuidesEven ctermbg=13
+" if &term=~"xterm"
+"    " These changes only apply to the gotham theme
+"    highlight LineNr ctermfg=DarkGrey ctermbg=black
+"    highlight Comment ctermfg=Magenta
+"    highlight Search cterm=NONE ctermfg=black ctermbg=DarkGrey
+"    highlight VertSplit ctermfg=black ctermbg=DarkGrey
+"    highlight Pmenu ctermbg=238 gui=bold
+"    highlight IndentGuidesOdd  ctermbg=5
+"    highlight IndentGuidesEven ctermbg=13
 
 
-   " highlight Comment ctermbg=DarkGray
-   " highlight Constant ctermbg=Blue
-   " highlight Normal ctermbg=Black
-   " highlight NonText ctermbg=Black
-   " highlight Special ctermbg=DarkMagenta
-   " highlight Cursor ctermbg=Green
-endif
+"    " highlight Comment ctermbg=DarkGray
+"    " highlight Constant ctermbg=Blue
+"    " highlight Normal ctermbg=Black
+"    " highlight NonText ctermbg=Black
+"    " highlight Special ctermbg=DarkMagenta
+"    " highlight Cursor ctermbg=Green
+" endif
 
 "+=================+
 "|  Mappings       |
@@ -156,7 +157,7 @@ map <leader>l :call RunLastSpec()<CR>
 map <leader>a :call RunAllSpecs()<CR>
 map <leader>n :NumbersToggle<cr>
 map <leader>e :edit %%
-map <leader>w :%s/\s\+$//g <cr>
+map <leader>w :call WrapThem()<cr>
 map <leader>f :s/:\([^ ]*\)\(\s*\)=>/\1:/g <cr>
 map <leader>y "+yy
 map <leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>
@@ -222,6 +223,7 @@ nnoremap tn  :tabnext <CR>
 nnoremap tm  :tabm <Space>
 nnoremap td  :tabclose <CR>
 nnoremap <leader>wtf oputs "#" * 90<c-m>puts caller<c-m>puts "#" * 90<esc>
+nnoremap <leader>bi o<c-m>binding.pry<c-m><esc>
 
 "+=============+
 "|  Functions  |
@@ -298,3 +300,34 @@ endfunction
 
 filetype plugin indent on
 syntax enable
+
+"+===========================+
+"  Wrap things in a character|
+"+===========================+
+let g:wrap_char = '#'
+function! WrapThem() range
+		let lines = getline(a:firstline,a:lastline)
+		let maxl = 0
+		for l in lines
+				let maxl = len(l)>maxl? len(l):maxl
+		endfor
+		let h = repeat(g:wrap_char, maxl+4)
+		for i in range(len(lines))
+				let ll = len(lines[i])
+				let lines[i] = g:wrap_char . ' ' . lines[i] . repeat(' ', maxl-ll) . ' ' . g:wrap_char
+		endfor
+		let result = [h]
+		call extend(result, lines)
+		call add(result,h)
+		execute a:firstline.','.a:lastline . ' d'
+		let s = a:firstline-1<0?0:a:firstline-1
+		call append(s, result)
+endfunction
+
+
+"+===========================+
+" Macros                     |
+"+===========================+
+
+" puts a var
+let @p='ywoputs ""hpli#{}hp^'

@@ -1,3 +1,4 @@
+
 alias tf='tail -f'
 alias tfd='tf log/development.log'
 alias tft='tf log/test.log'
@@ -16,13 +17,13 @@ alias lah="ls -lah"
 
 # Git related aliases
 alias gpsh='git push origin HEAD'
-alias ci="git ci -v"
+alias civ="git ci -v"
 alias ca="git cia"
-alias cim="git ci -m"
+alias ci="git ci -m"
 alias s="git st"
 alias d="git diff"
 alias a="git add"
-alias dca="d --cached"
+alias ds="d --cached"
 alias pp="git stash && git pull && git pop"
 alias po="git co db/schema.rb && git stash && git pull && git pop"
 alias myco="git log --author=me"
@@ -35,7 +36,7 @@ alias gl="git log"
 
 # Rails/Ruby related aliases
 alias r="rake"
-alias migraete="RAILS_ENV=development rake db:migrate"
+alias migrate="RAILS_ENV=development rake db:migrate"
 alias production_deploy="cap production deploy && cap production unicorn:restart"
 alias rebuild="rake db:drop db:create db:migrate && rake db:seed"
 
@@ -52,3 +53,5 @@ alias vi='vim'
 alias agr='ag --ruby'
 
 alias fixaudio="sudo killall coreaudiod"
+
+alias spec_scan="rspec && rubocop && brakeman --run-all-checks --summary --exit-on-warn --quiet && echo -e \"\n$COL_RED All checks Passed:) $COL_RESET\""

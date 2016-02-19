@@ -78,3 +78,5 @@ eval $(thefuck --alias)
 export RBENV_VERSION=2.3.0
 
 bindkey "^R" history-incremental-search-backward
+
+test -e ${HOME}/.iterm2_shell_integration.zsh && source ${HOME}/.iterm2_shell_integration.zsh
