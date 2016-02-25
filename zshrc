@@ -30,6 +30,9 @@ plugins=(git brew bundler gem rails rake rvm osx vi-mode)
 
 source $ZSH/oh-my-zsh.sh
 
+# postgresql.app command line tools:
+export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/latest/bin
+
 export PATH="/usr/local/bin:$PATH"
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
@@ -80,3 +83,4 @@ export RBENV_VERSION=2.3.0
 bindkey "^R" history-incremental-search-backward
 
 test -e ${HOME}/.iterm2_shell_integration.zsh && source ${HOME}/.iterm2_shell_integration.zsh
+

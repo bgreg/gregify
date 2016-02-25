@@ -186,7 +186,7 @@ vnoremap <leader>rem  :RExtractMethod<cr>
 map <c-n> :call RenameFile()<cr>
 map <c-\> :NERDTreeFind<cr>
 map <c-t> <esc>:tabnew <cr>
-map <c-c> <esc>:!ctags -R .<cr>
+map <c-c><c-t> <esc>:!ctags -R .<cr>
 nnoremap <C-J> <C-W>j
 nnoremap <C-K> <C-W>k
 nnoremap <C-L> <C-W>l
