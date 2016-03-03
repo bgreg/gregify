@@ -212,6 +212,7 @@ map Q <Nop>         " Disable Ex mode
 map Q :q<CR>        " quit in normal mode
 vmap Q :q<CR>       " quit in visual mapping
 nnoremap , :w<CR><c-^>  " Switch between the last two files
+nnoremap <leader>fs 1z=  "pick the first option to correct spelling mistakes
 
 "    Tab navigation
 nnoremap th  :tabfirst <CR>

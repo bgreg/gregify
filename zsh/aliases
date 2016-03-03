@@ -35,15 +35,16 @@ alias gl="git log"
 # Rails projects
 alias r="rails"
 alias migrate="RAILS_ENV=development rake db:migrate"
-alias production_deploy="../ops_scripts/backup_prod.sh && cap production deploy && cap production unicorn:restart && open http://security-tools.hq.unity3d.com/ && say 'deploy completed'"
+alias production_deploy="../ops_scripts/backup_prod.sh && cap production deploy && cap production unicorn:restart && ../ops_scripts/post_deploy.sh"
 alias rebuild="rake db:drop db:create db:migrate && rake db:seed"
 alias rspec="spring rspec"
 alias rake="spring rake"
 alias rubocop="spring rubocop"
 alias rubocop="spring rubocop"
-alias spec_scan="rspec && rubocop && brakeman --run-all-checks --summary --exit-on-warn --quiet && echo -e \"\n$COL_RED All checks Passed:) $COL_RESET\""
+alias spec_scan="rspec && rubocop && brakeman --run-all-checks --summary --exit-on-warn --quiet && echo -e \"\n$COL_RED All Checks Passed! $COL_RESET\""
 alias last_migration="zr; cat db/migrate/$(ls ~/Workspace/paladin/db/migrate | tail -1)"
 alias paladin="cd ~/Workspace/paladin"
+alias check_coverage="CHECK_COVERAGE=true rspec spec && open coverage/index.html"
 
 # Dotfiles folder aliases
 alias dotv="vim ~/.dotfiles"
