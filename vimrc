@@ -330,4 +330,4 @@ endfunction
 "+===========================+
 
 " puts a var
-let @p='ywoputs ""hpli#{}hp^'
+let @p='ywoputs ""hpli: #{}hp^'

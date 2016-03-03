@@ -1,13 +1,13 @@
-
 alias tf='tail -f'
 alias tfd='tf log/development.log'
 alias tft='tf log/test.log'
 
-alias ctags="`brew --prefix`/bin/ctags"
+# -G colorizes output, -h is great because it uses "human" size numbers
+alias ls="ls -FG"
+alias ll="ls -laFhG"
 
-alias l="ls"
-alias la="ls -la"
-alias lah="ls -lah"
+alias c="clear"
+alias h='history'
 
 # A script to recursively find and replace through folders using Perl
 # alias rr="~/.scripts/recursive_replace.sh"
@@ -20,6 +20,7 @@ alias ci="git ci -m"
 alias s="git st"
 alias d="git diff"
 alias a="git add"
+alias ap="git add -p"
 alias ds="d --cached"
 alias pp="git stash && git pull && git pop"
 alias po="git co db/schema.rb && git stash && git pull && git pop"
@@ -31,25 +32,46 @@ alias erf='vim $(git diff --name-only)'
 alias gbr='git for-each-ref --sort=-committerdate refs/heads/ | head | cut -d"/" -f3'
 alias gl="git log"
 
-# Rails/Ruby related aliases
-alias r="rake"
+# Rails projects
+alias r="rails"
 alias migrate="RAILS_ENV=development rake db:migrate"
-alias production_deploy="../ops_scripts/backup_prod.sh && cap production deploy && cap production unicorn:restart"
+alias production_deploy="../ops_scripts/backup_prod.sh && cap production deploy && cap production unicorn:restart && open http://security-tools.hq.unity3d.com/ && say 'deploy completed'"
 alias rebuild="rake db:drop db:create db:migrate && rake db:seed"
 alias rspec="spring rspec"
+alias rake="spring rake"
 alias rubocop="spring rubocop"
-alias spec_scan="rspec && spring rubocop && brakeman --run-all-checks --summary --exit-on-warn --quiet && echo -e \"\n$COL_RED All checks Passed:) $COL_RESET\""
-alias last_migration="zr; cat db/migrate/$(ls db/migrate | tail -1)"
+alias rubocop="spring rubocop"
+alias spec_scan="rspec && rubocop && brakeman --run-all-checks --summary --exit-on-warn --quiet && echo -e \"\n$COL_RED All checks Passed:) $COL_RESET\""
+alias last_migration="zr; cat db/migrate/$(ls ~/Workspace/paladin/db/migrate | tail -1)"
+alias paladin="cd ~/Workspace/paladin"
 
 # Dotfiles folder aliases
 alias dotv="vim ~/.dotfiles"
 alias dotf="~/.dotfiles"
-
-alias ze='vim ~/.dotfiles/zshrc'
+alias ze='vim ~/.dotfiles/zshrc && source ~/.dotfiles/zshrc'
 alias zr='source ~/.dotfiles/zshrc'
+alias ae='vim ~/.dotfiles/zsh/aliases && source ~/.dotfiles/zshrc'
 alias ve='vim ~/.dotfiles/vimrc'
+
+
+# misc
 alias vi='vim'
-
 alias agr='ag --ruby'
+alias svi='sudo vi'
 
+#helpers
+alias path='echo -e ${PATH//:/\\n}'
+alias ping='ping -c 5'
+
+# confirmation #
+alias mv='mv -i'
+alias cp='cp -i'
+alias ln='ln -i'
+alias wget='wget -c'
+
+## get top process eating memory
+alias psmem='ps auxf | sort -nr -k 4'
+alias psmem10='ps auxf | sort -nr -k 4 | head -10'
+
+# Maintenance
 alias fixaudio="sudo killall coreaudiod"
