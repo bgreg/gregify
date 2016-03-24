@@ -35,7 +35,7 @@ alias gl="git log"
 # Rails projects
 alias r="rails"
 alias migrate="RAILS_ENV=development rake db:migrate"
-alias production_deploy="../ops_scripts/backup_prod.sh && cap production deploy && cap production unicorn:restart && ../ops_scripts/post_deploy.sh"
+alias production_deploy="gpsh && ../ops_scripts/pre_deploy.sh && cap production deploy && ../ops_scripts/post_deploy.sh"
 alias rebuild="rake db:drop db:create db:migrate && rake db:seed"
 alias rspec="spring rspec"
 alias rake="spring rake"
