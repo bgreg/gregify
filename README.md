@@ -15,6 +15,5 @@
   install the vim plugins:
   `vim +PluginInstall +qall`
 
-####TODO:
 
-- [ ] look at using command key more in vimrc ( <D - ... > )
+#### To set soundtracks per directory, add a file '.spotify-soundtrack' to that directory that contains the spotify uri
