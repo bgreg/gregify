@@ -124,3 +124,18 @@ function french {
     printf "\e[44m%${t}s\e[47m%${t}s\e[41m%${t}s\e[0m\n"
   done
 }
+
+# for itunes
+# chpwd() {
+#   if [[ -a "$PWD/.itunes-soundtrack" ]]; then
+#     itunes playlist "$(cat $PWD/.itunes-soundtrack)"
+#   fi
+# }
+#
+# for spotify
+chpwd() {
+  if [[ -a "$PWD/.spotify-soundtrack" ]]; then
+    SPOTIFY_PLAY_URI="$(cat $PWD/.spotify-soundtrack)"
+    osascript -e "tell application \"Spotify\" to play track \"$SPOTIFY_PLAY_URI\"";
+  fi
+}

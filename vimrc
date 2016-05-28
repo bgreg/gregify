@@ -55,6 +55,7 @@ au FileType ruby,eruby setl ofu=rubycomplete#Complete
 au FileType html,xhtml setl ofu=htmlcomplete#CompleteTags
 au FileType css setl ofu=csscomplete#CompleteCSS
 
+set autochdir
 set shiftround
 set autowrite
 set number
@@ -155,7 +156,6 @@ map <Leader>as :call RunCurrentSpecFile()<CR>
 map <leader>s :call RunNearestSpec()<CR>
 map <leader>l :call RunLastSpec()<CR>
 map <leader>a :call RunAllSpecs()<CR>
-map <leader>n :NumbersToggle<cr>
 map <leader>e :edit %%
 map <leader>w :call WrapThem()<cr>
 map <leader>f :s/:\([^ ]*\)\(\s*\)=>/\1:/g <cr>
@@ -170,6 +170,8 @@ map <leader>tc :CtrlP app/controllers/<cr>
 map <leader>tv :CtrlP app/views/<cr>
 map <leader>tl :CtrlP app/lib/<cr>
 map <leader>ig :IndentGuidesToggle<cr>
+map <leader>b :bp <cr>
+map <leader>n :bn <cr>
 
 " refactoring bindings
 nnoremap <leader>rap  :RAddParameter<cr>
@@ -219,7 +221,6 @@ nnoremap th  :tabfirst <CR>
 nnoremap tj  :tabnext <CR>
 nnoremap tk  :tabprev <CR>
 nnoremap tl  :tablast <CR>
-nnoremap te  :tabedit <Space>
 nnoremap tn  :tabnext <CR>
 nnoremap tm  :tabm <Space>
 nnoremap td  :tabclose <CR>
