@@ -1,0 +1,23 @@
+#!/usr/local/bin/zsh
+
+#
+# TODO:
+#  *) don't send if that list is already playing
+#  *) add this to dotfiles
+
+function Spotify () {
+  state=`osascript -e 'tell application "Spotify" to player state as string'`;
+
+  if [ $state = "playing" ]; then
+    if [[ -a "$1/.spotify-soundtrack" ]]; then
+      track=`osascript -e 'tell application "Spotify" to name of current track'`;
+      echo "Spotify is currently $state. $track";
+
+      SPOTIFY_PLAY_URI="$(cat $1/.spotify-soundtrack)"
+
+      osascript -e "tell application \"Spotify\" to play track \"$SPOTIFY_PLAY_URI\"";
+    fi
+  fi
+}
+
+Spotify $1

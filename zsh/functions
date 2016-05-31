@@ -125,17 +125,7 @@ function french {
   done
 }
 
-# for itunes
-# chpwd() {
-#   if [[ -a "$PWD/.itunes-soundtrack" ]]; then
-#     itunes playlist "$(cat $PWD/.itunes-soundtrack)"
-#   fi
-# }
-#
-# for spotify
+# zsh hook for all directory changes
 chpwd() {
-  if [[ -a "$PWD/.spotify-soundtrack" ]]; then
-    SPOTIFY_PLAY_URI="$(cat $PWD/.spotify-soundtrack)"
-    osascript -e "tell application \"Spotify\" to play track \"$SPOTIFY_PLAY_URI\"";
-  fi
+  $HOME/.dotfiles/soundtrack $PWD
 }

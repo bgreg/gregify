@@ -255,7 +255,8 @@ autocmd BufReadPost * call Spotify()
 
 function! Spotify()
   let file_name = expand('%:p:h')
-  exec ':silent !soundtrack ' . file_name
+  exec ':silent !~/.dotfiles/soundtrack ' . file_name
+  redraw!
 endfunction
 
 "+===========================+
