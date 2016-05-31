@@ -55,7 +55,6 @@ au FileType ruby,eruby setl ofu=rubycomplete#Complete
 au FileType html,xhtml setl ofu=htmlcomplete#CompleteTags
 au FileType css setl ofu=csscomplete#CompleteCSS
 
-set autochdir
 set shiftround
 set autowrite
 set number
@@ -251,6 +250,13 @@ autocmd! BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "nor
 " Remove white space on save
 autocmd BufWritePre * :%s/\s\+$//e
 
+" Play song for directory
+autocmd BufReadPost * call Spotify()
+
+function! Spotify()
+  let file_name = expand('%:p:h')
+  exec ':silent !soundtrack ' . file_name
+endfunction
 
 "+===========================+
 " Custom color switcher      |
@@ -280,7 +286,6 @@ function! SwitchColor(swinc)
     else
       return SwitchColor(a:swinc)
     endif
-
   else
     let s:swback = 1
     if (&background == "light")
