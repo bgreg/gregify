@@ -126,6 +126,6 @@ function french {
 }
 
 # zsh hook for all directory changes
-chpwd() {
-  $HOME/.dotfiles/soundtrack $PWD
-}
+# chpwd() {
+  # $HOME/.dotfiles/soundtrack $PWD
+# }

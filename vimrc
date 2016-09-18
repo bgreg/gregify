@@ -33,8 +33,8 @@ call vundle#begin()
   Plugin 'tpope/vim-haml'
   Plugin 'cakebaker/scss-syntax.vim'
   Plugin 'kchmck/vim-coffee-script'
-  Plugin 'ervandew/supertab'
   Plugin 'mattn/emmet-vim' "<c-y>, to fire
+  Plugin 'ervandew/supertab'
   Plugin 'bling/vim-airline'
   Plugin 'majutsushi/tagbar'
   Plugin 'myusuf3/numbers.vim'
@@ -47,8 +47,9 @@ call vundle#begin()
   Plugin 'chriskempson/vim-tomorrow-theme'
   Plugin 'guns/xterm-color-table.vim'
   Plugin '907th/vim-auto-save'
-  Plugin 'roman/golden-ratio'
+  " Plugin 'roman/golden-ratio'
   Plugin 'ngmy/vim-rubocop'
+  Plugin 'tommcdo/vim-exchange'
 call vundle#end()
 
 au FileType ruby,eruby setl ofu=rubycomplete#Complete
@@ -106,15 +107,19 @@ set gcr=a:blinkon0
 set laststatus=2
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 set nocompatible
+
 " set hidden " navigate away from a buffer without saving
 let mapleader = "\<Space>"
 let g:fuzzy_ignore = "*.png;*.PNG;*.JPG;*.jpg;*.GIF;*.gif;vendor/**;coverage/**;tmp/**;rdoc/**"
+
 let g:ctrlp_map='<Leader>t'
 let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_working_path_mode = 'a'
 let g:ctrlp_custom_ignore = {
   \ 'dir':  '\v[\/]\.(git|hg|svn)$',
   \ 'file': '\v\.(exe|so|dll|log|sql)$'
   \ }
+
 let g:indent_guides_auto_colors = 0
 let g:numbers_exclude = ['tagbar', 'gundo', 'minibufexpl', 'nerdtree']
 let g:auto_save = 1  " enable AutoSave on Vim startup
@@ -123,6 +128,7 @@ let g:auto_save_in_insert_mode = 0  " do not save while in insert mode
 " let g:user_emmet_leader_key='<C-j>'  this didn't work because I hit that to
 " move windows
 
+let g:rspec_command = "!spring rspec {spec}"
 colorscheme gotham256
 
 " let g:alduin_Shout_Windhelm = 1
@@ -159,7 +165,7 @@ map <leader>e :edit %%
 map <leader>w :call WrapThem()<cr>
 map <leader>f :s/:\([^ ]*\)\(\s*\)=>/\1:/g <cr>
 map <leader>y "+yy
-map <leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>
+map <leader>p :set paste<CR><esc>"*]p:set nopaste<cr>
 map <leader>c :Tabularize /
 map <leader>tm :CtrlP app/models/<cr>
 map <leader>ta :CtrlP app/assets/<cr>
@@ -171,6 +177,8 @@ map <leader>tl :CtrlP app/lib/<cr>
 map <leader>ig :IndentGuidesToggle<cr>
 map <leader>b :bp <cr>
 map <leader>n :bn <cr>
+map <leader>ru :Rubocop <cr>
+map <leader>= :=am <cr>
 
 " refactoring bindings
 nnoremap <leader>rap  :RAddParameter<cr>
@@ -251,13 +259,13 @@ autocmd! BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "nor
 autocmd BufWritePre * :%s/\s\+$//e
 
 " Play song for directory
-autocmd BufReadPost * call Spotify()
+" autocmd BufReadPost * call Spotify()
 
-function! Spotify()
-  let file_name = expand('%:p:h')
-  exec ':silent !~/.dotfiles/soundtrack ' . file_name
-  redraw!
-endfunction
+" function! Spotify()
+"   let file_name = expand('%:p:h')
+"   exec ':silent !~/.dotfiles/soundtrack ' . file_name
+"   redraw!
+" endfunction
 
 "+===========================+
 " Custom color switcher      |

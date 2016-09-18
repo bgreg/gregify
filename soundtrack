@@ -11,7 +11,7 @@ function Spotify () {
   if [ $state = "playing" ]; then
     if [[ -a "$1/.spotify-soundtrack" ]]; then
       track=`osascript -e 'tell application "Spotify" to name of current track'`;
-      echo "Spotify is currently $state. $track";
+      echo "Spotify is currently $state $track";
 
       SPOTIFY_PLAY_URI="$(cat $1/.spotify-soundtrack)"
 

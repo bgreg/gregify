@@ -13,12 +13,12 @@ alias h='history'
 # alias rr="~/.scripts/recursive_replace.sh"
 
 # Git related aliases
-alias gpsh='zr && git push origin HEAD'
+alias gpsh='git push origin HEAD'
 alias civ="git ci -v"
 alias ca="git cia"
 alias ci="git ci -m"
 alias s="git st"
-alias d="git diff"
+alias d="git diff --compaction-heuristic"
 alias a="git add"
 alias ap="git add -p"
 alias ds="d --cached"
@@ -33,14 +33,15 @@ alias gbr='git for-each-ref --sort=-committerdate refs/heads/ | head | cut -d"/"
 alias gl="git log"
 
 # Rails projects
+alias be="bundle exec"
 alias r="rails"
-alias migrate="RAILS_ENV=development rake db:migrate"
+alias migrate="RAILS_ENV=development rails db:migrate"
 alias production_deploy="gpsh && ../ops_scripts/pre_deploy.sh && cap production deploy && cap production unicorn:restart"
-alias quick_production_deploy="gpsh && cap production deploy && cap production unicorn:restart"
-alias rebuild="rake db:drop db:create db:migrate && rake db:seed"
+alias quick_production_deploy="gpsh && cap production deploy && cap production unicorn:restart; say 'deployed'"
+alias rebuild="rails db:environment:set RAILS_ENV=development && rails db:drop db:create db:migrate db:seed"
 alias rspec="spring rspec"
 alias rubocop="spring rubocop"
-alias spec_scan="rspec --fail-fast && rubocop && brakeman --run-all-checks --summary --exit-on-warn --quiet && echo -e \"\n$COL_RED All Checks Passed! $COL_RESET\""
+alias spec_scan="rspec spec && rubocop && brakeman --run-all-checks --summary --exit-on-warn --quiet && echo -e \"\n$COL_RED All Checks Passed! $COL_RESET\""
 alias last_migration="cat db/migrate/$(ls ~/Workspace/paladin/db/migrate | tail -1)"
 alias paladin="cd ~/Workspace/paladin"
 alias check_coverage="CHECK_COVERAGE=true rspec spec && open coverage/index.html"
@@ -76,3 +77,5 @@ alias psmem10='ps auxf | sort -nr -k 4 | head -10'
 
 # Maintenance
 alias fixaudio="sudo killall coreaudiod"
+
+alias phill="awk '{ if ($6 ~ /live|dev|test/) print \$3 }'"
