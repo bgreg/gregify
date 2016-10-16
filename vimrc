@@ -47,9 +47,12 @@ call vundle#begin()
   Plugin 'chriskempson/vim-tomorrow-theme'
   Plugin 'guns/xterm-color-table.vim'
   Plugin '907th/vim-auto-save'
-  " Plugin 'roman/golden-ratio'
+  Plugin 'roman/golden-ratio'
   Plugin 'ngmy/vim-rubocop'
   Plugin 'tommcdo/vim-exchange'
+  Plugin 'altercation/vim-colors-solarized'
+	Plugin 'junegunn/gv.vim'
+	Plugin 'vim-scripts/DrawIt'
 call vundle#end()
 
 au FileType ruby,eruby setl ofu=rubycomplete#Complete
@@ -95,7 +98,7 @@ set undoreload=200
 set undodir=$HOME/.vim/undo
 set mouse=nicr "enables mouse scrolling
 set mouse=a
-set t_Co=256
+" set t_Co=256
 set guifont=Source\ Code\ Pro:h16
 set noswapfile
 set nobackup
@@ -107,6 +110,12 @@ set gcr=a:blinkon0
 set laststatus=2
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 set nocompatible
+
+set termguicolors
+" enable 24 bit color support
+set t_8f=[38;2;%lu;%lu;%lum
+set t_8b=[48;2;%lu;%lu;%lum
+
 
 " set hidden " navigate away from a buffer without saving
 let mapleader = "\<Space>"
@@ -130,28 +139,12 @@ let g:auto_save_in_insert_mode = 0  " do not save while in insert mode
 
 let g:rspec_command = "!spring rspec {spec}"
 colorscheme gotham256
+" colorscheme solarized
+" set background=dark
+" let g:solarized_termcolors=256
 
 " let g:alduin_Shout_Windhelm = 1
 " colorscheme alduin
-
-" if &term=~"xterm"
-"    " These changes only apply to the gotham theme
-"    highlight LineNr ctermfg=DarkGrey ctermbg=black
-"    highlight Comment ctermfg=Magenta
-"    highlight Search cterm=NONE ctermfg=black ctermbg=DarkGrey
-"    highlight VertSplit ctermfg=black ctermbg=DarkGrey
-"    highlight Pmenu ctermbg=238 gui=bold
-"    highlight IndentGuidesOdd  ctermbg=5
-"    highlight IndentGuidesEven ctermbg=13
-
-
-"    " highlight Comment ctermbg=DarkGray
-"    " highlight Constant ctermbg=Blue
-"    " highlight Normal ctermbg=Black
-"    " highlight NonText ctermbg=Black
-"    " highlight Special ctermbg=DarkMagenta
-"    " highlight Cursor ctermbg=Green
-" endif
 
 "+=================+
 "|  Mappings       |
@@ -161,7 +154,6 @@ map <Leader>as :call RunCurrentSpecFile()<CR>
 map <leader>s :call RunNearestSpec()<CR>
 map <leader>l :call RunLastSpec()<CR>
 map <leader>a :call RunAllSpecs()<CR>
-map <leader>e :edit %%
 map <leader>w :call WrapThem()<cr>
 map <leader>f :s/:\([^ ]*\)\(\s*\)=>/\1:/g <cr>
 map <leader>y "+yy
@@ -178,7 +170,7 @@ map <leader>ig :IndentGuidesToggle<cr>
 map <leader>b :bp <cr>
 map <leader>n :bn <cr>
 map <leader>ru :Rubocop <cr>
-map <leader>= :=am <cr>
+map <leader>= =am <cr>
 
 " refactoring bindings
 nnoremap <leader>rap  :RAddParameter<cr>
@@ -232,7 +224,7 @@ nnoremap tn  :tabnext <CR>
 nnoremap tm  :tabm <Space>
 nnoremap td  :tabclose <CR>
 nnoremap <leader>wtf oputs "#" * 90<c-m>puts caller<c-m>puts "#" * 90<esc>
-nnoremap <leader>bi o<c-m>binding.pry<c-m><esc>
+nnoremap <leader>bi o<c-m>require "pry"; binding.pry<c-m><esc>
 
 "+=============+
 "|  Functions  |
@@ -256,7 +248,7 @@ endfunction
 autocmd! BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
 
 " Remove white space on save
-autocmd BufWritePre * :%s/\s\+$//e
+" autocmd BufWritePre * :%s/\s\+$//e
 
 " Play song for directory
 " autocmd BufReadPost * call Spotify()
