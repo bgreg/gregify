@@ -18,6 +18,7 @@ call vundle#begin()
   Plugin 'scrooloose/nerdtree.git'
   Plugin 'godlygeek/tabular'
   Plugin 'rking/ag.vim'
+	" Plugin 'mhinz/vim-grepper'
   Plugin 'gmarik/vundle'
   Plugin 'vim-ruby/vim-ruby'
   Plugin 'tpope/vim-repeat.git'
@@ -28,9 +29,9 @@ call vundle#begin()
   Plugin 'tpope/vim-commentary'
   Plugin 'tpope/vim-bundler'
   Plugin 'tpope/vim-fugitive'
+  Plugin 'tpope/vim-ragtag'
   Plugin 'thoughtbot/vim-rspec'
   Plugin 'Keithbsmiley/rspec.vim'
-  Plugin 'tpope/vim-haml'
   Plugin 'cakebaker/scss-syntax.vim'
   Plugin 'kchmck/vim-coffee-script'
   Plugin 'mattn/emmet-vim' "<c-y>, to fire
@@ -38,12 +39,11 @@ call vundle#begin()
   Plugin 'bling/vim-airline'
   Plugin 'majutsushi/tagbar'
   Plugin 'myusuf3/numbers.vim'
-  Plugin 'edsono/vim-matchit'
+	Plugin 'tmhedberg/matchit'
   Plugin 'nathanaelkane/vim-indent-guides'
   Plugin 'ecomba/vim-ruby-refactoring'
   Plugin 'xolox/vim-misc'
   Plugin 'scrooloose/syntastic'
-  Plugin 'tpope/vim-vividchalk'
   Plugin 'chriskempson/vim-tomorrow-theme'
   Plugin 'guns/xterm-color-table.vim'
   Plugin '907th/vim-auto-save'
@@ -53,6 +53,10 @@ call vundle#begin()
   Plugin 'altercation/vim-colors-solarized'
 	Plugin 'junegunn/gv.vim'
 	Plugin 'vim-scripts/DrawIt'
+	Plugin 'MarcWeber/vim-addon-mw-utils'
+	Plugin 'tomtom/tlib_vim'
+	Plugin 'garbas/vim-snipmate'
+	Plugin 'honza/vim-snippets'
 call vundle#end()
 
 au FileType ruby,eruby setl ofu=rubycomplete#Complete
@@ -121,6 +125,13 @@ set t_8b=[48;2;%lu;%lu;%lum
 let mapleader = "\<Space>"
 let g:fuzzy_ignore = "*.png;*.PNG;*.JPG;*.jpg;*.GIF;*.gif;vendor/**;coverage/**;tmp/**;rdoc/**"
 
+let b:surround_{char2nr('=')} = "<%= \r %>"
+let b:surround_{char2nr('-')} = "<% \r %>"
+
+let g:snipMate = get(g:, 'snipMate', {}) " Allow for vimrc re-sourcing
+let g:snipMate.scope_aliases = {}
+let g:snipMate.scope_aliases['ruby'] = 'ruby,rails,ruby-rails'
+
 let g:ctrlp_map='<Leader>t'
 let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_working_path_mode = 'a'
@@ -131,13 +142,14 @@ let g:ctrlp_custom_ignore = {
 
 let g:indent_guides_auto_colors = 0
 let g:numbers_exclude = ['tagbar', 'gundo', 'minibufexpl', 'nerdtree']
-let g:auto_save = 1  " enable AutoSave on Vim startup
 let g:auto_save_in_insert_mode = 0  " do not save while in insert mode
+
+let g:golden_ratio_autocommand = 0 " disable on startup
 
 " let g:user_emmet_leader_key='<C-j>'  this didn't work because I hit that to
 " move windows
 
-let g:rspec_command = "!spring rspec {spec}"
+let g:rspec_command = "!bundle exec spring rspec {spec}"
 colorscheme gotham256
 " colorscheme solarized
 " set background=dark
@@ -150,28 +162,30 @@ colorscheme gotham256
 "|  Mappings       |
 "+=================+
 
-map <Leader>as :call RunCurrentSpecFile()<CR>
+map <Leader>a :call RunCurrentSpecFile()<CR>
 map <leader>s :call RunNearestSpec()<CR>
 map <leader>l :call RunLastSpec()<CR>
-map <leader>a :call RunAllSpecs()<CR>
+map <leader>as :call RunAllSpecs()<CR>
 map <leader>w :call WrapThem()<cr>
+map <leader>sc :vsp db/schema.rb<cr>
 map <leader>f :s/:\([^ ]*\)\(\s*\)=>/\1:/g <cr>
 map <leader>y "+yy
 map <leader>p :set paste<CR><esc>"*]p:set nopaste<cr>
 map <leader>c :Tabularize /
 map <leader>tm :CtrlP app/models/<cr>
 map <leader>ta :CtrlP app/assets/<cr>
+map <leader>te :CtrlP app/elements/<cr>
 map <leader>ts :CtrlP spec/<cr>
 map <leader>tf :CtrlP spec/fixtures/<cr>
 map <leader>tc :CtrlP app/controllers/<cr>
 map <leader>tv :CtrlP app/views/<cr>
 map <leader>tl :CtrlP app/lib/<cr>
+map <leader>te :CtrlP app/elements/<cr>
 map <leader>ig :IndentGuidesToggle<cr>
 map <leader>b :bp <cr>
 map <leader>n :bn <cr>
 map <leader>ru :Rubocop <cr>
 map <leader>= =am <cr>
-
 " refactoring bindings
 nnoremap <leader>rap  :RAddParameter<cr>
 nnoremap <leader>rcpc :RConvertPostConditional<cr>
@@ -247,8 +261,10 @@ endfunction
 " just after opening it, if the '" mark is set: >
 autocmd! BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
 
-" Remove white space on save
-" autocmd BufWritePre * :%s/\s\+$//e
+
+" turn these off when you want to use drawit
+autocmd BufWritePre * :%s/\s\+$//e " Remove white space on save
+let g:auto_save = 1  " enable AutoSave on Vim startup
 
 " Play song for directory
 " autocmd BufReadPost * call Spotify()
@@ -338,4 +354,4 @@ endfunction
 "+===========================+
 
 " puts a var
-let @p='ywoputs ""hpli: #{}hp^'
+let @p='ywoputs ""hpi: #{}hp^'

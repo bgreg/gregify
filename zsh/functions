@@ -125,6 +125,26 @@ function french {
   done
 }
 
+function tab_color {
+		case $1 in
+		green)
+		echo -e "\033]6;1;bg;red;brightness;57\a"
+		echo -e "\033]6;1;bg;green;brightness;197\a"
+		echo -e "\033]6;1;bg;blue;brightness;77\a"
+		;;
+		red)
+		echo -e "\033]6;1;bg;red;brightness;270\a"
+		echo -e "\033]6;1;bg;green;brightness;60\a"
+		echo -e "\033]6;1;bg;blue;brightness;83\a"
+		;;
+		orange)
+		echo -e "\033]6;1;bg;red;brightness;227\a"
+		echo -e "\033]6;1;bg;green;brightness;143\a"
+		echo -e "\033]6;1;bg;blue;brightness;10\a"
+		;;
+		esac
+ }
+
 # zsh hook for all directory changes
 chpwd() {
   $HOME/.dotfiles/soundtrack $PWD

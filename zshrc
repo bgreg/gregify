@@ -35,9 +35,6 @@ export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/latest/bin
 
 export PATH="/usr/local/bin:$PATH"
 export PATH="$HOME/.rbenv/bin:$PATH"
-export PATH=$PATH:/usr/local/go/bin
-export GOPATH=$HOME/Workspace/go_workspace
-export PATH=$PATH:$GOPATH/bin
 eval "$(rbenv init -)"
 
 # Source my custom files after oh-my-zsh so I can override things.
@@ -78,10 +75,8 @@ export COLLATION=utf8_general_ci
 GPG_TTY=`tty`
 export GPG_TTY
 export EDITOR=/usr/local/bin/vim
-eval $(thefuck --alias)
-export RBENV_VERSION=2.3.1
+export RBENV_VERSION=2.3.3
 
 bindkey "^R" history-incremental-search-backward
 
 test -e ${HOME}/.iterm2_shell_integration.zsh && source ${HOME}/.iterm2_shell_integration.zsh
-
