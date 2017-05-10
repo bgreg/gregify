@@ -36,7 +36,7 @@ alias gl="git log"
 alias be="bundle exec"
 alias r="rails"
 alias migrate="RAILS_ENV=development rails db:migrate"
-alias production_deploy="gpsh && ../ops_scripts/pre_deploy.sh && cap production deploy && cap production unicorn:restart"
+alias production_deploy="gpsh && ../ops_scripts/pre_deploy.sh && cap production deploy && cap production unicorn:restart; say 'deployed'"
 alias quick_production_deploy="gpsh && cap production deploy && cap production unicorn:restart && say 'deployed'"
 alias rebuild="rails db:environment:set RAILS_ENV=development && rails db:drop db:create db:migrate db:seed"
 alias rspec=" rspec"
@@ -45,6 +45,7 @@ alias spec_scan="rspec spec && rubocop && brakeman --run-all-checks --summary --
 alias last_migration="cat db/migrate/$(ls ~/Workspace/paladin/db/migrate | tail -1)"
 alias paladin="cd ~/Workspace/paladin"
 alias shield="cd ~/Workspace/shield"
+alias constable="cd ~/Workspace/file_service/constable"
 alias check_coverage="CHECK_COVERAGE=true rspec spec && open coverage/index.html"
 alias re_link_qt="brew unlink qt55 && brew link qt55 --force"
 
@@ -57,9 +58,11 @@ alias zr='source ~/.dotfiles/zshrc'
 alias ae='vim ~/.dotfiles/zsh/aliases && source ~/.dotfiles/zshrc'
 alias ve='vim ~/.dotfiles/vimrc'
 alias rubysnips='cat ~/.vim/bundle/vim-snippets/UltiSnips/eruby.snippets ~/.vim/bundle/vim-snippets/UltiSnips/ruby.snippets'
+alias snips="cat /Users/gregmc/.vim/bundle/vim-snippets/snippets/rails.snippets /Users/gregmc/.vim/bundle/vim-snippets/snippets/ruby.snippets"
 
 # misc
-alias vi='vim'
+alias vi='nvim'
+alias vim='nvim'
 alias agr='ag --ruby'
 alias svi='sudo vi'
 
@@ -81,3 +84,8 @@ alias psmem10='ps auxf | sort -nr -k 4 | head -10'
 alias fixaudio="sudo killall coreaudiod"
 
 alias phill="awk '{ if ($6 ~ /live|dev|test/) print \$3 }'"
+
+# Docker
+alias dc='docker-compose'
+alias dce='dc exec'
+

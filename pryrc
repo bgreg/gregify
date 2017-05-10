@@ -56,7 +56,6 @@ end
     require gem
   rescue LoadError
     puts "You are missing a cool gem: #{gem}"
-    exit
   end
 end
 

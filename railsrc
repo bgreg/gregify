@@ -1,18 +1,7 @@
-#!/usr/bin/ruby
-
-def change_log(stream)
-  ActiveRecord::Base.logger = Logger.new(stream)
-  ActiveRecord::Base.clear_active_connections!
-end
-
-def show_log
-  change_log(STDOUT)
-end
-
-def hide_log
-  change_log(nil)
-end
-
-def show_session(session)
-  Marshal.load(Base64.decode64(session))
-end
+--database=postgresql
+--skip-test
+--skip-listen
+--skip-action-cable
+--skip-spring
+--skip-javascript
+--template=~/.rails_template.rb

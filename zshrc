@@ -75,7 +75,6 @@ export COLLATION=utf8_general_ci
 GPG_TTY=`tty`
 export GPG_TTY
 export EDITOR=/usr/local/bin/vim
-export RBENV_VERSION=2.3.3
 
 bindkey "^R" history-incremental-search-backward
 

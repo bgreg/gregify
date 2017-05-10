@@ -1,26 +1,22 @@
 " TODO:
 "  *) add something to show the marks
-"  *) figure out how to exclude files from auto complete
 "  *) if it is before 12 am, use morning color scheme
-"  *)  https://github.com/mhinz/vim-grepper
 
-set nocompatible
 filetype off
 set rtp+=~/.vim/bundle/Vundle.vim
 set encoding=utf-8
+syntax enable
 
 " :help vundle
 call vundle#begin()
-  Plugin 'sunaku/vim-ruby-minitest'
   Plugin 'gmarik/Vundle.vim'
   Plugin 'whatyouhide/vim-gotham'
-  Plugin 'kien/ctrlp.vim'
+  Plugin 'ctrlpvim/ctrlp.vim'
   Plugin 'scrooloose/nerdtree.git'
   Plugin 'godlygeek/tabular'
-  Plugin 'rking/ag.vim'
-	" Plugin 'mhinz/vim-grepper'
-  Plugin 'gmarik/vundle'
+	Plugin 'mhinz/vim-grepper'
   Plugin 'vim-ruby/vim-ruby'
+	Plugin 'elixir-lang/vim-elixir'
   Plugin 'tpope/vim-repeat.git'
   Plugin 'tpope/vim-rails'
   Plugin 'tpope/vim-surround'
@@ -30,8 +26,8 @@ call vundle#begin()
   Plugin 'tpope/vim-bundler'
   Plugin 'tpope/vim-fugitive'
   Plugin 'tpope/vim-ragtag'
-  Plugin 'thoughtbot/vim-rspec'
-  Plugin 'Keithbsmiley/rspec.vim'
+  Plugin 'tpope/vim-dispatch'
+  Plugin 'keith/rspec.vim'
   Plugin 'cakebaker/scss-syntax.vim'
   Plugin 'kchmck/vim-coffee-script'
   Plugin 'mattn/emmet-vim' "<c-y>, to fire
@@ -43,20 +39,24 @@ call vundle#begin()
   Plugin 'nathanaelkane/vim-indent-guides'
   Plugin 'ecomba/vim-ruby-refactoring'
   Plugin 'xolox/vim-misc'
-  Plugin 'scrooloose/syntastic'
   Plugin 'chriskempson/vim-tomorrow-theme'
   Plugin 'guns/xterm-color-table.vim'
   Plugin '907th/vim-auto-save'
   Plugin 'roman/golden-ratio'
   Plugin 'ngmy/vim-rubocop'
   Plugin 'tommcdo/vim-exchange'
-  Plugin 'altercation/vim-colors-solarized'
+  Plugin 'lifepillar/vim-solarized8'
 	Plugin 'junegunn/gv.vim'
 	Plugin 'vim-scripts/DrawIt'
 	Plugin 'MarcWeber/vim-addon-mw-utils'
 	Plugin 'tomtom/tlib_vim'
-	Plugin 'garbas/vim-snipmate'
+	Plugin 'garbas/vim-snipmate' " Pure vim script snippets, using this because utilisnips needs python and youcompleteme
 	Plugin 'honza/vim-snippets'
+  Plugin 'w0rp/ale'
+  Plugin 'janko-m/vim-test'
+	Plugin 'skywind3000/asyncrun.vim'
+	Plugin 'jyota/vimColors'
+  Plugin 'muellan/am-colors'
 call vundle#end()
 
 au FileType ruby,eruby setl ofu=rubycomplete#Complete
@@ -64,73 +64,70 @@ au FileType html,xhtml setl ofu=htmlcomplete#CompleteTags
 au FileType css setl ofu=csscomplete#CompleteCSS
 
 set shiftround
-set autowrite
+set autowriteall
 set number
 set relativenumber
-set ruler
 set spell spelllang=en_us
 set ignorecase
 set smartcase
-set incsearch
-set hlsearch
 set grepprg=ag
-set showmatch " show matching brace when they are typed or under cursor
+" set showmatch " show matching brace when they are typed or under cursor
 set matchtime=30
 set scrolloff=8
 set sidescrolloff=15
 set sidescroll=1
-set iskeyword-=_,#
 set splitbelow
 set splitright
-set noesckeys
+" set noesckeys
 set ttimeout
 set ttimeoutlen=1
 set timeoutlen=500 " Don't wait so long for the next key press
-set autoindent
 set smartindent
-set autoread
-set smarttab
 set expandtab
 set tabstop=2
 set shiftwidth=2
 set backspace=indent,eol,start "Allow backspace in insert mode
 set nowrap
 set linebreak
-set history=1000
-set undolevels=500 " Save text state between reloads (e.g. if you use :e!)
-set undoreload=200
-set undodir=$HOME/.vim/undo
+set history=10000
+set undofile
+set undolevels=1000 " Save text state between reloads (e.g. if you use :e!)
+set undoreload=1000
 set mouse=nicr "enables mouse scrolling
 set mouse=a
-" set t_Co=256
 set guifont=Source\ Code\ Pro:h16
 set noswapfile
 set nobackup
 set nowb
 set title
-set showcmd
 set showmode
 set gcr=a:blinkon0
-set laststatus=2
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 set nocompatible
-
 set termguicolors
 " enable 24 bit color support
 set t_8f=[38;2;%lu;%lu;%lum
 set t_8b=[48;2;%lu;%lu;%lum
+set nofoldenable    " disable folding
+set tags=./tags,tags
+set undodir=$HOME/.vim/undo
+set smarttab
+set showcmd
+set autoindent
+set autoread
+set hlsearch
+set incsearch
+set laststatus=2
+set ruler
+filetype plugin indent on
+if !has('nvim')
+endif
 
-
-" set hidden " navigate away from a buffer without saving
 let mapleader = "\<Space>"
 let g:fuzzy_ignore = "*.png;*.PNG;*.JPG;*.jpg;*.GIF;*.gif;vendor/**;coverage/**;tmp/**;rdoc/**"
 
 let b:surround_{char2nr('=')} = "<%= \r %>"
 let b:surround_{char2nr('-')} = "<% \r %>"
-
-let g:snipMate = get(g:, 'snipMate', {}) " Allow for vimrc re-sourcing
-let g:snipMate.scope_aliases = {}
-let g:snipMate.scope_aliases['ruby'] = 'ruby,rails,ruby-rails'
 
 let g:ctrlp_map='<Leader>t'
 let g:ctrlp_cmd = 'CtrlP'
@@ -143,30 +140,29 @@ let g:ctrlp_custom_ignore = {
 let g:indent_guides_auto_colors = 0
 let g:numbers_exclude = ['tagbar', 'gundo', 'minibufexpl', 'nerdtree']
 let g:auto_save_in_insert_mode = 0  " do not save while in insert mode
-
 let g:golden_ratio_autocommand = 0 " disable on startup
 
-" let g:user_emmet_leader_key='<C-j>'  this didn't work because I hit that to
-" move windows
+colorscheme solarized8_dark
+let test#strategy = "neovim"
 
-let g:rspec_command = "!bundle exec spring rspec {spec}"
-colorscheme gotham256
-" colorscheme solarized
-" set background=dark
-" let g:solarized_termcolors=256
-
-" let g:alduin_Shout_Windhelm = 1
-" colorscheme alduin
+let g:snipMate = get(g:, 'snipMate', {}) " Allow for vimrc re-sourcing
+let g:snipMate.scope_aliases = {}
+let g:snipMate.scope_aliases['ruby'] = 'ruby,rails'         " look for snippets in both these files at once for ruby files
 
 "+=================+
 "|  Mappings       |
 "+=================+
+" map <Leader>a :call RunCurrentSpecFile()<CR>
+" map <leader>s :call RunNearestSpec()<CR>
+" map <leader>l :call RunLastSpec()<CR>
+" map <leader>as :call RunAllSpecs()<CR>
 
-map <Leader>a :call RunCurrentSpecFile()<CR>
-map <leader>s :call RunNearestSpec()<CR>
-map <leader>l :call RunLastSpec()<CR>
-map <leader>as :call RunAllSpecs()<CR>
-map <leader>w :call WrapThem()<cr>
+nmap <silent> <leader>a :TestFile<CR>
+nmap <silent> <leader>s :TestNearest<CR>
+nmap <silent> <leader>l :TestLast<CR>
+nmap <silent> <leader>as :TestSuite<CR>
+
+map <leader>w :w<cr>
 map <leader>sc :vsp db/schema.rb<cr>
 map <leader>f :s/:\([^ ]*\)\(\s*\)=>/\1:/g <cr>
 map <leader>y "+yy
@@ -186,6 +182,7 @@ map <leader>b :bp <cr>
 map <leader>n :bn <cr>
 map <leader>ru :Rubocop <cr>
 map <leader>= =am <cr>
+
 " refactoring bindings
 nnoremap <leader>rap  :RAddParameter<cr>
 nnoremap <leader>rcpc :RConvertPostConditional<cr>
@@ -197,17 +194,22 @@ vnoremap <leader>rrlv :RRenameLocalVariable<cr>
 vnoremap <leader>rriv :RRenameInstanceVariable<cr>
 vnoremap <leader>rem  :RExtractMethod<cr>
 
+nnoremap <leader>g :Grepper<cr>
+let g:grepper = { 'next_tool': '<leader>g' }
+
 "     Control Mappings
 map <c-n> :call RenameFile()<cr>
 map <c-\> :NERDTreeFind<cr>
 map <c-t> <esc>:tabnew <cr>
-map <c-c><c-t> <esc>:!ctags -R .<cr>
-nnoremap <C-J> <C-W>j
-nnoremap <C-K> <C-W>k
-nnoremap <C-L> <C-W>l
-nnoremap <C-H> <C-W>h
+map <c-c><c-t> <esc>:!ctags -R . --sort=yes<cr>
 
-"     Command mode
+" Split Pane navigation
+nnoremap <C-j> <C-W><C-J>
+nnoremap <C-k> <C-W><C-K>
+nnoremap <C-l> <C-W><C-L>
+nnoremap <C-h> <C-W><C-H>
+
+" Command mode
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
 command! Q q
 command! Qall qall
@@ -238,29 +240,15 @@ nnoremap tn  :tabnext <CR>
 nnoremap tm  :tabm <Space>
 nnoremap td  :tabclose <CR>
 nnoremap <leader>wtf oputs "#" * 90<c-m>puts caller<c-m>puts "#" * 90<esc>
-nnoremap <leader>bi o<c-m>require "pry"; binding.pry<c-m><esc>
-
-"+=============+
-"|  Functions  |
-"+=============+
-function! RenameFile()
-let old_name = expand('%')
-    let new_name = input('New file name: ', expand('%'), 'file')
-    if new_name != '' && new_name != old_name
-        exec ':saveas ' . new_name
-        exec ':silent !rm ' . old_name
-        redraw!
-    endif
-endfunction
 
 "+================+
 "|  Autocommands  |
 "+================+
 
+
 " This autocommand jumps to the last known position in a file
 " just after opening it, if the '" mark is set: >
 autocmd! BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
-
 
 " turn these off when you want to use drawit
 autocmd BufWritePre * :%s/\s\+$//e " Remove white space on save
@@ -274,56 +262,6 @@ let g:auto_save = 1  " enable AutoSave on Vim startup
 "   exec ':silent !~/.dotfiles/soundtrack ' . file_name
 "   redraw!
 " endfunction
-
-"+===========================+
-" Custom color switcher      |
-"+===========================+
-if v:version < 700 || exists('loaded_switchcolor') || &cp
-  finish
-endif
-
-let loaded_switchcolor = 1
-
-let paths = split(globpath(&runtimepath, 'colors/*.vim'), "\n")
-let s:swcolors = map(paths, 'fnamemodify(v:val, ":t:r")')
-let s:swskip = [ '256-jungle', '3dglasses', 'calmar256-light', 'coots-beauty-256', 'grb256' ]
-let s:swback = 0    " background variants light/dark was not yet switched
-let s:swindex = 0
-
-function! SwitchColor(swinc)
-  " if have switched background: dark/light
-  if (s:swback == 1)
-    let s:swback = 0
-    let s:swindex += a:swinc
-    let i = s:swindex % len(s:swcolors)
-
-    " in skip list
-    if (index(s:swskip, s:swcolors[i]) == -1)
-      execute "colorscheme " . s:swcolors[i]
-    else
-      return SwitchColor(a:swinc)
-    endif
-  else
-    let s:swback = 1
-    if (&background == "light")
-      execute "set background=dark"
-    else
-      execute "set background=light"
-    endif
-
-    " roll back if background is not supported
-    if (!exists('g:colors_name'))
-      return SwitchColor(a:swinc)
-    endif
-  endif
-
-  " show current name on screen. :h :echo-redraw
-  redraw
-  execute "colorscheme"
-endfunction
-
-filetype plugin indent on
-syntax enable
 
 "+===========================+
 "  Wrap things in a character|
@@ -348,6 +286,46 @@ function! WrapThem() range
 		call append(s, result)
 endfunction
 
+let loaded_switchcolor = 1
+
+let paths = split(globpath(&runtimepath, 'colors/*.vim'), "\n")
+let s:swcolors = map(paths, 'fnamemodify(v:val, ":t:r")')
+let s:swskip = [ '256-jungle', '3dglasses', 'calmar256-light', 'coots-beauty-256', 'grb256' ]
+let s:swback = 0    " background variants light/dark was not yet switched
+let s:swindex = 0
+
+function! SwitchColor(swinc)
+	" if have switched background: dark/light
+	if (s:swback == 1)
+		let s:swback = 0
+		let s:swindex += a:swinc
+		let i = s:swindex % len(s:swcolors)
+
+		" in skip list
+		if (index(s:swskip, s:swcolors[i]) == -1)
+			execute "colorscheme " . s:swcolors[i]
+		else
+			return SwitchColor(a:swinc)
+		endif
+
+	else
+		let s:swback = 1
+		if (&background == "light")
+			execute "set background=dark"
+		else
+			execute "set background=light"
+		endif
+
+		" roll back if background is not supported
+		if (!exists('g:colors_name'))
+			return SwitchColor(a:swinc)
+		endif
+	endif
+
+	" show current name on screen. :h :echo-redraw
+	redraw
+	execute "colorscheme"
+endfunction
 
 "+===========================+
 " Macros                     |
