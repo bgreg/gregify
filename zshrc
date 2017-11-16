@@ -35,16 +35,13 @@ export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/latest/bin
 
 export PATH="/usr/local/bin:$PATH"
 export PATH="$HOME/.rbenv/bin:$PATH"
+export PATH="$HOME/.mix/escripts:$PATH"
 eval "$(rbenv init -)"
 
 # Source my custom files after oh-my-zsh so I can override things.
 source $HOME/.dotfiles/zsh/aliases
 source $HOME/.dotfiles/zsh/functions
 
-# Fix up the Ruby GC to make it faster
-export RUBY_GC_HEAP_INIT_SLOTS=2000000
-export RUBY_HEAP_FREE_MIN=20000
-export RUBY_GC_MALLOC_LIMIT=100000000
 
 # this helps with source highlighting with less
 LESSPIPE=`which src-hilite-lesspipe.sh`
@@ -77,5 +74,8 @@ export GPG_TTY
 export EDITOR=/usr/local/bin/vim
 
 bindkey "^R" history-incremental-search-backward
+
+# reduce timeout for vi mode switching
+export KEYTIMEOUT=1
 
 test -e ${HOME}/.iterm2_shell_integration.zsh && source ${HOME}/.iterm2_shell_integration.zsh

@@ -17,7 +17,7 @@ alias gpsh='git push origin HEAD'
 alias gciv="git ci -v"
 alias gca="git cia"
 alias gci="git ci -m"
-alias gd="git diff --compaction-heuristic"
+alias gd="git diff"
 alias ga="git add"
 alias gap="git add -pA"
 alias gs="git status"
@@ -45,7 +45,7 @@ alias spec_scan="rspec spec && rubocop && brakeman --run-all-checks --summary --
 alias last_migration="cat db/migrate/$(ls ~/Workspace/paladin/db/migrate | tail -1)"
 alias paladin="cd ~/Workspace/paladin"
 alias shield="cd ~/Workspace/shield"
-alias constable="cd ~/Workspace/file_service/constable"
+alias constable="cd ~/Workspace/constable"
 alias check_coverage="CHECK_COVERAGE=true rspec spec && open coverage/index.html"
 alias re_link_qt="brew unlink qt55 && brew link qt55 --force"
 
@@ -82,10 +82,13 @@ alias psmem10='ps auxf | sort -nr -k 4 | head -10'
 
 # Maintenance
 alias fixaudio="sudo killall coreaudiod"
-
 alias phill="awk '{ if ($6 ~ /live|dev|test/) print \$3 }'"
 
 # Docker
+alias doc='docker'
+alias dps='docker ps'
 alias dc='docker-compose'
 alias dce='dc exec'
+
+alias k='kubectl'
 

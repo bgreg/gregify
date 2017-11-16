@@ -65,7 +65,7 @@ function clear_desktop() {
 # A command to launch a new, anonymous Chrome session for testing.
 function chrome() {
   mkdir -p /tmp/chrome$1
-  ~/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --user-data-dir=/tmp/chrome$1
+  /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --user-data-dir=/tmp/chrome$1
 }
 
 function parse_git_branch {
@@ -147,5 +147,5 @@ function tab_color {
 
 # zsh hook for all directory changes
 chpwd() {
-  $HOME/.dotfiles/soundtrack $PWD
+  # $HOME/.dotfiles/soundtrack $PWD
 }

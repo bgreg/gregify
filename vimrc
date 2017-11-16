@@ -1,11 +1,9 @@
 " TODO:
-"  *) add something to show the marks
 "  *) if it is before 12 am, use morning color scheme
 
 filetype off
 set rtp+=~/.vim/bundle/Vundle.vim
 set encoding=utf-8
-syntax enable
 
 " :help vundle
 call vundle#begin()
@@ -17,6 +15,7 @@ call vundle#begin()
 	Plugin 'mhinz/vim-grepper'
   Plugin 'vim-ruby/vim-ruby'
 	Plugin 'elixir-lang/vim-elixir'
+	Plugin 'avdgaag/vim-phoenix'
   Plugin 'tpope/vim-repeat.git'
   Plugin 'tpope/vim-rails'
   Plugin 'tpope/vim-surround'
@@ -36,7 +35,6 @@ call vundle#begin()
   Plugin 'majutsushi/tagbar'
   Plugin 'myusuf3/numbers.vim'
 	Plugin 'tmhedberg/matchit'
-  Plugin 'nathanaelkane/vim-indent-guides'
   Plugin 'ecomba/vim-ruby-refactoring'
   Plugin 'xolox/vim-misc'
   Plugin 'chriskempson/vim-tomorrow-theme'
@@ -57,7 +55,12 @@ call vundle#begin()
 	Plugin 'skywind3000/asyncrun.vim'
 	Plugin 'jyota/vimColors'
   Plugin 'muellan/am-colors'
+	Plugin 'kassio/neoterm'
+	Plugin 'Yggdroot/indentLine'
 call vundle#end()
+
+filetype plugin indent on
+syntax enable
 
 au FileType ruby,eruby setl ofu=rubycomplete#Complete
 au FileType html,xhtml setl ofu=htmlcomplete#CompleteTags
@@ -67,7 +70,7 @@ set shiftround
 set autowriteall
 set number
 set relativenumber
-set spell spelllang=en_us
+" set spell spelllang=en_us " set nospell
 set ignorecase
 set smartcase
 set grepprg=ag
@@ -119,9 +122,8 @@ set hlsearch
 set incsearch
 set laststatus=2
 set ruler
-filetype plugin indent on
-if !has('nvim')
-endif
+set synmaxcol=200  " only syntax highlight the first 200 columns of a line
+
 
 let mapleader = "\<Space>"
 let g:fuzzy_ignore = "*.png;*.PNG;*.JPG;*.jpg;*.GIF;*.gif;vendor/**;coverage/**;tmp/**;rdoc/**"
@@ -137,12 +139,12 @@ let g:ctrlp_custom_ignore = {
   \ 'file': '\v\.(exe|so|dll|log|sql)$'
   \ }
 
-let g:indent_guides_auto_colors = 0
 let g:numbers_exclude = ['tagbar', 'gundo', 'minibufexpl', 'nerdtree']
 let g:auto_save_in_insert_mode = 0  " do not save while in insert mode
 let g:golden_ratio_autocommand = 0 " disable on startup
 
-colorscheme solarized8_dark
+" colorscheme solarized8_dark
+colorscheme gotham256
 let test#strategy = "neovim"
 
 let g:snipMate = get(g:, 'snipMate', {}) " Allow for vimrc re-sourcing
@@ -198,7 +200,6 @@ nnoremap <leader>g :Grepper<cr>
 let g:grepper = { 'next_tool': '<leader>g' }
 
 "     Control Mappings
-map <c-n> :call RenameFile()<cr>
 map <c-\> :NERDTreeFind<cr>
 map <c-t> <esc>:tabnew <cr>
 map <c-c><c-t> <esc>:!ctags -R . --sort=yes<cr>
@@ -208,6 +209,27 @@ nnoremap <C-j> <C-W><C-J>
 nnoremap <C-k> <C-W><C-K>
 nnoremap <C-l> <C-W><C-L>
 nnoremap <C-h> <C-W><C-H>
+
+nnoremap <C-i> :IndentLinesToggle<cr>
+let g:indentLine_enabled = 0  "disable indent guides by default. Use the command to enable them
+
+
+" Terminal
+tnoremap <Leader><ESC> <C-\><C-n>
+tnoremap <D-l> clear<CR>
+
+tmap <C-h> <Leader><ESC><C-h>
+tmap <C-j> <Leader><ESC><C-j>
+tmap <C-k> <Leader><ESC><C-k>
+tmap <C-l> <Leader><ESC><C-l>
+
+" Auto insert on terminal
+
+augroup terminal_insert
+	autocmd BufEnter * if &buftype == 'terminal' | :startinsert | endif
+augroup END
+
+
 
 " Command mode
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
@@ -256,6 +278,9 @@ let g:auto_save = 1  " enable AutoSave on Vim startup
 
 " Play song for directory
 " autocmd BufReadPost * call Spotify()
+"
+"resize splits when window is resized
+autocmd VimResized * wincmd =
 
 " function! Spotify()
 "   let file_name = expand('%:p:h')

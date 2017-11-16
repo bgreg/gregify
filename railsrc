@@ -4,4 +4,4 @@
 --skip-action-cable
 --skip-spring
 --skip-javascript
---template=~/.rails_template.rb
+#--template=~/.rails_template.rb
