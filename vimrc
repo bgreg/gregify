@@ -179,7 +179,7 @@ map <leader>tc :CtrlP app/controllers/<cr>
 map <leader>tv :CtrlP app/views/<cr>
 map <leader>tl :CtrlP app/lib/<cr>
 map <leader>te :CtrlP app/elements/<cr>
-map <leader>ig :IndentGuidesToggle<cr>
+" map <leader>ig :IndentGuidesToggle<cr>
 map <leader>b :bp <cr>
 map <leader>n :bn <cr>
 map <leader>ru :Rubocop <cr>

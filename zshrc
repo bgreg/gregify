@@ -26,7 +26,7 @@ export GIT_PAGER='less -FRX'
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git brew bundler gem rails rake rvm osx vi-mode)
+plugins=(git brew bundler gem rails rake rbenv osx vi-mode)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -34,9 +34,9 @@ source $ZSH/oh-my-zsh.sh
 export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/latest/bin
 
 export PATH="/usr/local/bin:$PATH"
+export PATH="/usr/local/sbin:$PATH"
 export PATH="$HOME/.rbenv/bin:$PATH"
 export PATH="$HOME/.mix/escripts:$PATH"
-eval "$(rbenv init -)"
 
 # Source my custom files after oh-my-zsh so I can override things.
 source $HOME/.dotfiles/zsh/aliases
@@ -79,3 +79,4 @@ bindkey "^R" history-incremental-search-backward
 export KEYTIMEOUT=1
 
 test -e ${HOME}/.iterm2_shell_integration.zsh && source ${HOME}/.iterm2_shell_integration.zsh
+eval "$(rbenv init -)"
