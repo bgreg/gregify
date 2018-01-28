@@ -12,10 +12,10 @@ call vundle#begin()
   Plugin 'ctrlpvim/ctrlp.vim'
   Plugin 'scrooloose/nerdtree.git'
   Plugin 'godlygeek/tabular'
-	Plugin 'mhinz/vim-grepper'
+  Plugin 'mhinz/vim-grepper'
   Plugin 'vim-ruby/vim-ruby'
-	Plugin 'elixir-lang/vim-elixir'
-	Plugin 'avdgaag/vim-phoenix'
+  Plugin 'elixir-lang/vim-elixir'
+  Plugin 'avdgaag/vim-phoenix'
   Plugin 'tpope/vim-repeat.git'
   Plugin 'tpope/vim-rails'
   Plugin 'tpope/vim-surround'
@@ -34,7 +34,7 @@ call vundle#begin()
   Plugin 'bling/vim-airline'
   Plugin 'majutsushi/tagbar'
   Plugin 'myusuf3/numbers.vim'
-	Plugin 'tmhedberg/matchit'
+  Plugin 'tmhedberg/matchit'
   Plugin 'ecomba/vim-ruby-refactoring'
   Plugin 'xolox/vim-misc'
   Plugin 'chriskempson/vim-tomorrow-theme'
@@ -44,19 +44,19 @@ call vundle#begin()
   Plugin 'ngmy/vim-rubocop'
   Plugin 'tommcdo/vim-exchange'
   Plugin 'lifepillar/vim-solarized8'
-	Plugin 'junegunn/gv.vim'
-	Plugin 'vim-scripts/DrawIt'
-	Plugin 'MarcWeber/vim-addon-mw-utils'
-	Plugin 'tomtom/tlib_vim'
-	Plugin 'garbas/vim-snipmate' " Pure vim script snippets, using this because utilisnips needs python and youcompleteme
-	Plugin 'honza/vim-snippets'
+  Plugin 'junegunn/gv.vim'
+  Plugin 'vim-scripts/DrawIt'
+  Plugin 'MarcWeber/vim-addon-mw-utils'
+  Plugin 'tomtom/tlib_vim'
+  Plugin 'garbas/vim-snipmate' " Pure vim script snippets, using this because utilisnips needs python and youcompleteme
+  Plugin 'honza/vim-snippets'
   Plugin 'w0rp/ale'
   Plugin 'janko-m/vim-test'
-	Plugin 'skywind3000/asyncrun.vim'
-	Plugin 'jyota/vimColors'
+  Plugin 'skywind3000/asyncrun.vim'
+  Plugin 'jyota/vimColors'
   Plugin 'muellan/am-colors'
-	Plugin 'kassio/neoterm'
-	Plugin 'Yggdroot/indentLine'
+  Plugin 'kassio/neoterm'
+  Plugin 'Yggdroot/indentLine'
 call vundle#end()
 
 filetype plugin indent on
@@ -144,7 +144,7 @@ let g:auto_save_in_insert_mode = 0  " do not save while in insert mode
 let g:golden_ratio_autocommand = 0 " disable on startup
 
 " colorscheme solarized8_dark
-colorscheme gotham256
+colorscheme gotham
 let test#strategy = "neovim"
 
 let g:snipMate = get(g:, 'snipMate', {}) " Allow for vimrc re-sourcing

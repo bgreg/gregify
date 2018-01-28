@@ -3,5 +3,4 @@
 --skip-listen
 --skip-action-cable
 --skip-spring
---skip-javascript
 #--template=~/.rails_template.rb
