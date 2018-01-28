@@ -17,3 +17,12 @@
 
 
 #### To set soundtracks per directory, add a file '.spotify-soundtrack' to that directory that contains the spotify uri
+
+create a file `~/.config/nvim/init.vim`
+
+with these contents:
+```
+set runtimepath+=~/.vim,~/.vim/after
+set packpath+=~/.vim
+source ~/.vimrc
+```
