@@ -11,11 +11,10 @@ call vundle#begin()
   Plugin 'whatyouhide/vim-gotham'
   Plugin 'ctrlpvim/ctrlp.vim'
   Plugin 'scrooloose/nerdtree.git'
+  Plugin 'Xuyuanp/nerdtree-git-plugin'
   Plugin 'godlygeek/tabular'
   Plugin 'mhinz/vim-grepper'
   Plugin 'vim-ruby/vim-ruby'
-  Plugin 'elixir-lang/vim-elixir'
-  Plugin 'avdgaag/vim-phoenix'
   Plugin 'tpope/vim-repeat.git'
   Plugin 'tpope/vim-rails'
   Plugin 'tpope/vim-surround'
@@ -28,12 +27,10 @@ call vundle#begin()
   Plugin 'tpope/vim-dispatch'
   Plugin 'keith/rspec.vim'
   Plugin 'cakebaker/scss-syntax.vim'
-  Plugin 'kchmck/vim-coffee-script'
   Plugin 'mattn/emmet-vim' "<c-y>, to fire
   Plugin 'ervandew/supertab'
   Plugin 'bling/vim-airline'
   Plugin 'majutsushi/tagbar'
-  Plugin 'myusuf3/numbers.vim'
   Plugin 'tmhedberg/matchit'
   Plugin 'ecomba/vim-ruby-refactoring'
   Plugin 'xolox/vim-misc'
@@ -45,17 +42,14 @@ call vundle#begin()
   Plugin 'tommcdo/vim-exchange'
   Plugin 'lifepillar/vim-solarized8'
   Plugin 'junegunn/gv.vim'
-  Plugin 'vim-scripts/DrawIt'
   Plugin 'MarcWeber/vim-addon-mw-utils'
   Plugin 'tomtom/tlib_vim'
-  Plugin 'garbas/vim-snipmate' " Pure vim script snippets, using this because utilisnips needs python and youcompleteme
   Plugin 'honza/vim-snippets'
   Plugin 'w0rp/ale'
   Plugin 'janko-m/vim-test'
   Plugin 'skywind3000/asyncrun.vim'
   Plugin 'jyota/vimColors'
   Plugin 'muellan/am-colors'
-  Plugin 'kassio/neoterm'
   Plugin 'Yggdroot/indentLine'
 call vundle#end()
 
@@ -69,12 +63,12 @@ au FileType css setl ofu=csscomplete#CompleteCSS
 set shiftround
 set autowriteall
 set number
-set relativenumber
-" set spell spelllang=en_us " set nospell
+" set relativenumber
+set spell spelllang=en_us " set nospell
 set ignorecase
 set smartcase
 set grepprg=ag
-" set showmatch " show matching brace when they are typed or under cursor
+set showmatch " show matching brace when they are typed or under cursor
 set matchtime=30
 set scrolloff=8
 set sidescrolloff=15
@@ -126,7 +120,7 @@ set synmaxcol=200  " only syntax highlight the first 200 columns of a line
 
 
 let mapleader = "\<Space>"
-let g:fuzzy_ignore = "*.png;*.PNG;*.JPG;*.jpg;*.GIF;*.gif;vendor/**;coverage/**;tmp/**;rdoc/**"
+" let g:fuzzy_ignore = "*.png;*.PNG;*.JPG;*.jpg;*.GIF;*.gif;vendor/**;coverage/**;tmp/**;rdoc/**"
 
 let b:surround_{char2nr('=')} = "<%= \r %>"
 let b:surround_{char2nr('-')} = "<% \r %>"
@@ -145,11 +139,10 @@ let g:golden_ratio_autocommand = 0 " disable on startup
 
 " colorscheme solarized8_dark
 colorscheme gotham
-let test#strategy = "neovim"
 
-let g:snipMate = get(g:, 'snipMate', {}) " Allow for vimrc re-sourcing
-let g:snipMate.scope_aliases = {}
-let g:snipMate.scope_aliases['ruby'] = 'ruby,rails'         " look for snippets in both these files at once for ruby files
+" let g:snipMate = get(g:, 'snipMate', {}) " Allow for vimrc re-sourcing
+" let g:snipMate.scope_aliases = {}
+" let g:snipMate.scope_aliases['ruby'] = 'ruby,rails'         " look for snippets in both these files at once for ruby files
 
 "+=================+
 "|  Mappings       |
@@ -179,7 +172,7 @@ map <leader>tc :CtrlP app/controllers/<cr>
 map <leader>tv :CtrlP app/views/<cr>
 map <leader>tl :CtrlP app/lib/<cr>
 map <leader>te :CtrlP app/elements/<cr>
-" map <leader>ig :IndentGuidesToggle<cr>
+map <leader>ig :IndentGuidesToggle<cr>
 map <leader>b :bp <cr>
 map <leader>n :bn <cr>
 map <leader>ru :Rubocop <cr>
@@ -197,7 +190,9 @@ vnoremap <leader>rriv :RRenameInstanceVariable<cr>
 vnoremap <leader>rem  :RExtractMethod<cr>
 
 nnoremap <leader>g :Grepper<cr>
-let g:grepper = { 'next_tool': '<leader>g' }
+let g:grepper = {}
+let g:grepper.ag = { 'gregprg': 'ag --vimgrep --' }
+
 
 "     Control Mappings
 map <c-\> :NERDTreeFind<cr>
@@ -222,13 +217,6 @@ tmap <C-h> <Leader><ESC><C-h>
 tmap <C-j> <Leader><ESC><C-j>
 tmap <C-k> <Leader><ESC><C-k>
 tmap <C-l> <Leader><ESC><C-l>
-
-" Auto insert on terminal
-
-augroup terminal_insert
-	autocmd BufEnter * if &buftype == 'terminal' | :startinsert | endif
-augroup END
-
 
 
 " Command mode
@@ -267,6 +255,9 @@ nnoremap <leader>wtf oputs "#" * 90<c-m>puts caller<c-m>puts "#" * 90<esc>
 "|  Autocommands  |
 "+================+
 
+
+autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
+		\ quit | endif
 
 " This autocommand jumps to the last known position in a file
 " just after opening it, if the '" mark is set: >

@@ -10,7 +10,7 @@ task :install do
   replace_all = false
   Dir['*'].each do |file|
     next if %w[Rakefile README LICENSE id_dsa.pub].include?(file)
-    
+
     if File.exist?(File.join(ENV['HOME'], ".#{file}"))
       if replace_all
         replace_file(file)
@@ -32,7 +32,7 @@ task :install do
       link_file(file)
     end
   end
-  
+
   # Need to do this to make vim use RVM's ruby version
   puts "Moving zshenv to zshrc"
   system %Q{sudo mv /etc/zshenv /etc/zshrc}

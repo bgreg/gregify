@@ -89,16 +89,17 @@ function box(){
   echo ${t//?/$c};
 }
 
-#function gjc {
-#    echo
-#    echo "==============================================================================="
-#    echo "Your Commit Message: $(g rev-parse --abbrev-ref HEAD) - $1"
-#    echo "==============================================================================="
-#    echo
-#    g commit -m "$(g rev-parse --abbrev-ref HEAD) - $1"
-#    g commit --amend
-#}
-#
+
+# just puts the branch in the commit, lame
+# function gjc {
+#     echo
+#     echo "==============================================================================="
+#     echo "Your Commit Message: $(g rev-parse --abbrev-ref HEAD) - $1"
+#     echo "==============================================================================="
+#     echo
+#     g commit -m "$(g rev-parse --abbrev-ref HEAD) - $1"
+#     g commit --amend
+# }
 
 function st {
   echo -ne "\e]1;$1\a"
@@ -148,4 +149,19 @@ function tab_color {
 # zsh hook for all directory changes
 chpwd() {
   # $HOME/.dotfiles/soundtrack $PWD
+}
+
+function gjc() {
+  if [ -z "$BRANCHES_TO_SKIP" ]; then
+    BRANCHES_TO_SKIP=(master dev)
+  fi
+
+  BRANCH_NAME=$(git symbolic-ref --short HEAD)
+  BRANCH_NAME="${BRANCH_NAME##*/}"
+  BRANCH_EXCLUDED=$(printf "%s\n" "${BRANCHES_TO_SKIP[@]}" | grep -c "^$BRANCH_NAME$")
+  BRANCH_JIRA_KEY=$(echo $BRANCH_NAME | grep -E -o '^([A-Za-z]+-[0-9]+)')
+
+  if ! [[ $BRANCH_EXCLUDED -eq 1 ]] && ! [[ $(cat "$1") == "$BRANCH_JIRA_KEY"* ]] && ! [ -z "$BRANCH_JIRA_KEY" ]; then
+    echo "$BRANCH_JIRA_KEY $(cat "${1}")" > "$1"
+  fi
 }
