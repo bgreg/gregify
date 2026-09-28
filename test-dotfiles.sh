@@ -1,13 +1,7 @@
 #!/usr/bin/env bash
 
-VERSION="1.0.0"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-RED='\033[0;31m'
-BLUE='\033[0;34m'
-NC='\033[0m'
+source "$SCRIPT_DIR/dotfiles.sh"
 
 TESTS_PASSED=0
 TESTS_FAILED=0
@@ -15,21 +9,17 @@ TESTS_WARNING=0
 
 log_test_pass() {
     echo -e "${GREEN}✓${NC} $1"
-    ((TESTS_PASSED++))
+    ((++TESTS_PASSED))
 }
 
 log_test_fail() {
     echo -e "${RED}✗${NC} $1"
-    ((TESTS_FAILED++))
+    ((++TESTS_FAILED))
 }
 
 log_test_warn() {
     echo -e "${YELLOW}⚠${NC} $1"
-    ((TESTS_WARNING++))
-}
-
-log_info() {
-    echo -e "${BLUE}[INFO]${NC} $1"
+    ((++TESTS_WARNING))
 }
 
 print_header() {
@@ -52,25 +42,25 @@ print_section() {
 test_xdg_environment() {
     print_section "XDG Base Directory Specification"
 
-    if [[ -n "$XDG_CONFIG_HOME" && "$XDG_CONFIG_HOME" == "$HOME/.config" ]]; then
+    if [[ "${XDG_CONFIG_HOME:-}" == "$HOME/.config" ]]; then
         log_test_pass "XDG_CONFIG_HOME is set correctly: $XDG_CONFIG_HOME"
     else
         log_test_fail "XDG_CONFIG_HOME not set or incorrect"
     fi
 
-    if [[ -n "$XDG_DATA_HOME" && "$XDG_DATA_HOME" == "$HOME/.local/share" ]]; then
+    if [[ "${XDG_DATA_HOME:-}" == "$HOME/.local/share" ]]; then
         log_test_pass "XDG_DATA_HOME is set correctly: $XDG_DATA_HOME"
     else
         log_test_fail "XDG_DATA_HOME not set or incorrect"
     fi
 
-    if [[ -n "$XDG_CACHE_HOME" && "$XDG_CACHE_HOME" == "$HOME/.cache" ]]; then
+    if [[ "${XDG_CACHE_HOME:-}" == "$HOME/.cache" ]]; then
         log_test_pass "XDG_CACHE_HOME is set correctly: $XDG_CACHE_HOME"
     else
         log_test_fail "XDG_CACHE_HOME not set or incorrect"
     fi
 
-    if [[ -n "$ZDOTDIR" && "$ZDOTDIR" == "$HOME/.config/zsh" ]]; then
+    if [[ "${ZDOTDIR:-}" == "$HOME/.config/zsh" ]]; then
         log_test_pass "ZDOTDIR is set correctly: $ZDOTDIR"
     else
         log_test_fail "ZDOTDIR not set or incorrect"
@@ -80,15 +70,8 @@ test_xdg_environment() {
 test_directory_structure() {
     print_section "Directory Structure"
 
-    local required_dirs=(
-        "$HOME/.config"
-        "$HOME/.local/share"
-        "$HOME/.cache"
-        "$HOME/.config/zsh"
-        "$HOME/.config/oh-my-zsh"
-    )
-
-    for dir in "${required_dirs[@]}"; do
+    local dir
+    for dir in "$HOME/.config" "$HOME/.local/share" "$HOME/.cache" "$HOME/.config/zsh" "$HOME/.config/oh-my-zsh" "$HOME/bin"; do
         if [[ -d "$dir" ]]; then
             log_test_pass "Directory exists: $dir"
         else
@@ -97,217 +80,179 @@ test_directory_structure() {
     done
 }
 
-test_zsh_files() {
-    print_section "Zsh Configuration Files"
+test_symlinks() {
+    print_section "Symlinks"
 
-    if [[ -f "$HOME/.zshenv" ]]; then
-        log_test_pass "~/.zshenv exists"
-
-        if grep -q "XDG_CONFIG_HOME" "$HOME/.zshenv"; then
-            log_test_pass "~/.zshenv sets XDG variables"
+    local entry src dst
+    for entry in "${LINKS[@]}"; do
+        src="$SCRIPT_DIR/${entry%%:*}"
+        dst="$HOME/${entry#*:}"
+        if [[ -L "$dst" && "$(readlink "$dst")" == "$src" ]]; then
+            log_test_pass "${entry#*:} -> ${entry%%:*}"
         else
-            log_test_fail "~/.zshenv missing XDG variables"
+            log_test_fail "${entry#*:} is not linked to ${entry%%:*}"
         fi
-    else
-        log_test_fail "~/.zshenv missing"
-    fi
-
-    if [[ -f "$HOME/.config/zsh/.zprofile" ]]; then
-        log_test_pass "~/.config/zsh/.zprofile exists"
-    else
-        log_test_warn "~/.config/zsh/.zprofile missing (optional)"
-    fi
-
-    if [[ -f "$HOME/.config/zsh/.zshrc" ]]; then
-        log_test_pass "~/.config/zsh/.zshrc exists"
-    else
-        log_test_fail "~/.config/zsh/.zshrc missing"
-    fi
-
-    if [[ -f "$HOME/.config/zsh/aliases" ]]; then
-        log_test_pass "~/.config/zsh/aliases exists"
-    else
-        log_test_warn "~/.config/zsh/aliases missing"
-    fi
-
-    if [[ -f "$HOME/.config/zsh/functions" ]]; then
-        log_test_pass "~/.config/zsh/functions exists"
-    else
-        log_test_warn "~/.config/zsh/functions missing"
-    fi
-
-    if [[ -f "$HOME/.zshrc" ]]; then
-        log_test_warn "Old ~/.zshrc still exists (should be removed)"
-    fi
+    done
 }
 
 test_homebrew() {
     print_section "Homebrew"
 
-    if command -v brew &> /dev/null; then
-        log_test_pass "Homebrew is installed"
-        local brew_version=$(brew --version | head -n1)
-        log_info "Version: $brew_version"
-    else
+    if ! command -v brew &> /dev/null; then
         log_test_fail "Homebrew not found"
+        return
     fi
-}
+    log_test_pass "Homebrew is installed: $(brew --version | head -n1)"
 
-test_core_tools() {
-    print_section "Core Development Tools"
-
-    local tools=(
-        "git:Git"
-        "gh:GitHub CLI"
-        "fzf:Fuzzy Finder"
-        "rg:Ripgrep"
-        "tree:Tree"
-        "nvim:Neovim"
-        "vim:Vim"
-    )
-
-    for tool_pair in "${tools[@]}"; do
-        IFS=':' read -r cmd name <<< "$tool_pair"
-        if command -v "$cmd" &> /dev/null; then
-            log_test_pass "$name is installed"
-        else
-            log_test_fail "$name not found"
-        fi
-    done
+    local output
+    if output="$(brew bundle check --no-upgrade --verbose --file="$SCRIPT_DIR/Brewfile" 2>&1)"; then
+        log_test_pass "Brewfile dependencies are satisfied"
+    else
+        log_test_fail "Brewfile has unsatisfied entries"
+        echo "$output" | grep '→'
+    fi
 }
 
 test_version_managers() {
     print_section "Version Managers"
 
-    if command -v nvm &> /dev/null || [[ -s "$(brew --prefix)/opt/nvm/nvm.sh" ]]; then
-        log_test_pass "NVM is available"
-    else
-        log_test_fail "NVM not found"
-    fi
-
-    if [[ -d "$HOME/.config/nvm" ]]; then
-        log_test_pass "NVM directory at XDG location"
-    else
-        log_test_warn "NVM directory not at XDG location"
-    fi
-
     if command -v rbenv &> /dev/null; then
         log_test_pass "rbenv is installed"
-
-        if [[ -n "$RBENV_ROOT" && "$RBENV_ROOT" == "$HOME/.config/rbenv" ]]; then
-            log_test_pass "RBENV_ROOT is set to XDG location"
+        local ruby_global
+        ruby_global="$(rbenv global 2>/dev/null)"
+        if [[ "$ruby_global" == "$RUBY_VERSION" ]]; then
+            log_test_pass "rbenv global is $RUBY_VERSION"
         else
-            log_test_warn "RBENV_ROOT not set to XDG location"
+            log_test_fail "rbenv global is '$ruby_global', expected $RUBY_VERSION"
         fi
     else
-        log_test_fail "rbenv not found"
+        log_test_fail "rbenv not found (expected global Ruby $RUBY_VERSION)"
+    fi
+
+    if [[ "${RBENV_ROOT:-}" == "$HOME/.config/rbenv" ]]; then
+        log_test_pass "RBENV_ROOT is at the XDG location"
+    else
+        log_test_warn "RBENV_ROOT is not $HOME/.config/rbenv (reload the shell)"
+    fi
+
+    local nvm_sh="$BREW_PREFIX/opt/nvm/nvm.sh"
+    if [[ -s "$nvm_sh" ]]; then
+        log_test_pass "nvm is installed"
+    else
+        log_test_fail "nvm.sh not found at $nvm_sh"
+    fi
+
+    local node_default="$HOME/.config/nvm/alias/default"
+    if [[ -f "$node_default" && "$(cat "$node_default")" == "$NODE_VERSION" ]]; then
+        log_test_pass "nvm default alias is $NODE_VERSION"
+    else
+        log_test_fail "nvm default alias is not $NODE_VERSION (expected in $node_default)"
+    fi
+
+    if [[ "${NVM_DIR:-}" == "$HOME/.config/nvm" ]]; then
+        log_test_pass "NVM_DIR is at the XDG location"
+    else
+        log_test_warn "NVM_DIR is not $HOME/.config/nvm (reload the shell)"
     fi
 }
 
 test_oh_my_zsh() {
     print_section "Oh My Zsh"
 
-    if [[ -d "$HOME/.config/oh-my-zsh" ]]; then
-        log_test_pass "Oh My Zsh installed at XDG location"
+    local omz="$HOME/.config/oh-my-zsh"
+    if [[ -f "$omz/oh-my-zsh.sh" ]]; then
+        log_test_pass "oh-my-zsh.sh exists at the XDG location"
+    else
+        log_test_fail "oh-my-zsh.sh missing from $omz"
+    fi
 
-        if [[ -f "$HOME/.config/oh-my-zsh/oh-my-zsh.sh" ]]; then
-            log_test_pass "oh-my-zsh.sh exists"
+    local plugin
+    for plugin in zsh-autosuggestions zsh-syntax-highlighting; do
+        if [[ -f "$omz/custom/plugins/$plugin/$plugin.zsh" ]]; then
+            log_test_pass "$plugin is installed"
         else
-            log_test_fail "oh-my-zsh.sh missing"
-        fi
-    else
-        log_test_fail "Oh My Zsh not found at XDG location"
-    fi
-
-    if [[ -n "$ZSH" && "$ZSH" == "$HOME/.config/oh-my-zsh" ]]; then
-        log_test_pass "ZSH environment variable set correctly"
-    else
-        log_test_warn "ZSH environment variable not set (may need to reload shell)"
-    fi
-
-    if command -v omz &> /dev/null; then
-        log_test_pass "omz command is available"
-    else
-        log_test_warn "omz command not found (may need to reload shell)"
-    fi
-}
-
-test_databases() {
-    print_section "Databases & Services"
-
-    local services=(
-        "postgres:PostgreSQL"
-        "redis-cli:Redis"
-        "meilisearch:MeiliSearch"
-    )
-
-    for service_pair in "${services[@]}"; do
-        IFS=':' read -r cmd name <<< "$service_pair"
-        if command -v "$cmd" &> /dev/null; then
-            log_test_pass "$name is installed"
-        else
-            log_test_warn "$name not found (optional)"
+            log_test_fail "$plugin missing from $omz/custom/plugins"
         fi
     done
+
+    if [[ -f "$omz/custom/plugins/tips/tips.plugin.zsh" ]]; then
+        log_test_pass "tips plugin is linked"
+    else
+        log_test_fail "tips plugin missing"
+    fi
+
+    if [[ "${ZSH:-}" == "$omz" ]]; then
+        log_test_pass "ZSH environment variable set correctly"
+    else
+        log_test_warn "ZSH environment variable not set (reload the shell)"
+    fi
 }
 
 test_custom_scripts() {
     print_section "Custom Scripts"
 
-    local scripts=(
-        "goodmorning.sh"
-        "rem-add.sh"
-        "cal-today.sh"
-        "backup_dev_env.sh"
-    )
-
-    for script in "${scripts[@]}"; do
-        if [[ -f "$HOME/.config/zsh/scripts/$script" ]]; then
-            log_test_pass "$script exists"
-        else
-            log_test_warn "$script missing (optional)"
-        fi
+    local entry dst
+    for entry in "${LINKS[@]}"; do
+        dst="${entry#*:}"
+        case "$dst" in
+            .config/zsh/scripts/*|bin/*)
+                if [[ -x "$HOME/$dst" ]]; then
+                    log_test_pass "$dst is executable"
+                else
+                    log_test_fail "$dst is missing or not executable"
+                fi
+                ;;
+        esac
     done
 }
 
 test_shell_integration() {
-    print_section "Shell Integration Test"
+    print_section "Shell Integration"
 
-    log_info "Testing zsh can load configuration..."
+    local probe='type load-nvmrc; alias vim'
+    local stderr stdout
+    stderr="$(zsh -li -c "$probe" 2>&1 >/dev/null | grep -v "can't change option: zle" || true)"
+    stdout="$(zsh -li -c "$probe" 2>/dev/null)"
 
-    local test_output=$(zsh -l -c 'echo "Shell loaded successfully"' 2>&1)
-
-    if [[ "$test_output" == *"Shell loaded successfully"* ]]; then
-        log_test_pass "Zsh loads configuration without errors"
+    if [[ -z "$stderr" ]]; then
+        log_test_pass "Interactive login zsh starts without errors"
     else
-        log_test_fail "Zsh configuration has errors"
-        echo "$test_output" | head -5
+        log_test_fail "Interactive login zsh wrote to stderr:"
+        echo "$stderr" | head -5
     fi
 
-    if zsh -c 'source "$ZDOTDIR/.zshrc" 2>&1' | grep -q "command not found"; then
-        log_test_warn "Some commands in .zshrc not found (may be normal)"
+    if [[ "$stdout" == *"load-nvmrc is a shell function"* ]]; then
+        log_test_pass "functions.zsh is loaded (load-nvmrc defined)"
+    else
+        log_test_fail "load-nvmrc is not defined; functions.zsh did not load"
+    fi
+
+    if [[ "$stdout" == *"vim=nvim-profile"* ]]; then
+        log_test_pass "aliases.zsh is loaded (vim -> nvim-profile)"
+    else
+        log_test_fail "vim alias missing; aliases.zsh did not load"
     fi
 }
 
 test_git_config() {
     print_section "Git Configuration"
 
-    if [[ -f "$HOME/.config/git/config" ]] || [[ -f "$HOME/.gitconfig" ]]; then
-        log_test_pass "Git config exists"
+    local local_file="$HOME/.config/git/config.local"
+    if [[ -f "$local_file" ]]; then
+        local name email
+        name="$(git config --file "$local_file" user.name 2>/dev/null)"
+        email="$(git config --file "$local_file" user.email 2>/dev/null)"
+        if [[ -n "$name" && -n "$email" ]]; then
+            log_test_pass "config.local identity: $name <$email>"
+        else
+            log_test_fail "config.local exists but user.name or user.email is empty"
+        fi
     else
-        log_test_warn "Git config not found"
+        log_test_fail "config.local missing at $local_file"
     fi
 
-    if git config user.name &> /dev/null; then
-        log_test_pass "Git user.name is set: $(git config user.name)"
-    else
-        log_test_warn "Git user.name not set"
-    fi
-
-    if git config user.email &> /dev/null; then
-        log_test_pass "Git user.email is set: $(git config user.email)"
-    else
-        log_test_warn "Git user.email not set"
+    if [[ "$(git config --global filter.lfs.required 2>/dev/null)" == "true" ]] && ! command -v git-lfs &> /dev/null; then
+        log_test_warn "filter.lfs.required is true but git-lfs is not installed"
     fi
 }
 
@@ -342,12 +287,10 @@ main() {
 
     test_xdg_environment
     test_directory_structure
-    test_zsh_files
+    test_symlinks
     test_homebrew
-    test_core_tools
     test_version_managers
     test_oh_my_zsh
-    test_databases
     test_custom_scripts
     test_shell_integration
     test_git_config
