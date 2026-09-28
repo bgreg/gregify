@@ -1,0 +1,34 @@
+[include]
+	path = config.local
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[pager]
+	diff = false
+[git]
+	autofetch = false
+[init]
+	defaultBranch = main
+[url "git@github.com:"]
+	insteadOf = https://github.com/
+[core]
+	editor = nvim
+	hooksPath = ~/.config/git/hooks
+[credential "https://github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper =
+	helper = !/opt/homebrew/bin/gh auth git-credential
+
+# Conditional identity override for TaskRabbit contractor work.
+# Trailing slash means git auto-appends ** so this matches every repo whose
+# .git directory lives anywhere under ~/Workspace/task-rabbit/.
+[includeIf "gitdir:~/Workspace/task-rabbit/"]
+	path = ~/.gitconfig-taskrabbit
+[url "git@github-tr:taskrabbit/waistband-os.git"]
+	insteadOf = git@github.com:taskrabbit/waistband-os.git
+[safe]
+	directory = /app
