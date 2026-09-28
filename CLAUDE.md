@@ -39,18 +39,3 @@ Shell-based automation for personal dotfiles and dev environment.
 - May overwrite existing dotfiles
 - Always backup before running
 
-## Branch Artifacts
-
-All branch-specific work artifacts should be organized in `.claude/branches/<branch-name>/`:
-- Implementation plans and task breakdowns
-- Temporary debugging scripts
-- Analysis notes and research
-- Any branch-specific documentation
-
-This keeps the main `.claude/` directory clean and makes branch cleanup easier.
-
-## Git Workflow
-
-**Commit Attribution**: Never include Claude Code attribution or Co-Authored-By tags in commits unless explicitly requested. Commits should appear as authored by the developer using the tool.
-
-Follow workspace git standards if present, otherwise follow standard git practices.
