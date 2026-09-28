@@ -108,9 +108,61 @@ print_links() {
     done
 }
 
+check_prerequisites() {
+    log_info "Checking prerequisites..."
+    if [[ "$OSTYPE" != darwin* ]]; then
+        log_error "This script supports macOS only (OSTYPE=$OSTYPE)"
+        exit 1
+    fi
+    log_success "Running on macOS"
+}
+
+capture_git_identity() {
+    GIT_IDENTITY_NAME="$(git config --global user.name 2>/dev/null || true)"
+    GIT_IDENTITY_EMAIL="$(git config --global user.email 2>/dev/null || true)"
+    GIT_IDENTITY_NAME="${GIT_IDENTITY_NAME:-${GIT_AUTHOR_NAME:-}}"
+    GIT_IDENTITY_EMAIL="${GIT_IDENTITY_EMAIL:-${GIT_AUTHOR_EMAIL:-}}"
+}
+
+write_git_identity() {
+    local file="$HOME/.config/git/config.local"
+    if [[ -f "$file" ]]; then
+        log_success "Git identity already present at $file"
+        return 0
+    fi
+    if [[ -t 0 ]]; then
+        if [[ -z "${GIT_IDENTITY_NAME:-}" ]]; then
+            read -r -p "Git user.name: " GIT_IDENTITY_NAME
+        fi
+        if [[ -z "${GIT_IDENTITY_EMAIL:-}" ]]; then
+            read -r -p "Git user.email: " GIT_IDENTITY_EMAIL
+        fi
+    fi
+    if [[ -z "${GIT_IDENTITY_NAME:-}" || -z "${GIT_IDENTITY_EMAIL:-}" ]]; then
+        log_warning "Git identity is incomplete; edit $file before committing"
+    fi
+    mkdir -p "$(dirname "$file")"
+    printf '[user]\n\tname = %s\n\temail = %s\n' "${GIT_IDENTITY_NAME:-}" "${GIT_IDENTITY_EMAIL:-}" > "$file"
+    log_success "Wrote git identity to $file"
+}
+
+warn_legacy_files() {
+    log_info "Checking for legacy shell files zsh no longer reads..."
+    local file
+    for file in "$HOME/.zshrc" "$HOME/.zprofile" "$HOME/.bash_profile" "$HOME/.bashrc"; do
+        if [[ -f "$file" && ! -L "$file" ]]; then
+            log_warning "$file exists but is not read because ZDOTDIR points at ~/.config/zsh"
+        fi
+    done
+}
+
 main() {
     print_header
+    check_prerequisites
+    capture_git_identity
     link_files
+    write_git_identity
+    warn_legacy_files
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
