@@ -33,14 +33,34 @@ Describe 'test-dotfiles.sh sections'
   End
 
   Describe 'test_git_config'
-    It 'passes with a complete config.local and warns about git-lfs only when the filter is required'
+    lfs_setup() {
       link_files > /dev/null
       printf '[user]\n\tname = Spec Name\n\temail = spec@example.com\n' > "$HOME/.config/git/config.local"
       XDG_CONFIG_HOME="$HOME/.config"
       export XDG_CONFIG_HOME
+      mkdir -p "$TMP/bin"
+      ln -s "$(command -v git)" "$TMP/bin/git"
+    }
+
+    It 'passes with a complete config.local and warns when the lfs filter is required but git-lfs is absent'
+      lfs_setup
+      PATH="$TMP/bin:/usr/bin:/bin"
+      When call test_git_config
+      The output should include 'Spec Name'
+      The output should include 'git-lfs is not installed'
+      The variable TESTS_FAILED should equal 0
+      The variable TESTS_WARNING should equal 1
+    End
+
+    It 'does not warn when git-lfs is on PATH'
+      lfs_setup
+      printf '#!/bin/sh\nexit 0\n' > "$TMP/bin/git-lfs"
+      chmod +x "$TMP/bin/git-lfs"
+      PATH="$TMP/bin:/usr/bin:/bin"
       When call test_git_config
       The output should include 'Spec Name'
       The variable TESTS_FAILED should equal 0
+      The variable TESTS_WARNING should equal 0
     End
 
     It 'fails when config.local is missing'
@@ -64,10 +84,33 @@ Describe 'test-dotfiles.sh sections'
   End
 
   Describe 'test_version_managers'
-    It 'reads the pinned versions from dotfiles.sh'
+    managers_setup() {
+      BREW_PREFIX="$TMP/brew"
+      mkdir -p "$TMP/bin" "$BREW_PREFIX/opt/nvm" "$HOME/.config/nvm/alias"
+      printf 'nvm() { :; }\n' > "$BREW_PREFIX/opt/nvm/nvm.sh"
+      printf '#!/bin/sh\n[ "$1" = global ] && echo 3.3.6\n' > "$TMP/bin/rbenv"
+      chmod +x "$TMP/bin/rbenv"
+      PATH="$TMP/bin:$PATH"
+      unset RBENV_ROOT NVM_DIR
+    }
+
+    It 'passes when rbenv global and the nvm default alias match the pinned versions'
+      managers_setup
+      printf '22.18.0\n' > "$HOME/.config/nvm/alias/default"
       When call test_version_managers
-      The output should include '3.3.6'
-      The output should include '22.18.0'
+      The output should include 'rbenv global is 3.3.6'
+      The output should include 'nvm default alias is 22.18.0'
+      The variable TESTS_FAILED should equal 0
+      The variable TESTS_PASSED should equal 4
+    End
+
+    It 'fails once when the nvm default alias is a different version'
+      managers_setup
+      printf '20.0.0\n' > "$HOME/.config/nvm/alias/default"
+      When call test_version_managers
+      The output should include 'nvm default alias is not 22.18.0'
+      The variable TESTS_FAILED should equal 1
+      The variable TESTS_PASSED should equal 3
     End
   End
 End

@@ -8,6 +8,7 @@ Describe 'dotfiles.sh prerequisites and identity'
     mkdir -p "$HOME/.config/git"
     export HOME XDG_CONFIG_HOME
     unset GIT_AUTHOR_NAME GIT_AUTHOR_EMAIL
+    unset GIT_CONFIG_GLOBAL GIT_CONFIG_PARAMETERS GIT_CONFIG_COUNT
   }
   BeforeEach 'setup'
 
@@ -63,6 +64,18 @@ Describe 'dotfiles.sh prerequisites and identity'
       The status should be success
       The output should include 'already present'
       The value "$(git config --file "$HOME/.config/git/config.local" user.name)" should equal 'Keep Me'
+    End
+
+    It 'replaces a config.local whose name and email are empty'
+      printf '[user]\n\tname = \n\temail = \n' > "$HOME/.config/git/config.local"
+      GIT_IDENTITY_NAME='Filled Name'
+      GIT_IDENTITY_EMAIL='filled@example.com'
+      Data ''
+      When call write_git_identity
+      The status should be success
+      The output should include 'Wrote git identity'
+      The value "$(git config --file "$HOME/.config/git/config.local" user.name)" should equal 'Filled Name'
+      The value "$(git config --file "$HOME/.config/git/config.local" user.email)" should equal 'filled@example.com'
     End
 
     It 'writes an incomplete identity and warns when nothing is available'

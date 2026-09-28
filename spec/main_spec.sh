@@ -79,6 +79,17 @@ EOF
     The value "$(find "$HOME" -name '*.backup.*' | wc -l | tr -d ' ')" should equal 1
   End
 
+  It 'captures the git identity before linking replaces the global config'
+    unset GIT_AUTHOR_NAME GIT_AUTHOR_EMAIL
+    mkdir -p "$HOME/.config/git"
+    printf '[user]\n\tname = Pre Link\n\temail = prelink@example.com\n' > "$HOME/.config/git/config"
+    When run main
+    The status should be success
+    The output should include 'Wrote git identity'
+    The value "$(git config --file "$HOME/.config/git/config.local" user.name)" should equal 'Pre Link'
+    The value "$(git config --file "$HOME/.config/git/config.local" user.email)" should equal 'prelink@example.com'
+  End
+
   It 'clones oh-my-zsh before linking custom files into it'
     When run main
     The status should be success

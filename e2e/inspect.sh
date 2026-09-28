@@ -14,7 +14,7 @@ check_links() {
             continue
         fi
         target="$(readlink -f "$HOME/$dst")"
-        if [[ "$target" == "$REPO/"* && -e "$target" ]]; then
+        if [[ "$target" == "$REPO/$src" && -e "$target" ]]; then
             pass "$dst -> $src"
         else
             fail "$dst resolves to '$target'"
@@ -59,14 +59,14 @@ check_tool_versions() {
 }
 
 check_interactive_zsh() {
-    local probe='type load-nvmrc; type check-port; alias vim; print -r -- $ZSH; ruby -v; node -v'
+    local probe='type load-nvmrc; type check-port; alias vim; print -r -- "ZSH=$ZSH"; ruby -v; node -v'
     local out err
     out="$(zsh -li -c "$probe" 2>/dev/null)"
     err="$(zsh -li -c "$probe" 2>&1 >/dev/null | grep -v "can't change option: zle")"
     [[ "$out" == *"load-nvmrc is a shell function"* ]] && pass "load-nvmrc defined" || fail "load-nvmrc missing"
     [[ "$out" == *"check-port is a shell function"* ]] && pass "check-port defined" || fail "check-port missing"
     [[ "$out" == *"vim=nvim-profile"* ]] && pass "vim alias" || fail "vim alias missing"
-    [[ "$out" == *"$HOME/.config/oh-my-zsh"* ]] && pass "ZSH points at XDG oh-my-zsh" || fail "ZSH is wrong"
+    [[ "$out" == *"ZSH=$HOME/.config/oh-my-zsh"* ]] && pass "ZSH points at XDG oh-my-zsh" || fail "ZSH is wrong"
     [[ "$out" == *"ruby 3.3.6"* ]] && pass "ruby 3.3.6" || fail "ruby version: $(grep -m1 '^ruby' <<< "$out")"
     [[ "$out" == *"v22.18.0"* ]] && pass "node v22.18.0" || fail "node version: $(grep -m1 '^v' <<< "$out")"
     if [[ -z "$err" ]]; then pass "interactive zsh stderr clean"; else fail "interactive zsh stderr: $(head -3 <<< "$err" | tr '\n' ' ')"; fi

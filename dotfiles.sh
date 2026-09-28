@@ -126,7 +126,7 @@ capture_git_identity() {
 
 write_git_identity() {
     local file="$HOME/.config/git/config.local"
-    if [[ -f "$file" ]]; then
+    if [[ -n "$(git config --file "$file" user.name 2>/dev/null)" && -n "$(git config --file "$file" user.email 2>/dev/null)" ]]; then
         log_success "Git identity already present at $file"
         return 0
     fi

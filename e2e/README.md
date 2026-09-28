@@ -4,7 +4,8 @@
 bind-mounts this repo at `/home/greg/Personal/gregify` (read-write, as on a real machine; lazy.nvim
 rewrites `lazy-lock.json` on restore), and runs three phases. Each must exit 0:
 
-1. `bash ~/Personal/gregify/dotfiles.sh` from an empty home.
+1. `bash ~/Personal/gregify/dotfiles.sh` in a home with no dotfiles; Homebrew is already installed in
+   the image (see the table below).
 2. `zsh -li -c ~/Personal/gregify/test-dotfiles.sh`, the same validator the Macs run.
 3. `zsh -li -c ~/Personal/gregify/e2e/inspect.sh`, which checks links, packages, the interactive
    shell, Neovim, git config, the `defaults` calls, and a second idempotent install run.
@@ -26,6 +27,8 @@ file stays unchanged.
 | login shell | user `greg`, uid 1000, `/bin/zsh`, passwordless sudo |
 | GitHub SSH key | the Neovim check runs with `GIT_CONFIG_GLOBAL=/dev/null` so lazy.nvim clones over HTTPS; on a real Mac the key must exist before Neovim's first launch (see the root README) |
 | git identity prompt | `GIT_AUTHOR_NAME` and `GIT_AUTHOR_EMAIL` are set in the Dockerfile, so the installer writes `config.local` without prompting |
+| Homebrew | installed at image build time, so `install_homebrew` takes its already-installed branch; the Homebrew-install branch has only ever run on a real Mac |
+| `bash` | Ubuntu bash 5.2; a fresh Mac runs `/bin/bash` 3.2 until Homebrew's bash is on PATH (the specs pass under both; the full installer has not been executed under 3.2) |
 
 `uname` is not faked. Homebrew reads it to decide how to behave, and the installer does not use it.
 

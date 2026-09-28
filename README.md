@@ -9,11 +9,13 @@ from this repo into `$HOME`.
 
 1. Install Xcode Command Line Tools: `xcode-select --install`.
 2. Generate an SSH key (`ssh-keygen -t ed25519`), add the public key to GitHub, and confirm with
-   `ssh -T git@github.com`. This is required before cloning: the tracked git config rewrites every
-   `https://github.com/` URL to `git@github.com:`, so without a key Neovim's first launch fails
-   (lazy.nvim's bootstrap clone) and every HTTPS clone after the installer runs fails.
+   `ssh -T git@github.com`. Step 3 clones over SSH. Later, the tracked git config rewrites
+   `https://github.com/` to SSH, so lazy.nvim's first-launch clone and every later GitHub clone
+   also need the key.
 3. `mkdir -p ~/Personal && git clone git@github.com:bgreg/gregify.git ~/Personal/gregify`
-4. `~/Personal/gregify/dotfiles.sh`. It prompts for a git name and email if none is found.
+4. `~/Personal/gregify/dotfiles.sh`. It prompts for a git name and email if none is found. Stay at
+   the keyboard: Homebrew asks for your macOS password near the start, and the git identity prompt
+   appears after `brew bundle`, which is the long step.
 5. `exec zsh`
 6. `~/Personal/gregify/test-dotfiles.sh`. Expect `Failed: 0`. One warning about `git-lfs` is
    normal: the tracked git config requires the LFS filter and the Brewfile does not install
@@ -76,10 +78,13 @@ on the other machine picks it up.
 `~/.config/gh`, `~/.config/gcloud`, shell history, completion caches, the iTerm2 integration
 script, and the Python scripts under `~/.config/zsh/scripts/`.
 
+`~/.ssh/config` is not tracked either. It holds the `github-tr` host alias, which the tracked git
+config uses for the `waistband-os` rewrite; without it that one clone fails on machine 2.
+
 ## Tests
 
 ```bash
-shellspec          # unit tests for the installer and validator (27 examples)
+shellspec          # unit tests for the installer and validator (31 examples)
 e2e/run.sh         # full install in Docker
 ```
 
