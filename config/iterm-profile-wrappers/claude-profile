@@ -1,0 +1,25 @@
+#!/bin/bash
+RELOAD_MARKER="/tmp/claude-reload-marker"
+
+trap '' HUP
+
+printf "\033]50;SetProfile=Claude Code Optimized\a" > /dev/tty
+
+unset ITERM_INJECT_SHELL_INTEGRATION
+
+continue_flag=""
+while true; do
+  "$HOME/.local/bin/claude" --allow-dangerously-skip-permissions --chrome --verbose $continue_flag "$@"
+  rc=$?
+  if [ -f "$RELOAD_MARKER" ]; then
+    rm -f "$RELOAD_MARKER"
+    echo "Reloading Claude Code..."
+    continue_flag="-c"
+    set --
+    continue
+  fi
+  break
+done
+
+printf "\033]50;SetProfile=Default\a" > /dev/tty
+exit $rc
