@@ -156,13 +156,129 @@ warn_legacy_files() {
     done
 }
 
+omz_dir() {
+    echo "$HOME/.config/oh-my-zsh"
+}
+
+install_homebrew() {
+    if [[ -x "$BREW_PREFIX/bin/brew" ]]; then
+        log_success "Homebrew already installed at $BREW_PREFIX"
+    else
+        log_info "Installing Homebrew..."
+        NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        if [[ ! -x "$BREW_PREFIX/bin/brew" ]]; then
+            log_error "Homebrew did not install to $BREW_PREFIX; only Apple Silicon Macs are supported"
+            exit 1
+        fi
+        log_success "Homebrew installed"
+    fi
+    eval "$("$BREW_PREFIX/bin/brew" shellenv)"
+}
+
+create_directories() {
+    log_info "Creating XDG directory structure..."
+    local dir
+    for dir in .config .local/share .cache .config/zsh/scripts .config/nvm .config/rbenv .config/git .config/fzf bin; do
+        mkdir -p "$HOME/$dir"
+    done
+    log_success "Directories ready"
+}
+
+install_brew_packages() {
+    log_info "Installing Homebrew packages from Brewfile..."
+    if brew bundle install --no-upgrade --file="$SCRIPT_DIR/Brewfile"; then
+        log_success "Brewfile satisfied"
+    else
+        log_warning "brew bundle reported failures; run: brew bundle check --no-upgrade --verbose --file=$SCRIPT_DIR/Brewfile"
+    fi
+}
+
+install_oh_my_zsh() {
+    local dir
+    dir="$(omz_dir)"
+    if [[ -f "$dir/oh-my-zsh.sh" ]]; then
+        log_success "Oh My Zsh already installed at $dir"
+        return 0
+    fi
+    log_info "Installing Oh My Zsh..."
+    git clone --depth=1 https://github.com/ohmyzsh/ohmyzsh.git "$dir"
+    log_success "Oh My Zsh installed"
+}
+
+install_zsh_plugins() {
+    local name dir
+    for name in zsh-autosuggestions zsh-syntax-highlighting; do
+        dir="$(omz_dir)/custom/plugins/$name"
+        if [[ -d "$dir" ]]; then
+            log_success "$name already installed"
+        else
+            log_info "Installing $name..."
+            git clone --depth=1 "https://github.com/zsh-users/$name.git" "$dir"
+        fi
+    done
+}
+
+install_ruby() {
+    log_info "Installing Ruby $RUBY_VERSION via rbenv..."
+    export RBENV_ROOT="$HOME/.config/rbenv"
+    rbenv install --skip-existing "$RUBY_VERSION"
+    rbenv global "$RUBY_VERSION"
+    log_success "Ruby $RUBY_VERSION is the rbenv global version"
+}
+
+install_node() {
+    log_info "Installing Node $NODE_VERSION via nvm..."
+    export NVM_DIR="$HOME/.config/nvm"
+    local nounset_was_on=0
+    [[ $- == *u* ]] && nounset_was_on=1
+    set +u
+    source "$(brew --prefix nvm)/nvm.sh" --no-use
+    nvm install "$NODE_VERSION"
+    nvm alias default "$NODE_VERSION"
+    [[ $nounset_was_on == 1 ]] && set -u
+    log_success "Node $NODE_VERSION is the nvm default"
+}
+
+apply_macos_defaults() {
+    log_info "Applying macOS defaults..."
+    defaults write -g KeyRepeat -int 0
+    defaults write -g InitialKeyRepeat -int 10
+    log_success "Key repeat set to fastest"
+}
+
+print_next_steps() {
+    echo ""
+    log_success "╔══════════════════════════════════════════════════════════════╗"
+    log_success "║                    Installation Complete!                    ║"
+    log_success "╚══════════════════════════════════════════════════════════════╝"
+    echo ""
+    log_info "Next Steps:"
+    echo ""
+    echo "  1. Start a new shell:            exec zsh"
+    echo "  2. Validate:                     $SCRIPT_DIR/test-dotfiles.sh"
+    echo "  3. Sign in to GitHub:            gh auth login"
+    echo "  4. iTerm2 > Install Shell Integration (writes ~/.config/zsh/.iterm2_shell_integration.zsh)"
+    echo "  5. Start services if wanted:     brew services start postgresql@17 redis"
+    echo "  6. Log out and back in for the key repeat change"
+    echo ""
+}
+
 main() {
     print_header
     check_prerequisites
+    install_homebrew
+    create_directories
+    install_brew_packages
+    install_oh_my_zsh
+    install_zsh_plugins
     capture_git_identity
     link_files
     write_git_identity
+    install_ruby
+    install_node
+    apply_macos_defaults
     warn_legacy_files
+    print_next_steps
 }
 
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
