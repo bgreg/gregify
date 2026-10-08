@@ -39,6 +39,9 @@ LINKS=(
     "config/iterm-profile-wrappers/claude-profile:bin/claude-profile"
     "config/iterm-profile-wrappers/nvim-profile:bin/nvim-profile"
     "config/iterm-profile-wrappers/vim-profile:bin/vim-profile"
+    "vscodium/settings.json:Library/Application Support/VSCodium/User/settings.json"
+    "vscodium/keybindings.json:Library/Application Support/VSCodium/User/keybindings.json"
+    "vscodium/snippets:Library/Application Support/VSCodium/User/snippets"
 )
 
 GREEN='\033[0;32m'
@@ -177,8 +180,9 @@ install_homebrew() {
 
 create_directories() {
     log_info "Creating XDG directory structure..."
+    local dirs=(.config .local/share .cache .config/zsh/scripts .config/nvm .config/rbenv .config/git .config/fzf bin "Library/Application Support/VSCodium/User")
     local dir
-    for dir in .config .local/share .cache .config/zsh/scripts .config/nvm .config/rbenv .config/git .config/fzf bin; do
+    for dir in "${dirs[@]}"; do
         mkdir -p "$HOME/$dir"
     done
     log_success "Directories ready"
@@ -239,6 +243,26 @@ install_node() {
     log_success "Node $NODE_VERSION is the nvm default"
 }
 
+install_vscodium_extensions() {
+    log_info "Installing VSCodium extensions..."
+    if ! command -v codium &> /dev/null; then
+        log_warning "codium is not on PATH; skipping extensions (install the vscodium cask, then re-run)"
+        return 0
+    fi
+    local installed wanted
+    installed="$(codium --list-extensions)"
+    while read -r wanted; do
+        [[ -z "$wanted" ]] && continue
+        if grep -qixF "$wanted" <<< "$installed"; then
+            log_success "$wanted already installed"
+        else
+            log_info "Installing $wanted..."
+            codium --install-extension "$wanted"
+        fi
+    done < "${SCRIPT_DIR_EXTENSIONS:-$SCRIPT_DIR/vscodium/extensions.txt}"
+    log_success "VSCodium extensions complete"
+}
+
 apply_macos_defaults() {
     log_info "Applying macOS defaults..."
     defaults write -g KeyRepeat -int 0
@@ -276,6 +300,7 @@ main() {
     write_git_identity
     install_ruby
     install_node
+    install_vscodium_extensions
     apply_macos_defaults
     warn_legacy_files
     print_next_steps

@@ -206,6 +206,27 @@ test_custom_scripts() {
     done
 }
 
+test_vscodium() {
+    print_section "VSCodium"
+
+    if ! command -v codium &> /dev/null; then
+        log_test_warn "codium not on PATH; extensions not checked"
+        return
+    fi
+    local installed wanted missing=0
+    installed="$(codium --list-extensions)"
+    while read -r wanted; do
+        [[ -z "$wanted" ]] && continue
+        if ! grep -qixF "$wanted" <<< "$installed"; then
+            log_test_fail "extension missing: $wanted"
+            missing=$((missing + 1))
+        fi
+    done < "$SCRIPT_DIR/vscodium/extensions.txt"
+    if [[ $missing -eq 0 ]]; then
+        log_test_pass "all $(grep -c . "$SCRIPT_DIR/vscodium/extensions.txt") extensions from extensions.txt are installed"
+    fi
+}
+
 test_shell_integration() {
     print_section "Shell Integration"
 
@@ -292,6 +313,7 @@ main() {
     test_version_managers
     test_oh_my_zsh
     test_custom_scripts
+    test_vscodium
     test_shell_integration
     test_git_config
 

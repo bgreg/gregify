@@ -18,7 +18,7 @@ Describe 'test-dotfiles.sh sections'
       When call test_symlinks
       The output should include 'Symlinks'
       The variable TESTS_FAILED should equal 0
-      The variable TESTS_PASSED should equal 31
+      The variable TESTS_PASSED should equal 34
     End
 
     It 'fails for a destination that is a regular file'
@@ -28,7 +28,7 @@ Describe 'test-dotfiles.sh sections'
       When call test_symlinks
       The output should include 'not linked'
       The variable TESTS_FAILED should equal 1
-      The variable TESTS_PASSED should equal 30
+      The variable TESTS_PASSED should equal 33
     End
   End
 
@@ -80,6 +80,16 @@ Describe 'test-dotfiles.sh sections'
       The output should include 'Custom Scripts'
       The variable TESTS_FAILED should equal 0
       The variable TESTS_PASSED should equal 17
+    End
+  End
+
+  Describe 'test_vscodium'
+    It 'warns and does not fail when codium is not on PATH'
+      PATH="$TMP/bin:/usr/bin:/bin"
+      When call test_vscodium
+      The output should include 'codium not on PATH'
+      The variable TESTS_WARNING should equal 1
+      The variable TESTS_FAILED should equal 0
     End
   End
 

@@ -2,8 +2,8 @@
 
 Bootstraps an Apple Silicon Mac into Greg's development environment: Homebrew packages from a
 Brewfile (6 taps, 50 formulas, 11 casks), oh-my-zsh with two extra plugins, Ruby 3.3.6 via rbenv,
-Node 22.18.0 via nvm, and every shell, Neovim, git, fzf, and iTerm wrapper config file symlinked
-from this repo into `$HOME`.
+Node 22.18.0 via nvm, every shell, Neovim, git, fzf, iTerm wrapper, and VSCodium config file
+symlinked from this repo into `$HOME`, and the VSCodium extensions listed in `vscodium/extensions.txt`.
 
 ## New machine
 
@@ -15,7 +15,8 @@ from this repo into `$HOME`.
 3. `mkdir -p ~/Personal && git clone git@github.com:bgreg/gregify.git ~/Personal/gregify`
 4. `~/Personal/gregify/dotfiles.sh`. It prompts for a git name and email if none is found. Stay at
    the keyboard: Homebrew asks for your macOS password near the start, and the git identity prompt
-   appears after `brew bundle`, which is the long step.
+   appears after `brew bundle`, which is the long step. VSCodium extensions install only if the
+   `vscodium` cask installed, which the Brewfile does.
 5. `exec zsh`
 6. `~/Personal/gregify/test-dotfiles.sh`. Expect `Failed: 0`. One warning about `git-lfs` is
    normal: the tracked git config requires the LFS filter and the Brewfile does not install
@@ -41,6 +42,7 @@ It never deletes.
 | `Brewfile` | Package manifest. |
 | `home/` | Files linked into `~` (`.zshenv`). |
 | `config/` | Files linked into `~/.config` and `~/bin`, mirroring their destination paths. |
+| `vscodium/` | VSCodium `settings.json`, `keybindings.json`, `snippets/`, and `extensions.txt`, linked into `~/Library/Application Support/VSCodium/User`. |
 | `e2e/` | Docker end-to-end test. See `e2e/README.md`. |
 | `spec/` | shellspec unit tests: `shellspec`. |
 
@@ -66,9 +68,18 @@ clean. Nothing installed here comes from either tap.
 
 Commit.
 
+## Adding an extension
+
+Install it in VSCodium, then regenerate the list and commit:
+
+```bash
+codium --list-extensions | sort > vscodium/extensions.txt
+```
+
 ## Changing config
 
-Edit the file at its normal path (`~/.config/nvim/init.lua`, `~/.config/oh-my-zsh/custom/aliases.zsh`).
+Edit the file at its normal path (`~/.config/nvim/init.lua`, `~/.config/oh-my-zsh/custom/aliases.zsh`,
+`~/Library/Application Support/VSCodium/User/settings.json`, `~/Library/Application Support/VSCodium/User/keybindings.json`).
 It is a symlink into this repo, so `git status` here shows the change. Commit and push; `git pull`
 on the other machine picks it up.
 
@@ -84,7 +95,7 @@ config uses for the `waistband-os` rewrite; without it that one clone fails on m
 ## Tests
 
 ```bash
-shellspec          # unit tests for the installer and validator (31 examples)
+shellspec          # unit tests for the installer and validator (34 examples)
 e2e/run.sh         # full install in Docker
 ```
 

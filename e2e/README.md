@@ -50,4 +50,6 @@ Add a row here whenever a formula is added to the skip list.
 - iTerm2 shell integration is not installed.
 - `open`, `osascript`, `pbcopy`, Calendar, and Reminders are absent, so the `cal-*` and `rem-*`
   functions are checked for definition only, not executed.
+- VSCodium is a cask, so `install_vscodium_extensions` takes its warning branch in the container and
+  no extension is installed. The three VSCodium links are still checked.
 - `nvm` and `rbenv` download and build real toolchains; the container phases take about five minutes, plus the image build on the first run.
