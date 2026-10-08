@@ -41,7 +41,12 @@ EOF
 #!/usr/bin/env bash
 echo "defaults \$*" >> "$LOG"
 EOF
-    chmod +x "$BREW_PREFIX/bin/brew" "$TMP/bin/git" "$TMP/bin/rbenv" "$TMP/bin/defaults"
+    cat > "$TMP/bin/codium" <<EOF
+#!/usr/bin/env bash
+echo "codium \$*" >> "$LOG"
+if [[ "\$1" == "--list-extensions" ]]; then printf 'already.installed\n'; fi
+EOF
+    chmod +x "$BREW_PREFIX/bin/brew" "$TMP/bin/git" "$TMP/bin/rbenv" "$TMP/bin/defaults" "$TMP/bin/codium"
     PATH="$TMP/bin:$BREW_PREFIX/bin:$PATH"
     export PATH
   }
@@ -97,5 +102,24 @@ EOF
     The stderr should not include 'already exists'
     The value "$(readlink "$HOME/.config/oh-my-zsh/custom/aliases.zsh")" should equal "$SCRIPT_DIR/config/oh-my-zsh/custom/aliases.zsh"
     The path "$HOME/.config/oh-my-zsh/oh-my-zsh.sh" should be file
+  End
+
+  It 'installs only the extensions that are missing'
+    printf 'already.installed\nneeds.install\n' > "$TMP/extensions.txt"
+    SCRIPT_DIR_EXTENSIONS="$TMP/extensions.txt"
+    When run main
+    The status should be success
+    The output should include 'Installing needs.install'
+    The contents of file "$LOG" should include 'codium --install-extension needs.install'
+    The contents of file "$LOG" should not include 'codium --install-extension already.installed'
+  End
+
+  It 'warns and continues when codium is absent'
+    mv "$TMP/bin/codium" "$TMP/bin/codium.hidden"
+    PATH="$TMP/bin:$BREW_PREFIX/bin:/usr/bin:/bin"
+    When run main
+    The status should be success
+    The output should include 'codium is not on PATH'
+    The output should include 'Installation Complete'
   End
 End

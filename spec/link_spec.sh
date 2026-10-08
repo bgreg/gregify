@@ -88,7 +88,7 @@ Describe 'dotfiles.sh link core'
       }
       When call check_sources
       The status should be success
-      The output should equal "all 31 sources exist"
+      The output should equal "all 34 sources exist"
     End
   End
 
@@ -109,7 +109,7 @@ Describe 'dotfiles.sh link core'
       When run script ./dotfiles.sh --print-links
       The status should be success
       The line 1 of output should equal "$(printf 'home/.zshenv\t.zshenv')"
-      The lines of output should equal 31
+      The lines of output should equal 34
       The output should not include 'Checking prerequisites'
     End
   End
