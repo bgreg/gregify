@@ -1,0 +1,4 @@
+#!/bin/bash
+printf "\033]50;SetProfile=Vim Optimized\a"
+nvim "$@"
+printf "\033]50;SetProfile=Default\a"
